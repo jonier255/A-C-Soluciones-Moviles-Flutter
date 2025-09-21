@@ -2,36 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/bloc/login_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/login_event.dart';
 import 'package:flutter_a_c_soluciones/bloc/login_state.dart';
-import 'package:flutter_a_c_soluciones/ui/forget.dart';
-import 'package:flutter_a_c_soluciones/ui/registrarse.dart';
-import 'package:flutter_a_c_soluciones/ui/verifyCode.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => LoginBloc(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const LoginScreen(),
-          '/register': (context) => const RegisterScreen(),
-          '/forget': (context) => const ForgetScreen(),
-          '/verify': (context) => const VerifyCodeScreen(),
-          '/home': (context) => const HomeScreen(),
-        },
-      ),
-    );
-  }
-}
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -67,7 +39,7 @@ class LoginScreen extends StatelessWidget {
                     clipper: WaveClipper(),
                     child: Container(
                       height: 180,
-                      color: Colors.blue,
+                      color: Color(0xFF2F91D8),
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -86,6 +58,14 @@ class LoginScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color(0xFF2F91D8).withOpacity(0.6),
+                            spreadRadius: 4,
+                            blurRadius: 10,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,10 +76,23 @@ class LoginScreen extends StatelessWidget {
                           const SizedBox(height: 8),
                           TextField(
                             controller: loginBloc.emailController,
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: "Ingrese su correo electronico",
-                            ),
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                hintText: "Ingrese su correo electronico",
+                                filled: true,
+                                fillColor: Colors.white,
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color(0xFF2F91D8), width: 2.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color(0xFF2F91D8), width: 2.0),
+                                ),
+                                disabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color(0xFF2F91D8), width: 2.0),
+                                )),
                           ),
                           const SizedBox(height: 16),
 
@@ -110,10 +103,23 @@ class LoginScreen extends StatelessWidget {
                           TextField(
                             controller: loginBloc.passwordController,
                             obscureText: true,
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: "Ingresa tu contraseña",
-                            ),
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                hintText: "Ingresa tu contraseña",
+                                filled: true,
+                                fillColor: Colors.white,
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color(0xFF2F91D8), width: 2.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color(0xFF2F91D8), width: 2.0),
+                                ),
+                                disabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color(0xFF2F91D8), width: 2.0),
+                                )),
                           ),
                           const SizedBox(height: 16),
 
@@ -121,26 +127,45 @@ class LoginScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, '/forget');
-                                },
-                                child: const Text(
-                                  "¿Olvidaste la contraseña?",
-                                  style: TextStyle(
+                              Card(
+                                elevation: 6, // sombra
+                                color: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      12), // esquinas redondeadas
+                                ),
+                                child: TextButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, '/forget');
+                                  },
+                                  child: const Text(
+                                    "¿Olvidaste la\ncontraseña?",
+                                    style: TextStyle(
+                                      
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.blue),
+                                      color: Color(0xFF2F91D8),
+                                    ),
+                                  ),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, '/register');
-                                },
-                                child: const Text(
-                                  "Crear cuenta",
-                                  style: TextStyle(
+                              Card(
+                                elevation: 6, // sombra
+                                color: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: TextButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, '/register');
+                                  },
+                                  child: const Text(
+                                    "Crear\ncuenta",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.blue),
+                                      color: Color(0xFF2F91D8),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],
@@ -149,6 +174,7 @@ class LoginScreen extends StatelessWidget {
                           const SizedBox(height: 20),
 
                           // Boton de iniciar sesion
+                          // Se ha agregado sombra al botón
                           Center(
                             child: Padding(
                               padding:
@@ -180,9 +206,16 @@ class LoginScreen extends StatelessWidget {
                                             }
                                           },
                                           style: ElevatedButton.styleFrom(
-                                              minimumSize:
-                                                  const Size.fromHeight(50),
-                                              backgroundColor: Colors.blue),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 50,
+                                                      vertical: 15),
+                                              backgroundColor: Color(0xFF2F91D8),
+                                              elevation: 8,
+                                              shadowColor: Colors.black,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                              )),
                                           child: const Text(
                                             "Iniciar sesión",
                                             style: TextStyle(
