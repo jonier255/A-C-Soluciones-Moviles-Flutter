@@ -58,7 +58,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           Navigator.pop(context);
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF2F91D8),
+                          backgroundColor: Color.fromARGB(255, 15, 128, 209),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
@@ -83,76 +83,80 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   const SizedBox(height: 15),
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color(0xFF2F91D8).withOpacity(0.9),
-                          spreadRadius: 2,
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildInput("Nombres", "Ingresa tus nombres", _registerBloc.nombreController),
-                        const SizedBox(height: 16),
-                        _buildInput("Apellidos", "Ingresa tus apellidos", _registerBloc.apellidoController),
-                        const SizedBox(height: 16),
-                        _buildInput("Correo electrónico", "Ingresa tu correo", _registerBloc.correoElectronicoController),
-                        const SizedBox(height: 16),
-                        _buildInput("Contraseña", "Ingresa tu contraseña", _registerBloc.contraseniaController, obscure: true),
-                        const SizedBox(height: 16),
-                        _buildInput("Cédula", "Ingresa tu número de cédula", _registerBloc.numeroDeCedulaController),
-                        const SizedBox(height: 16),
-                        _buildInput("Teléfono", "Ingresa tu teléfono", _registerBloc.telefonoController),
-                        const SizedBox(height: 16),
-                        _buildInput("Dirección", "Ingresa tu dirección", _registerBloc.direccionController),
-                        const SizedBox(height: 20),
-                        BlocBuilder<RegisterBloc, RegisterState>(
-                          builder: (context, state) {
-                            if (state is RegisterLoading) {
-                              return const Center(child: CircularProgressIndicator());
-                            }
-                            return Center(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  _registerBloc.add(
-                                    RegisterButtonPressed(
-                                      nombre: _registerBloc.nombreController.text,
-                                      apellido: _registerBloc.apellidoController.text,
-                                      numero_de_cedula: _registerBloc.numeroDeCedulaController.text,
-                                      correo_electronico: _registerBloc.correoElectronicoController.text,
-                                      telefono: _registerBloc.telefonoController.text,
-                                      direccion: _registerBloc.direccionController.text,
-                                      contrasenia: _registerBloc.contraseniaController.text,
+                  // Se ha agregado un padding horizontal para hacer la tarjeta más angosta
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromARGB(255, 15, 128, 209).withOpacity(0.9),
+                            spreadRadius: 2,
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildInput("Nombres", "Ingresa tus nombres", _registerBloc.nombreController),
+                          const SizedBox(height: 16),
+                          _buildInput("Apellidos", "Ingresa tus apellidos", _registerBloc.apellidoController),
+                          const SizedBox(height: 16),
+                          _buildInput("Correo electrónico", "Ingresa tu correo", _registerBloc.correoElectronicoController),
+                          const SizedBox(height: 16),
+                          _buildInput("Contraseña", "Ingresa tu contraseña", _registerBloc.contraseniaController, obscure: true),
+                          const SizedBox(height: 16),
+                          _buildInput("Cédula", "Ingresa tu número de cédula", _registerBloc.numeroDeCedulaController),
+                          const SizedBox(height: 16),
+                          _buildInput("Teléfono", "Ingresa tu teléfono", _registerBloc.telefonoController),
+                          const SizedBox(height: 16),
+                          _buildInput("Dirección", "Ingresa tu dirección", _registerBloc.direccionController),
+                          const SizedBox(height: 20),
+                          BlocBuilder<RegisterBloc, RegisterState>(
+                            builder: (context, state) {
+                              if (state is RegisterLoading) {
+                                return const Center(child: CircularProgressIndicator());
+                              }
+                              return Center(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    _registerBloc.add(
+                                      RegisterButtonPressed(
+                                        nombre: _registerBloc.nombreController.text,
+                                        apellido: _registerBloc.apellidoController.text,
+                                        numero_de_cedula: _registerBloc.numeroDeCedulaController.text,
+                                        correo_electronico: _registerBloc.correoElectronicoController.text,
+                                        telefono: _registerBloc.telefonoController.text,
+                                        direccion: _registerBloc.direccionController.text,
+                                        contrasenia: _registerBloc.contraseniaController.text,
+                                      ),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                                    backgroundColor: Color.fromARGB(255, 15, 128, 209),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
                                     ),
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                                  backgroundColor: Color(0xFF2F91D8),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: const Text(
+                                    "Registrarse",
+                                    style: TextStyle(
+                                        fontSize: 16, 
+                                        color: Colors.white, 
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
-                                child: const Text(
-                                  "Registrarse",
-                                  style: TextStyle(
-                                      fontSize: 16, 
-                                      color: Colors.white, 
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -177,15 +181,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color(0xFF2F91D8), width: 2.0),
+            borderSide: const BorderSide(color: Color.fromARGB(255, 15, 128, 209), width: 2.0),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color(0xFF2F91D8), width: 2.0),
+            borderSide: const BorderSide(color: Color.fromARGB(255, 15, 128, 209), width: 2.0),
           ),
           disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color(0xFF2F91D8), width: 2.0),
+            borderSide: const BorderSide(color: Color.fromARGB(255, 15, 128, 209), width: 2.0),
           ),
           hintText: hint,
           filled: true,

@@ -39,7 +39,7 @@ class LoginScreen extends StatelessWidget {
                     clipper: WaveClipper(),
                     child: Container(
                       height: 180,
-                      color: Color(0xFF2F91D8),
+                      color: Color.fromARGB(255, 15, 128, 209),
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -57,10 +57,10 @@ class LoginScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(22),
                         boxShadow: [
                           BoxShadow(
-                            color: Color(0xFF2F91D8).withOpacity(0.6),
+                            color: Color.fromARGB(255, 15, 128, 209).withOpacity(0.6),
                             spreadRadius: 4,
                             blurRadius: 10,
                             offset: const Offset(0, 3),
@@ -82,14 +82,17 @@ class LoginScreen extends StatelessWidget {
                                 filled: true,
                                 fillColor: Colors.white,
                                 enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(
-                                      color: Color(0xFF2F91D8), width: 2.0),
+                                      color: Color.fromARGB(255, 50, 153, 226), width: 2.0),
                                 ),
                                 focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(
-                                      color: Color(0xFF2F91D8), width: 2.0),
+                                      color: Color.fromARGB(255, 50, 153, 226), width: 2.0),
                                 ),
                                 disabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(
                                       color: Color(0xFF2F91D8), width: 2.0),
                                 )),
@@ -109,16 +112,20 @@ class LoginScreen extends StatelessWidget {
                                 filled: true,
                                 fillColor: Colors.white,
                                 enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(
-                                      color: Color(0xFF2F91D8), width: 2.0),
+                                      color: Color.fromARGB(255, 41, 142, 214), width: 2.0),
                                 ),
+                                  
                                 focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(
-                                      color: Color(0xFF2F91D8), width: 2.0),
+                                      color: Color.fromARGB(255, 41, 142, 214), width: 2.0),
                                 ),
                                 disabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(
-                                      color: Color(0xFF2F91D8), width: 2.0),
+                                      color: Color.fromARGB(255, 41, 142, 214), width: 2.0),
                                 )),
                           ),
                           const SizedBox(height: 16),
@@ -143,7 +150,7 @@ class LoginScreen extends StatelessWidget {
                                     style: TextStyle(
                                       
                                       fontWeight: FontWeight.bold,
-                                      color: Color(0xFF2F91D8),
+                                      color: Color.fromARGB(255, 15, 128, 209),
                                     ),
                                   ),
                                 ),
@@ -163,7 +170,7 @@ class LoginScreen extends StatelessWidget {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      color: Color(0xFF2F91D8),
+                                      color: Color.fromARGB(255, 15, 128, 209),
                                     ),
                                   ),
                                 ),
@@ -210,7 +217,7 @@ class LoginScreen extends StatelessWidget {
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 50,
                                                       vertical: 15),
-                                              backgroundColor: Color(0xFF2F91D8),
+                                              backgroundColor: Color.fromARGB(255, 15, 128, 209),
                                               elevation: 8,
                                               shadowColor: Colors.black,
                                               shape: RoundedRectangleBorder(
