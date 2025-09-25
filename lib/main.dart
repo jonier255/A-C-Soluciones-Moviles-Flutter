@@ -5,7 +5,7 @@ import 'package:flutter_a_c_soluciones/ui/login.dart';
 import 'package:flutter_a_c_soluciones/ui/registrarse.dart';
 import 'package:flutter_a_c_soluciones/ui/splash.dart';
 import 'package:flutter_a_c_soluciones/ui/forget.dart';
-import 'package:flutter_a_c_soluciones/ui/admin_home.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/admin_home.dart';
 import 'package:flutter_a_c_soluciones/ui/verifyCode.dart';
 
 void main() {
