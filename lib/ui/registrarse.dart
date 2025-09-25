@@ -49,7 +49,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  // Se ha movido la imagen a la parte superior derecha y se ha cambiado el tamaño a 80
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -75,7 +74,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ],
                   ),
                   const SizedBox(height: 15),
-                  // Se ha agregado la imagen de usuario
                   Center(
                     child: Image.asset(
                       'assets/user.png',
@@ -83,7 +81,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   const SizedBox(height: 15),
-                  // Se ha agregado un padding horizontal para hacer la tarjeta más angosta
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Container(
@@ -95,7 +92,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           BoxShadow(
                             color: Color.fromARGB(255, 15, 128, 209).withOpacity(0.9),
                             spreadRadius: 2,
-                            blurRadius: 12,
+                            blurRadius: 18,
                             offset: const Offset(0, 4),
                           ),
                         ],
@@ -138,8 +135,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                                    padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                                     backgroundColor: Color.fromARGB(255, 15, 128, 209),
+                                    // Se agrega la elevación para la sombra
+                                    elevation: 8,
+                                    // Se agrega el color de la sombra
+                                    shadowColor: Colors.black,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
@@ -181,15 +182,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color.fromARGB(255, 15, 128, 209), width: 2.0),
+            borderSide: const BorderSide(color: Color.fromARGB(255, 112, 184, 235), width: 2.0),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color.fromARGB(255, 15, 128, 209), width: 2.0),
+            borderSide: const BorderSide(color: Color.fromARGB(255, 112, 184, 235), width: 2.0),
           ),
           disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color.fromARGB(255, 15, 128, 209), width: 2.0),
+            borderSide: const BorderSide(color: Color.fromARGB(255, 112, 184, 235), width: 2.0),
           ),
           hintText: hint,
           filled: true,
