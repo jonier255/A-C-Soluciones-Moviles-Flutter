@@ -5,6 +5,7 @@ import 'package:flutter_a_c_soluciones/ui/login.dart';
 import 'package:flutter_a_c_soluciones/ui/registrarse.dart';
 import 'package:flutter_a_c_soluciones/ui/splash.dart';
 import 'package:flutter_a_c_soluciones/ui/forget.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/admin_home.dart';
 import 'package:flutter_a_c_soluciones/ui/verifyCode.dart';
 
 void main() {
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
           "/login": (context) => const LoginScreen(),
           "/register": (context) => const RegisterScreen(),
           '/forget': (context) => const ForgetScreen(),
-          '/verify': (context) => const VerifyCodeScreen(),
+          '/verify': (context) => VerifyCodeScreen(),
+          '/admin_home': (context) => AdminHomeScreen(),
           '/home': (context) => const HomeScreen(),
         },
       ),

@@ -16,7 +16,12 @@ class LoginScreen extends StatelessWidget {
       body: BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state is LoginSuccess) {
-            Navigator.pushReplacementNamed(context, '/home');
+            final userRole = state.role.toLowerCase();
+            if (userRole == 'admin' || userRole == 'administrador') {
+              Navigator.pushReplacementNamed(context, '/admin_home');
+            } else {
+              Navigator.pushReplacementNamed(context, '/home');
+            }
           } else if (state is LoginFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -39,11 +44,11 @@ class LoginScreen extends StatelessWidget {
                     clipper: WaveClipper(),
                     child: Container(
                       height: 180,
-                      color: Color.fromARGB(255, 15, 128, 209),
+                      color: Color.fromARGB(255, 46, 145, 216),
                     ),
                   ),
                   const SizedBox(height: 2),
-                  // Logo debajo de la curva
+                  // Logo debajo de la curva azul
                   Image.asset(
                     "assets/soluciones.png",
                     height: 200,
@@ -51,8 +56,9 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(height: 8),
 
                   // este es login como tal, el formulario
+                  // aumente el padding horizontal para hacer la tarjeta más angosta
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
                     child: Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
@@ -60,7 +66,7 @@ class LoginScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(22),
                         boxShadow: [
                           BoxShadow(
-                            color: Color.fromARGB(255, 15, 128, 209).withOpacity(0.6),
+                            color: Color.fromARGB(255, 46, 145, 216).withOpacity(0.9),
                             spreadRadius: 4,
                             blurRadius: 10,
                             offset: const Offset(0, 3),
@@ -71,8 +77,7 @@ class LoginScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Usuario
-                          const Text("Correo electronico",
-                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          const Text("Correo electronico"),
                           const SizedBox(height: 8),
                           TextField(
                             controller: loginBloc.emailController,
@@ -84,24 +89,23 @@ class LoginScreen extends StatelessWidget {
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 50, 153, 226), width: 2.0),
+                                      color: Color.fromARGB(255, 121, 188, 236), width: 2.0),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 50, 153, 226), width: 2.0),
+                                      color: Color.fromARGB(255, 121, 188, 236), width: 2.0),
                                 ),
                                 disabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(
-                                      color: Color(0xFF2F91D8), width: 2.0),
+                                      color: Color.fromARGB(255, 121, 188, 236), width: 2.0),
                                 )),
                           ),
                           const SizedBox(height: 16),
 
                           // Contraseña
-                          const Text("Contraseña",
-                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          const Text("Contraseña"),
                           const SizedBox(height: 8),
                           TextField(
                             controller: loginBloc.passwordController,
@@ -114,18 +118,18 @@ class LoginScreen extends StatelessWidget {
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 41, 142, 214), width: 2.0),
+                                      color: Color.fromARGB(255, 121, 188, 236), width: 2.0),
                                 ),
                                   
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 41, 142, 214), width: 2.0),
+                                      color: Color.fromARGB(255, 121, 188, 236), width: 2.0),
                                 ),
                                 disabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 41, 142, 214), width: 2.0),
+                                      color: Color.fromARGB(255, 121, 188, 236), width: 2.0),
                                 )),
                           ),
                           const SizedBox(height: 16),
@@ -139,7 +143,7 @@ class LoginScreen extends StatelessWidget {
                                 color: Colors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
-                                      12), // esquinas redondeadas
+                                      12), // esquinas redondas
                                 ),
                                 child: TextButton(
                                   onPressed: () {
@@ -150,27 +154,33 @@ class LoginScreen extends StatelessWidget {
                                     style: TextStyle(
                                       
                                       fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(255, 15, 128, 209),
+                                      color: Color.fromARGB(255, 46, 145, 216),
                                     ),
                                   ),
                                 ),
                               ),
                               Card(
+                                
+                        
                                 elevation: 6, // sombra
                                 color: Colors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                child: TextButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(context, '/register');
-                                  },
-                                  child: const Text(
-                                    "Crear\ncuenta",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(255, 15, 128, 209),
+                                child: SizedBox(
+                                  width: 100,
+                                  height: 40,
+                                  child: TextButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(context, '/register');
+                                    },
+                                    child: const Text(
+                                      "¿No tienes\ncuenta?",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Color.fromARGB(255, 46, 145, 216),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -181,7 +191,7 @@ class LoginScreen extends StatelessWidget {
                           const SizedBox(height: 20),
 
                           // Boton de iniciar sesion
-                          // Se ha agregado sombra al botón
+                          // agregue sombra al boton
                           Center(
                             child: Padding(
                               padding:
@@ -217,11 +227,11 @@ class LoginScreen extends StatelessWidget {
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 50,
                                                       vertical: 15),
-                                              backgroundColor: Color.fromARGB(255, 15, 128, 209),
+                                              backgroundColor: Color.fromARGB(255, 46, 145, 216),
                                               elevation: 8,
                                               shadowColor: Colors.black,
                                               shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(12),
+                                                borderRadius: BorderRadius.circular(15),
                                               )),
                                           child: const Text(
                                             "Iniciar sesión",
@@ -249,7 +259,7 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-/// curva de arriba la logica
+/// curva de arriba 
 class WaveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
