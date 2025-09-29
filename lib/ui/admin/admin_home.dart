@@ -1,72 +1,251 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/request_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../bloc/request_bloc.dart';
+import '../../bloc/request_event.dart';
+import '../../bloc/request_state.dart';
+import '../../model/request_model.dart';
+import '../../repository/request_repository.dart';
 
-//este es el modelo solictud, por el momento lo hice aca para probar, 
-// luego toca hacerla en la carpeta model
-class Request {
-  final String title;
-  final String client;
-  final String day;
-  final String time;
-  final String status; // Activo, Cancelado, Pendiente, etc.
-
-  Request({
-    required this.title,
-    required this.client,
-    required this.day,
-    required this.time,
-    required this.status,
-  });
-}
-
-//pantalla principal
+// Pantalla principal del administrador
 class AdminHomeScreen extends StatelessWidget {
   const AdminHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Lista de muestra para ver las solicitudes recientes y tener una idea de ui
-    final requests = [
-      Request(
-        title: "Limpieza profunda de piscinas",
-        client: "Roberto Castillo",
-        day: "Miércoles",
-        time: "7:40 a.m.",
-        status: "Activo",
-      ),
-      Request(
-        title: "Limpieza profunda de piscinas",
-        client: "Roberto Castillo",
-        day: "Jueves",
-        time: "7:40 a.m.",
-        status: "Cancelado",
-      ),
-      Request(
-        title: "Limpieza profunda de piscinas",
-        client: "Roberto Castillo",
-        day: "Viernes",
-        time: "7:40 a.m.",
-        status: "Activo",
-      ),
-    ];
-
-    return Scaffold(
-      backgroundColor: Colors.white,
-      bottomNavigationBar: const _BottomNavBar(),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const _HeaderSection(),
-              const SizedBox(height: 20),
-              const _MainButtonsSection(),
-              const SizedBox(height: 20),
-              const _QuickAccessSection(),
-              const SizedBox(height: 25),
-              _RecentRequestsSection(requests: requests), // ahora es dinámico
-            ],
+    // Usamos BlocProvider para crear y proveer el RequestBloc a esta pantalla.
+    // También añadimos el evento FetchRequests para que los datos se carguen al entrar.
+    return BlocProvider(
+      create: (context) =>
+          RequestBloc(RequestRepository())..add(FetchRequests()),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        bottomNavigationBar: const _BottomNavBar(),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const _HeaderSection(),
+                const SizedBox(height: 20),
+                const _MainButtonsSection(),
+                const SizedBox(height: 20),
+                const _QuickAccessSection(),
+                // La sección de solicitudes recientes ahora está integrada aquí
+                const _RecentRequestsSection(),
+              ],
+            ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+// Nueva sección que construye la lista de solicitudes recientes con el estilo proporcionado
+class _RecentRequestsSection extends StatelessWidget {
+  const _RecentRequestsSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Título con el estilo solicitado
+          Text(
+            "Solicitudes recientes",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              shadows: [
+                Shadow(
+                  blurRadius: 4.0,
+                  color: Colors.black.withOpacity(0.5),
+                  offset: const Offset(1.0, 1.0),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          // BlocBuilder para construir la UI basada en el estado del BLoC
+          BlocBuilder<RequestBloc, RequestState>(
+            builder: (context, state) {
+              if (state is RequestLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (state is RequestSuccess) {
+                // Tomamos solo las primeras 3 solicitudes
+                final recentRequests = state.requests.take(3).toList();
+                if (recentRequests.isEmpty) {
+                  return const Center(
+                      child: Text("No hay solicitudes recientes."));
+                }
+
+                return Column(
+                  children: [
+                    // Contenedor con el estilo de sombra azul
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.blue.withOpacity(0.9),
+                            spreadRadius: 4,
+                            blurRadius: 12,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      // Columna para las tarjetas de solicitud
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Column(
+                          children: recentRequests
+                              .map((req) => _RequestCard(request: req))
+                              .toList(),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    // Botón "Ver más..."
+                    Center(
+                      child: TextButton(
+                        onPressed: () {
+                          // Navega a la pantalla completa de solicitudes, reutilizando el BLoC actual.
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => BlocProvider.value(
+                                value: BlocProvider.of<RequestBloc>(context),
+                                child: RequestScreen(),
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "Ver más...",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            shadows: [
+                              Shadow(
+                                blurRadius: 4.0,
+                                color: Colors.black.withOpacity(0.5),
+                                offset: const Offset(1.0, 1.0),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+              if (state is RequestError) {
+                return Center(child: Text(state.message));
+              }
+              return const Center(child: Text("Cargando solicitudes..."));
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Widget para la tarjeta de una solicitud individual, restaurado a un Card con sombra
+class _RequestCard extends StatelessWidget {
+  final Request request;
+
+  const _RequestCard({required this.request});
+
+  @override
+  Widget build(BuildContext context) {
+    // Cada solicitud es una Card individual con su propia sombra y margen
+    return Card(
+      elevation: 8,
+      color: Colors.white,
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(35)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 16.0),
+        child: Row(
+          children: [
+            Card(
+              margin: const EdgeInsets.all(0),
+              elevation: 4,
+              color: const Color(0xFFF0F2F5),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                //icono de herramientas de services
+                child: const Icon(Icons.build, color: Colors.black, size: 30),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(18.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            request.descripcion,
+                            style: const TextStyle(fontSize: 14),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            request.direccionServicio
+                                .replaceAll('\n', ' ')
+                                .replaceAll(RegExp(r'\s+'), ' '),
+                            style: const TextStyle(color: Colors.grey, fontSize: 12),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 4),
+                          // NOTA: Mostrando ID del cliente. El backend debe ser modificado para enviar el nombre.
+                          Text(
+                            "Fecha de solictud: ${request.fechaSolicitud}",
+                            style: const TextStyle(color: Colors.grey, fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Card(
+                      elevation: 8,
+                      color: Color(0xFFF0F2F5),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(35)),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 30.0, horizontal: 0.5),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          request.estado,
+                          style: const TextStyle(
+                              color: Colors.green, fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -79,43 +258,46 @@ class _HeaderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Center(
-          child: Image.asset(
-            "assets/soluciones.png",
-            height: 120,
-          ),
-        ),
-        const SizedBox(height: 10),
-        // Se refactorizaa el TextField en un Container para poder agregarle una sombra.
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.4),
-                spreadRadius: 1,
-                blurRadius: 8,
-                offset: const Offset(0, 4), // Posicion de la sombra
-              ),
-            ],
-          ),
-          child: TextField(
-            decoration: InputDecoration(
-              hintText: "Buscar",
-              prefixIcon: const Icon(Icons.search),
-              // Se quita el borde del TextField para que no oculte la sombra del Container.
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none, // Sin borde visible
-              ),
-              filled: true,
-              fillColor: const Color(0xFFF0F2F5),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
+        children: [
+          Center(
+            child: Image.asset(
+              "assets/soluciones.png",
+              height: 120,
             ),
           ),
-        ),
-      ],
+          const SizedBox(height: 10),
+          // Se refactorizaa el TextField en un Container para poder agregarle una sombra.
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.4),
+                  spreadRadius: 1,
+                  blurRadius: 8,
+                  offset: const Offset(0, 4), // Posicion de la sombra
+                ),
+              ],
+            ),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: "Buscar",
+                prefixIcon: const Icon(Icons.search),
+                // Se quita el borde del TextField para que no oculte la sombra del Container.
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none, // Sin borde visible
+                ),
+                filled: true,
+                fillColor: const Color(0xFFF0F2F5),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -126,12 +308,15 @@ class _MainButtonsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: const [
-        _MainButton(icon: Icons.badge, label: "Técnico"),
-        _MainButton(icon: Icons.person, label: "Cliente"),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: const [
+          _MainButton(icon: Icons.badge, label: "Técnico"),
+          _MainButton(icon: Icons.person, label: "Cliente"),
+        ],
+      ),
     );
   }
 }
@@ -145,11 +330,11 @@ class _MainButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 150,
-      height: 100,
+      width: 120,
+      height: 90,
       decoration: BoxDecoration(
-        color: Colors.blue,
-        borderRadius: BorderRadius.circular(15),
+        color: const Color.fromARGB(255, 17, 115, 196),
+        borderRadius: BorderRadius.circular(22),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.5),
@@ -173,33 +358,53 @@ class _MainButton extends StatelessWidget {
   }
 }
 
-//botones chicos de servicios, visitas, admin y solitcitudes
+//botones de servicios, visitas, admin y solitcitudes
 class _QuickAccessSection extends StatelessWidget {
   const _QuickAccessSection();
 
   @override
   Widget build(BuildContext context) {
-  
-    return Row(
-      children: const [
-        Expanded(
-          child: _QuickButton(icon: Icons.build, label: "Servicios" ),
-        ),
-        SizedBox(width: 12), // Espacio entre botones
-        Expanded(
-          child: _QuickButton(icon: Icons.apartment, label: "Visitas"),
-        ),
-        SizedBox(width: 12),
-        Expanded(
-          child: _QuickButton(icon: Icons.security, label: "Admin"),
-        ),
-        SizedBox(width: 12),
-        Expanded(
-          child: _QuickButton(icon: Icons.mail, label: "Solicitudes",),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Row(
+        children: [
+          const Expanded(
+            child: _QuickButton(icon: Icons.build, label: "Servicios"),
+          ),
+          const SizedBox(width: 12), // Espacio entre botones
+          const Expanded(
+            child: _QuickButton(icon: Icons.apartment, label: "Visitas"),
+          ),
+          const SizedBox(width: 12),
+          const Expanded(
+            child: _QuickButton(icon: Icons.security, label: "Admin"),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                // Al presionar "Solicitudes", vamos a la pantalla RequestScreen.
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    // Usamos BlocProvider para dirigirse el RequestBloc a la pantalla RequestScreen.
+                    // Esto sirve para  podersolicitar los datos al backend.
+                    builder: (context) => BlocProvider(
+                      create: (context) => RequestBloc(RequestRepository()),
+                      child: RequestScreen(),
+                    ),
+                  ),
+                );
+              },
+              child: const _QuickButton(
+                icon: Icons.mail,
+                label: "Solicitudes",
+              ),
+            ),
+          ),
+        ],
+      ),
     );
-    
   }
 }
 
@@ -211,9 +416,7 @@ class _QuickButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return Container(
-      // Padding vertical reducido para hacerlo menos alto.
       padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 9),
       decoration: BoxDecoration(
         color: const Color(0xFFF0F2F5),
@@ -233,139 +436,16 @@ class _QuickButton extends StatelessWidget {
         children: [
           Icon(icon, color: Colors.black, size: 20),
           const SizedBox(width: 8),
-          // Se usa Flexible para evitar que el texto se desborde en pantallas pequeñas.
+          //flexible sirve para que las palbras no se salgan del contenedor
           Flexible(
             child: Text(
               label,
               style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-              overflow: TextOverflow.ellipsis, // Corta el texto con "..." si no cabe
+              overflow:
+                  TextOverflow.ellipsis, // Corta el texto con "..." si no cbe
             ),
           ),
         ],
-      ),
-    );
-    
-  }
-}
-
-//solictudes recientes
-class _RecentRequestsSection extends StatelessWidget {
-  final List<Request> requests;
-
-  const _RecentRequestsSection({required this.requests});
-
-@override
-Widget build(BuildContext context) {
-  // seccion de solicitudes recientes
-  return Padding(
-    padding: const EdgeInsets.all(16), 
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Solicitudes recientes",
-          style: TextStyle(
-            fontSize: 25, 
-            fontWeight: FontWeight.bold,
-            shadows: [
-              Shadow(
-                blurRadius: 4.0,
-                color: Colors.black.withOpacity(0.5),
-                offset: Offset(1.0, 1.0),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 10),
-
-        /// tarjeta que envuelve las solicitudes
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color:  Colors.white,
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.blue.withOpacity(0.9),
-                spreadRadius: 4,
-                blurRadius: 12,
-                offset: const Offset(0, 3), // sombra interna
-              ),
-            ],
-          ),
-          child: Column(
-            children: requests
-                .map((req) => _RequestCard(request: req))
-                .toList(),
-          ),
-        ),
-
-        const SizedBox(height: 10),
-        Center(
-          child: TextButton(
-            onPressed: () {
-              
-            },
-            child: Text("Ver más...", style: 
-            TextStyle(fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.black, 
-            shadows: [
-              Shadow(
-                blurRadius: 4.0,
-                color: Colors.black.withOpacity(0.5),
-                offset: const Offset(1.0, 1.0),
-              ),
-            ],
-            )
-          ),
-        ),
-        ),  
-      ],
-    ),
-  );
-}
-}
-
-
-class _RequestCard extends StatelessWidget {
-  final Request request;
-
-  const _RequestCard({required this.request});
-
-  @override
-  Widget build(BuildContext context) {
-    Color statusColor =
-        request.status == "Activo" ? Colors.green : Colors.red;
-
-    // le añadi la sombra de las tarjetas que son las tarjetas donde esat la informacion de las solicitudes
-    return Card(
-      
-      color:Colors.white,
-      
-      // La propiedad 'elevation' controla la intensidad de la sombra.
-      elevation: 8,
-      // aca se añade el color de la sombra
-      shadowColor: Colors.black.withOpacity(0.9),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-      // Aumente el espacio entre ellas.
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: ListTile(
-        leading: const Icon(Icons.build, color: Colors.black),
-        title: Text(request.title,
-            style: const TextStyle(fontWeight: FontWeight.w500)),
-        subtitle: Text("Cliente: ${request.client}\n${request.day} - Hora: ${request.time}"),
-        trailing: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          decoration: BoxDecoration(
-            color: statusColor.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Text(
-            request.status,
-            style: TextStyle(color: statusColor, fontWeight: FontWeight.bold),
-          ),
-        ),
       ),
     );
   }
@@ -379,7 +459,7 @@ class _BottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       selectedItemColor: const Color.fromARGB(255, 46, 145, 216),
-      unselectedItemColor: Colors.grey,
+      unselectedItemColor: Colors.black,
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
         BottomNavigationBarItem(
