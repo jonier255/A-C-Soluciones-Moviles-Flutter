@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_a_c_soluciones/bloc/login_bloc.dart';
-import 'package:flutter_a_c_soluciones/bloc/login_event.dart';
-import 'package:flutter_a_c_soluciones/bloc/login_state.dart';
+import 'package:flutter_a_c_soluciones/bloc/login/login_bloc.dart';
+import 'package:flutter_a_c_soluciones/bloc/login/login_event.dart';
+import 'package:flutter_a_c_soluciones/bloc/login/login_state.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 

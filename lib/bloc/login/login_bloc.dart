@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_a_c_soluciones/bloc/login_event.dart';
-import 'package:flutter_a_c_soluciones/bloc/login_state.dart';
+import 'package:flutter_a_c_soluciones/bloc/login/login_event.dart';
+import 'package:flutter_a_c_soluciones/bloc/login/login_state.dart';
 import 'package:flutter_a_c_soluciones/model/login_request_model.dart';
 import 'package:flutter_a_c_soluciones/repository/service_api_login.dart';
 import 'package:flutter_a_c_soluciones/repository/secure_storage_service.dart';

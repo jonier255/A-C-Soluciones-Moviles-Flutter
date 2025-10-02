@@ -1,4 +1,4 @@
-import '../model/request_model.dart';
+import '../../model/request_model.dart';
 
 abstract class RequestState {}
 
@@ -17,3 +17,4 @@ class RequestError extends RequestState {
 
   RequestError(this.message);
 }
+
