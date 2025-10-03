@@ -1,4 +1,3 @@
-
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -16,7 +15,8 @@ class APIService {
     };
 
     var url = Uri.http(
-      '127.0.0.1:8000',
+      // 'localhost:8000',
+      '10.0.2.2:8000',
       '/api/login',
     );
 

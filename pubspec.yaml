@@ -31,3 +31,7 @@ flutter:
   assets:
     - assets/soluciones.png
     - assets/user.png
+    - assets/servicio1.jpg
+    - assets/servicio2.jpg
+    - assets/servicio3.webp
+    - assets/servicio4.jpg

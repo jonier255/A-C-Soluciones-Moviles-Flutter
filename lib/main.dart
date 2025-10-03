@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_a_c_soluciones/ui/client/Home/homeClient.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/login_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/request_bloc.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
           '/forget': (context) => const ForgetScreen(),
           '/verify': (context) => VerifyCodeScreen(),
           '/admin_home': (context) => const AdminHomeScreen(),
+          '/client_home': (context) => const ClientScreen(),
           '/request': (context) => RequestScreen(),
         },
       ),
