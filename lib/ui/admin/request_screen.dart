@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../bloc/request_bloc.dart';
-import '../../bloc/request_event.dart';
-import '../../bloc/request_state.dart';
+import '../../bloc/request/request_bloc.dart';
+import '../../bloc/request/request_event.dart';
+import '../../bloc/request/request_state.dart';
 
 class RequestScreen extends StatefulWidget {
   @override

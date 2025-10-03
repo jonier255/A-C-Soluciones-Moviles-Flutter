@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_a_c_soluciones/bloc/visits/visits_bloc.dart';
+import 'package:flutter_a_c_soluciones/repository/service_api_visits.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/request_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/visits_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../bloc/request_bloc.dart';
-import '../../bloc/request_event.dart';
-import '../../bloc/request_state.dart';
+import '../../bloc/request/request_bloc.dart';
+import '../../bloc/request/request_event.dart';
+import '../../bloc/request/request_state.dart';
 import '../../model/request_model.dart';
 import '../../repository/request_repository.dart';
 
@@ -53,13 +56,16 @@ class _RecentRequestsSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Título con el estilo solicitado
+          
+          // Título
           Text(
             "Solicitudes recientes",
+            
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               shadows: [
+                
                 Shadow(
                   blurRadius: 4.0,
                   color: Colors.black.withOpacity(0.5),
@@ -68,7 +74,7 @@ class _RecentRequestsSection extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
           // BlocBuilder para construir la UI basada en el estado del BLoC
           BlocBuilder<RequestBloc, RequestState>(
             builder: (context, state) {
@@ -212,7 +218,8 @@ class _RequestCard extends StatelessWidget {
                             request.direccionServicio
                                 .replaceAll('\n', ' ')
                                 .replaceAll(RegExp(r'\s+'), ' '),
-                            style: const TextStyle(color: Colors.grey, fontSize: 12),
+                            style: const TextStyle(
+                                color: Colors.grey, fontSize: 12),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -220,7 +227,8 @@ class _RequestCard extends StatelessWidget {
                           // NOTA: Mostrando ID del cliente. El backend debe ser modificado para enviar el nombre.
                           Text(
                             "Fecha de solictud: ${request.fechaSolicitud}",
-                            style: const TextStyle(color: Colors.grey, fontSize: 12),
+                            style: const TextStyle(
+                                color: Colors.grey, fontSize: 12),
                           ),
                         ],
                       ),
@@ -237,7 +245,9 @@ class _RequestCard extends StatelessWidget {
                         child: Text(
                           request.estado,
                           style: const TextStyle(
-                              color: Colors.green, fontSize: 14, fontWeight: FontWeight.bold),
+                              color: Colors.green,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -365,15 +375,37 @@ class _QuickAccessSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
+      
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(
+        
         children: [
+          
           const Expanded(
-            child: _QuickButton(icon: Icons.build, label: "Servicios"),
+            
+            child: _QuickButton(icon: Icons.build, label: "Visitas"),
           ),
           const SizedBox(width: 12), // Espacio entre botones
-          const Expanded(
-            child: _QuickButton(icon: Icons.apartment, label: "Visitas"),
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                // Al presionar "Visitas", vamos a la pantalla VisitsScreen.
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    
+                    builder: (context) => BlocProvider(
+                      create: (context) => VisitsBloc(VisitsRepository()),
+                      child: VisitsScreen(),
+                    ),
+                  ),
+                );
+              },
+              child: const _QuickButton(
+                icon: Icons.visibility,
+                label: "Visitas",
+              ),
+            ),
           ),
           const SizedBox(width: 12),
           const Expanded(
@@ -406,7 +438,9 @@ class _QuickAccessSection extends StatelessWidget {
       ),
     );
   }
+  
 }
+
 
 class _QuickButton extends StatelessWidget {
   final IconData icon;
@@ -436,7 +470,7 @@ class _QuickButton extends StatelessWidget {
         children: [
           Icon(icon, color: Colors.black, size: 20),
           const SizedBox(width: 8),
-          //flexible sirve para que las palbras no se salgan del contenedor
+          //flexible sirve para que las palabras no se salgan del contenedor
           Flexible(
             child: Text(
               label,
@@ -458,6 +492,17 @@ class _BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      onTap: (index) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BlocProvider(
+              create: (context) => RequestBloc(RequestRepository()),
+              child: RequestScreen(),
+            ),
+          ),
+        );
+      },
       selectedItemColor: const Color.fromARGB(255, 46, 145, 216),
       unselectedItemColor: Colors.black,
       items: const [

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_a_c_soluciones/bloc/register_event.dart';
-import 'package:flutter_a_c_soluciones/bloc/register_state.dart';
+import 'package:flutter_a_c_soluciones/bloc/register/register_event.dart';
+import 'package:flutter_a_c_soluciones/bloc/register/register_state.dart';
 import 'package:flutter_a_c_soluciones/model/register_request_model.dart';
 import 'package:flutter_a_c_soluciones/repository/service_api_register.dart';
 

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/ui/client/Home/homeClient.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/visits_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_a_c_soluciones/bloc/login_bloc.dart';
-import 'package:flutter_a_c_soluciones/bloc/request_bloc.dart';
+import 'package:flutter_a_c_soluciones/bloc/login/login_bloc.dart';
+import 'package:flutter_a_c_soluciones/bloc/request/request_bloc.dart';
 import 'package:flutter_a_c_soluciones/repository/request_repository.dart';
 import 'package:flutter_a_c_soluciones/ui/login.dart';
 import 'package:flutter_a_c_soluciones/ui/registrarse.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
           '/admin_home': (context) => const AdminHomeScreen(),
           '/client_home': (context) => const ClientScreen(),
           '/request': (context) => RequestScreen(),
+          '/visits': (context) => VisitsScreen(),
         },
       ),
     );
