@@ -80,7 +80,7 @@ class ClientScreen extends StatelessWidget {
 
               const SizedBox(height: 10),
 
-              // 🔹 Branding
+              // Branding
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Center(
