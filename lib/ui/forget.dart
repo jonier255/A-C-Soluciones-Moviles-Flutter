@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 class ForgetScreen extends StatelessWidget {
   const ForgetScreen({super.key});
@@ -9,31 +8,19 @@ class ForgetScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
+          
           SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(top: 200),
               child: Column(
                 children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: IconButton(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      icon: const Icon(
-                        Icons.arrow_back,
-                        color: Colors.blue,
-                        size: 30,
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
                   Image.asset(
                     "assets/soluciones.png",
                     height: 200,
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 1),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20),
                     child: Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
@@ -41,7 +28,7 @@ class ForgetScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Color.fromARGB(255, 39, 128, 192)
+                            color: const Color.fromARGB(255, 39, 128, 192)
                                 .withOpacity(0.9),
                             spreadRadius: 2,
                             blurRadius: 16,
@@ -56,7 +43,7 @@ class ForgetScreen extends StatelessWidget {
                             child: Text(
                               "Recuperar Contraseña",
                               style: TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.bold),
+                                  fontSize: 24, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 27, 108, 175)),
                             ),
                           ),
                           const SizedBox(height: 20),
@@ -86,8 +73,8 @@ class ForgetScreen extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 40, vertical: 15),
                                 backgroundColor:
-                                    Color.fromARGB(255, 39, 128, 192),
-                                elevation: 8,
+                                    const Color.fromARGB(255, 39, 128, 192),
+                                elevation: 10,
                                 shadowColor: Colors.black,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
@@ -110,17 +97,27 @@ class ForgetScreen extends StatelessWidget {
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Transform.rotate(
-              angle: pi,
-              child: ClipPath(
-                clipper: WaveClipper(),
-                child: Container(
-                  height: 180,
-                  color: Color.fromARGB(255, 39, 128, 192),
-                ),
+          // La curva en la parte superior
+          ClipPath(
+            clipper: WaveClipper(),
+            child: Container(
+              height: 180,
+              color: const Color.fromARGB(255, 39, 128, 192),
+            ),
+          ),
+
+
+          // Botón de retroceso
+          Positioned(
+            top: 20,
+            left: 10,
+            child: IconButton(
+              icon: const Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+                size: 30,
               ),
+              onPressed: () => Navigator.pop(context),
             ),
           ),
         ],
@@ -129,7 +126,7 @@ class ForgetScreen extends StatelessWidget {
   }
 }
 
-/// curva de abajo
+/// curva azul
 class WaveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
@@ -154,3 +151,4 @@ class WaveClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }
+

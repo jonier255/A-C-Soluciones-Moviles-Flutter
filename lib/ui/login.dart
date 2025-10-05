@@ -53,12 +53,12 @@ class LoginScreen extends StatelessWidget {
                     "assets/soluciones.png",
                     height: 200,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 1),
 
                   // este es login como tal, el formulario
                   // aumente el padding horizontal para hacer la tarjeta más angosta
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20),
                     child: Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
