@@ -16,20 +16,14 @@ class ForgetScreen extends StatelessWidget {
                 children: [
                   Align(
                     alignment: Alignment.topLeft,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 39, 128, 192),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
+                    child: IconButton(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.blue,
+                        size: 30,
                       ),
-                      child: const Text(
-                        "Volver",
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
+                      onPressed: () => Navigator.pop(context),
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -47,7 +41,8 @@ class ForgetScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Color.fromARGB(255, 39, 128, 192).withOpacity(0.9),
+                            color: Color.fromARGB(255, 39, 128, 192)
+                                .withOpacity(0.9),
                             spreadRadius: 2,
                             blurRadius: 16,
                             offset: const Offset(0, 4),
@@ -60,7 +55,8 @@ class ForgetScreen extends StatelessWidget {
                           const Center(
                             child: Text(
                               "Recuperar Contraseña",
-                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontSize: 24, fontWeight: FontWeight.bold),
                             ),
                           ),
                           const SizedBox(height: 20),
@@ -72,10 +68,12 @@ class ForgetScreen extends StatelessWidget {
                           TextField(
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),  
-                              borderSide: const BorderSide(color: Color.fromARGB(255, 112, 184, 235), width: 2.0),),
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: const BorderSide(
+                                    color: Color.fromARGB(255, 112, 184, 235),
+                                    width: 2.0),
+                              ),
                               labelText: "Correo Electrónico",
-                              
                             ),
                           ),
                           const SizedBox(height: 20),
@@ -85,8 +83,10 @@ class ForgetScreen extends StatelessWidget {
                                 Navigator.pushNamed(context, '/verify');
                               },
                               style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                                backgroundColor: Color.fromARGB(255, 39, 128, 192),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 40, vertical: 15),
+                                backgroundColor:
+                                    Color.fromARGB(255, 39, 128, 192),
                                 elevation: 8,
                                 shadowColor: Colors.black,
                                 shape: RoundedRectangleBorder(
@@ -95,7 +95,10 @@ class ForgetScreen extends StatelessWidget {
                               ),
                               child: const Text(
                                 "Enviar Codigo",
-                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18),
                               ),
                             ),
                           ),
@@ -126,7 +129,7 @@ class ForgetScreen extends StatelessWidget {
   }
 }
 
-/// curva de abajo 
+/// curva de abajo
 class WaveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class VerifyCodeScreen extends StatelessWidget {
+class VerifyCodeScreen extends StatelessWidget { 
   VerifyCodeScreen({super.key});
 
   @override
@@ -11,41 +11,33 @@ class VerifyCodeScreen extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
+              Align( 
+                alignment: Alignment.topLeft, 
+                child: IconButton( 
+                  padding: const EdgeInsets.symmetric(horizontal: 20), 
+                  icon: const Icon( 
+                    Icons.arrow_back, 
+                    color: Colors.blue, 
+                    size: 30, 
                   ),
-                  child: const Text(
-                    "Volver",
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                ),
+                  onPressed: () => Navigator.pop(context), 
+                ), 
               ),
-
               const SizedBox(height: 10),
-
               Image.asset(
-                "assets/soluciones.png", 
+                "assets/soluciones.png",
                 height: 200,
               ),
-             const SizedBox(height: 15),
-
+              const SizedBox(height: 15),
               Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.blue.withOpacity(0.3),
+                      color: Colors.blue.withOpacity(0.9),
                       spreadRadius: 2,
                       blurRadius: 10,
                       offset: const Offset(0, 4),
@@ -56,9 +48,10 @@ class VerifyCodeScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Center(
-                      child: const Text(
+                      child: const Text( 
                         "Validar Codigo",
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -78,10 +71,10 @@ class VerifyCodeScreen extends StatelessWidget {
                     const SizedBox(height: 20),
                     Center(
                       child: ElevatedButton(
-                        onPressed: () {
-                          
-                        },
+                        onPressed: () {},
                         style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                                    horizontal: 40, vertical: 15),
                           minimumSize: const Size.fromHeight(50),
                           backgroundColor: Colors.blue,
                           shape: RoundedRectangleBorder(
@@ -90,13 +83,17 @@ class VerifyCodeScreen extends StatelessWidget {
                         ),
                         child: const Text(
                           "Comprobar codigo",
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
+              
             ],
           ),
         ),
