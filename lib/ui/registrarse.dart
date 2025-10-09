@@ -57,7 +57,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     clipper: WaveClipper(),
                     child: Container(
                       width: double.infinity,
-                      height: 180,
+                      height: 160,
                       color: const Color.fromARGB(255, 46, 145, 216),
                     ),
                   ),

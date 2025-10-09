@@ -64,6 +64,7 @@ class _RecentRequestsSection extends StatelessWidget {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
+              
               shadows: [
                 
                 Shadow(
@@ -93,6 +94,7 @@ class _RecentRequestsSection extends StatelessWidget {
                   children: [
                     // Contenedor con el estilo de sombra azul
                     Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 18.0),
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: Colors.white,
