@@ -19,7 +19,12 @@ class LoginScreen extends StatelessWidget {
             final userRole = state.role.toLowerCase();
             if (userRole == 'admin' || userRole == 'administrador') {
               Navigator.pushReplacementNamed(context, '/admin_home');
-            } else {
+              
+            } 
+            if (userRole == 'cliente') {
+              Navigator.pushReplacementNamed(context, '/client_home');
+            }
+            else {
               Navigator.pushReplacementNamed(context, '/home');
             }
           } else if (state is LoginFailure) {
