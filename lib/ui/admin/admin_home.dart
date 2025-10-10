@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/bloc/visits/visits_bloc.dart';
 import 'package:flutter_a_c_soluciones/repository/service_api_visits.dart';
@@ -16,8 +17,6 @@ class AdminHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Usamos BlocProvider para crear y proveer el RequestBloc a esta pantalla.
-    // También añadimos el evento FetchRequests para que los datos se carguen al entrar.
     return BlocProvider(
       create: (context) =>
           RequestBloc(RequestRepository())..add(FetchRequests()),
@@ -25,19 +24,43 @@ class AdminHomeScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         bottomNavigationBar: const _BottomNavBar(),
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const _HeaderSection(),
-                const SizedBox(height: 20),
-                const _MainButtonsSection(),
-                const SizedBox(height: 20),
-                const _QuickAccessSection(),
-                // La sección de solicitudes recientes ahora está integrada aquí
-                const _RecentRequestsSection(),
-              ],
-            ),
+          child: Stack(
+            children: [
+              ClipPath(
+                clipper: WaveClipper(),
+                child: Container(
+                  height: 170,
+                  color: const Color.fromARGB(255, 46, 145, 216),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
+                    child: Center(
+                      child: ColorFiltered(
+                        colorFilter:
+                            const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                        child: Image.asset(
+                          "assets/logo.png",
+                          height: 120,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 160),
+                    
+                    const _MainButtonsSection(),
+                    const SizedBox(height: 20),
+                    const _QuickAccessSection(),
+                    // La sección de solicitudes recientes ahora está integrada aquí
+                    const _RecentRequestsSection(),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -56,25 +79,30 @@ class _RecentRequestsSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          
+          const SizedBox(height: 1),
           // Título
-          Text(
-            "Solicitudes recientes",
-            
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              shadows: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+            child: Text(
+              "Solicitudes recientes",
+              
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
                 
-                Shadow(
-                  blurRadius: 4.0,
-                  color: Colors.black.withOpacity(0.5),
-                  offset: const Offset(1.0, 1.0),
-                ),
-              ],
+                color: Colors.blue,
+                shadows: [
+                  
+                  Shadow(
+                    blurRadius: 4.0,
+                    color: const Color.fromARGB(255, 25, 106, 172).withOpacity(0.5),
+                    offset: const Offset(1.0, 1.0),
+                  ),
+                ],
+              ),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
           // BlocBuilder para construir la UI basada en el estado del BLoC
           BlocBuilder<RequestBloc, RequestState>(
             builder: (context, state) {
@@ -91,8 +119,8 @@ class _RecentRequestsSection extends StatelessWidget {
 
                 return Column(
                   children: [
-                    // Contenedor con el estilo de sombra azul
                     Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 18.0),
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -167,7 +195,7 @@ class _RecentRequestsSection extends StatelessWidget {
   }
 }
 
-// Widget para la tarjeta de una solicitud individual, restaurado a un Card con sombra
+// Widget para la tarjeta de una solicitud individual
 class _RequestCard extends StatelessWidget {
   final Request request;
 
@@ -175,7 +203,6 @@ class _RequestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Cada solicitud es una Card individual con su propia sombra y margen
     return Card(
       elevation: 8,
       color: Colors.white,
@@ -224,7 +251,6 @@ class _RequestCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 4),
-                          // NOTA: Mostrando ID del cliente. El backend debe ser modificado para enviar el nombre.
                           Text(
                             "Fecha de solictud: ${request.fechaSolicitud}",
                             style: const TextStyle(
@@ -262,55 +288,7 @@ class _RequestCard extends StatelessWidget {
   }
 }
 
-//el header de la pantalla principal y la casilla de buscar
-class _HeaderSection extends StatelessWidget {
-  const _HeaderSection();
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        children: [
-          Center(
-            child: Image.asset(
-              "assets/soluciones.png",
-              height: 120,
-            ),
-          ),
-          const SizedBox(height: 10),
-          // Se refactorizaa el TextField en un Container para poder agregarle una sombra.
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.4),
-                  spreadRadius: 1,
-                  blurRadius: 8,
-                  offset: const Offset(0, 4), // Posicion de la sombra
-                ),
-              ],
-            ),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: "Buscar",
-                prefixIcon: const Icon(Icons.search),
-                // Se quita el borde del TextField para que no oculte la sombra del Container.
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none, // Sin borde visible
-                ),
-                filled: true,
-                fillColor: const Color(0xFFF0F2F5),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 //Botones de cliente y tecnico, los azules grandes
 class _MainButtonsSection extends StatelessWidget {
@@ -331,38 +309,51 @@ class _MainButtonsSection extends StatelessWidget {
   }
 }
 
-class _MainButton extends StatelessWidget {
+class _MainButton extends StatefulWidget {
   final IconData icon;
   final String label;
 
   const _MainButton({required this.icon, required this.label});
 
   @override
+  State<_MainButton> createState() => _MainButtonState();
+}
+
+class _MainButtonState extends State<_MainButton> {
+  bool _isHovered = false;
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 120,
-      height: 90,
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 17, 115, 196),
-        borderRadius: BorderRadius.circular(22),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 8,
-            offset: const Offset(0, 4), // posicion de la sombra
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 50, color: Colors.white),
-          const SizedBox(height: 5),
-          Text(label,
-              style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold)),
-        ],
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: Container(
+        width: 120,
+        height: 90,
+        decoration: BoxDecoration(
+          color: _isHovered
+              ? const Color.fromARGB(255, 33, 150, 243)
+              : const Color.fromARGB(255, 17, 115, 196),
+          borderRadius: BorderRadius.circular(22),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.5),
+              spreadRadius: 1,
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(widget.icon, size: 50, color: Colors.white),
+            const SizedBox(height: 5),
+            Text(widget.label,
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold)),
+          ],
+        ),
       ),
     );
   }
@@ -381,15 +372,21 @@ class _QuickAccessSection extends StatelessWidget {
         
         children: [
           
-          const Expanded(
-            
-            child: _QuickButton(icon: Icons.build, label: "Visitas"),
-          ),
-          const SizedBox(width: 12), // Espacio entre botones
           Expanded(
             child: GestureDetector(
               onTap: () {
-                // Al presionar "Visitas", vamos a la pantalla VisitsScreen.
+              },
+              child: const _QuickButton(
+                icon: Icons.build,
+                label: "Servicios",
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                // navegacion a visitas, la lista de visitas
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -415,7 +412,7 @@ class _QuickAccessSection extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                // Al presionar "Solicitudes", vamos a la pantalla RequestScreen.
+                // navegacion a solicitudes.
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -442,44 +439,55 @@ class _QuickAccessSection extends StatelessWidget {
 }
 
 
-class _QuickButton extends StatelessWidget {
+class _QuickButton extends StatefulWidget {
   final IconData icon;
   final String label;
 
   const _QuickButton({required this.icon, required this.label});
 
   @override
+  State<_QuickButton> createState() => _QuickButtonState();
+}
+
+class _QuickButtonState extends State<_QuickButton> {
+  bool _isHovered = false;
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 9),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF0F2F5),
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 5,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      // Se usa un Row para alinear el ícono y el texto horizontalmente.
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center, // Se centra el contenido
-        children: [
-          Icon(icon, color: Colors.black, size: 20),
-          const SizedBox(width: 8),
-          //flexible sirve para que las palabras no se salgan del contenedor
-          Flexible(
-            child: Text(
-              label,
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-              overflow:
-                  TextOverflow.ellipsis, // Corta el texto con "..." si no cbe
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 9),
+        decoration: BoxDecoration(
+          color: _isHovered ? const Color.fromARGB(255, 5, 162, 235) : const Color(0xFFF0F2F5),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.5),
+              spreadRadius: 1,
+              blurRadius: 5,
+              offset: const Offset(0, 2),
             ),
-          ),
-        ],
+          ],
+        ),
+        // use u Row para alinear el ícono y el texto horizontalmente.
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center, // Se centra el contenido
+          children: [
+            Icon(widget.icon, color: _isHovered ? Colors.white : Colors.black, size: 20),
+            const SizedBox(width: 8),
+            //flexible es para que las palabras no se salgan del contenedor
+            Flexible(
+              child: Text(
+                widget.label,
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: _isHovered ? Colors.white : Colors.black),
+                overflow:
+                    TextOverflow.ellipsis, // Corta el texto con "..." si no cbe
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -515,4 +523,30 @@ class _BottomNavBar extends StatelessWidget {
       ],
     );
   }
+}
+
+/// curva de arriba 
+class WaveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+    path.lineTo(0, size.height - 40);
+
+    var firstControlPoint = Offset(size.width / 4, size.height);
+    var firstEndPoint = Offset(size.width / 2, size.height - 40);
+    path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
+        firstEndPoint.dx, firstEndPoint.dy);
+
+    var secondControlPoint = Offset(size.width * 3 / 4, size.height - 80);
+    var secondEndPoint = Offset(size.width, size.height - 40);
+    path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy,
+        secondEndPoint.dx, secondEndPoint.dy);
+
+    path.lineTo(size.width, 0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }

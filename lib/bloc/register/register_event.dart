@@ -5,7 +5,7 @@ class RegisterButtonPressed extends RegisterEvent {
   final String apellido;
   final String numero_de_cedula;
   final String correo_electronico;
-  final String telefono;
+  final String telefono;  
   final String direccion;
   final String contrasenia;
 

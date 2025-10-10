@@ -15,7 +15,7 @@ class APIServiceRegister {
     };
 
     var url = Uri.http(
-      'localhost:8000',
+      '127.0.0.1:8000',
       '/api/cliente',
     );
 
