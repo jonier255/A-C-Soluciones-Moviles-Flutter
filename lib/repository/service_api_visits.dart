@@ -9,7 +9,8 @@ class VisitsRepository {
   Future<List<VisitsModel>> getVisits() async {
     final token = await _storageService.getToken();
     if (token == null) {
-      throw Exception('Token no encontrado. Por favor, inicie sesión de nuevo.');
+      throw Exception(
+          'Token no encontrado. Por favor, inicie sesión de nuevo.');
     }
 
     final response = await http.get(
@@ -21,7 +22,6 @@ class VisitsRepository {
     );
 
     if (response.statusCode == 200) {
-
       final decoded = json.decode(response.body);
 
       if (decoded is Map<String, dynamic> && decoded['data'] is List) {

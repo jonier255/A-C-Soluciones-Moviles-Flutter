@@ -14,68 +14,80 @@ class ClientHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Builder(
-              builder: (ctx) {
-                return IconButton(
-                  icon: const Icon(
-                    Icons.menu,
-                    size: 28,
-                    color: Color.fromARGB(255, 46, 145, 216),
-                  ),
-                  onPressed: () {
-                    Scaffold.of(ctx).openDrawer();
-                  },
-                );
-              },
-            ),
-            const SizedBox(width: 8),
-            const CircleAvatar(
-              radius: 35,
-              backgroundColor: Color.fromARGB(255, 46, 145, 216),
-              child: Icon(Icons.person, size: 40, color: Colors.white),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        name,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const Spacer(),
-                      IconButton(
-                        icon: const Icon(Icons.edit,
-                            color: Colors.grey, size: 20),
-                        onPressed: onEdit,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "Actividad: $activity",
-                    style: const TextStyle(fontSize: 16, color: Colors.grey),
-                  ),
-                ],
-              ),
-            ),
+    return Container(
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Color.fromARGB(255, 1, 157, 214),
+            Color.fromARGB(255, 9, 152, 218),
           ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(20),
+          bottomRight: Radius.circular(20),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+      child: Row(
+        children: [
+          Builder(
+            builder: (ctx) {
+              return IconButton(
+                icon: const Icon(
+                  Icons.menu,
+                  size: 28,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Scaffold.of(ctx).openDrawer();
+                },
+              );
+            },
+          ),
+          const SizedBox(width: 8),
+          const CircleAvatar(
+            radius: 35,
+            backgroundColor: Colors.white,
+            child: Icon(Icons.person, size: 40, color: Color(0xFF2196F3)),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      name,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      icon: const Icon(Icons.edit,
+                          color: Colors.white70, size: 20),
+                      onPressed: onEdit,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  "Actividad: $activity",
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.white70,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -5,10 +5,6 @@ import 'package:flutter_a_c_soluciones/bloc/login/login_bloc.dart';
 import 'package:flutter_a_c_soluciones/ui/client/Drawer/drawerClient.dart';
 import 'package:flutter_a_c_soluciones/ui/client/lib/client_header.dart';
 
-// import 'package:flutter_a_c_soluciones/ui/Drawer/drawerClient.dart';
-// import 'package:flutter_a_c_soluciones/ui/widgets/client_header.dart';
-// import 'package:flutter_a_c_soluciones/bloc/login_bloc.dart';
-
 class HistoryPage extends StatelessWidget {
   const HistoryPage({super.key});
 
