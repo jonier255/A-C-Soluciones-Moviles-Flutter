@@ -15,8 +15,7 @@ class APIServiceRegister {
     };
 
     var url = Uri.http(
-       '127.0.0.1:8000',
-      '/api/cliente',
+       'https://a-c-soluciones.onrender.com/api/cliente'
     );
 
     var response = await client.post(
