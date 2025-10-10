@@ -1,4 +1,5 @@
 import 'dart:convert';
+// import 'package:flutter_a_c_soluciones/server/conexion.dart';
 import 'package:http/http.dart' as http;
 import '../model/request_model.dart';
 import 'secure_storage_service.dart';
@@ -9,11 +10,13 @@ class RequestRepository {
   Future<List<Request>> getRequests() async {
     final token = await _storageService.getToken();
     if (token == null) {
-      throw Exception('Token no encontrado. Por favor, inicie sesión de nuevo.');
+      throw Exception(
+          'Token no encontrado. Por favor, inicie sesión de nuevo.');
     }
 
     final response = await http.get(
-      Uri.parse('http://127.0.0.1:8000/api/solicitudes'),
+      // Uri.parse('$conexionURL/api/solicitudes'),
+      Uri.parse('https://a-c-soluciones.onrender.com/api/solicitudes'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -30,5 +33,3 @@ class RequestRepository {
     }
   }
 }
-
-  

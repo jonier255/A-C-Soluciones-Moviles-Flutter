@@ -1,4 +1,5 @@
 import 'dart:convert';
+// import 'package:flutter_a_c_soluciones/server/conexion.dart';
 import 'package:http/http.dart' as http;
 import '../../model/client/service_model.dart';
 import '../secure_storage_service.dart';
@@ -14,7 +15,9 @@ class ServiceRepository {
     }
 
     final response = await http.get(
-      Uri.parse('http://localhost:8000/api/servicios'),
+      // Uri.parse('https://a-c-soluciones.onrender.com/api/servicios'),
+      Uri.parse('https://flutter-58c3.onrender.com/api/servicios'),
+
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -22,12 +25,16 @@ class ServiceRepository {
     );
 
     if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
+      final decoded = json.decode(response.body);
+
+      // 🔹 Si la API devuelve { "data": [...] }
+      final List<dynamic> data = decoded is List ? decoded : decoded['data'];
+
       return data.map((json) => ServiceModel.fromJson(json)).toList();
     } else if (response.statusCode == 401) {
       throw Exception('Sesión expirada. Por favor, inicie sesión de nuevo.');
     } else {
-      throw Exception('Failed to load services');
+      throw Exception('Error al cargar los servicios (${response.statusCode})');
     }
   }
 }

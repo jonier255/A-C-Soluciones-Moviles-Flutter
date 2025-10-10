@@ -1,19 +1,19 @@
+import 'package:flutter_a_c_soluciones/repository/client/service_api_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../repository/service_api_visits.dart';
-import 'package:flutter_a_c_soluciones/bloc/visits/visits_event.dart';
-import 'package:flutter_a_c_soluciones/bloc/visits/visits_state.dart';
+import 'package:flutter_a_c_soluciones/bloc/client/service_event.dart';
+import 'package:flutter_a_c_soluciones/bloc/client/service_state.dart';
 
-class VisitsBloc extends Bloc<VisitsEvent, VisitsState> {
-  final VisitsRepository repository;
+class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
+  final ServiceRepository repository;
 
-  VisitsBloc(this.repository) : super(VisitsInitial()) {
-    on<FetchVisits>((event, emit) async {
-      emit(VisitsLoading());
+  ServiceBloc(this.repository) : super(ServiceInitial()) {
+    on<FetchService>((event, emit) async {
+      emit(ServiceLoading());
       try {
-        final visits = await repository.getVisits();
-        emit(VisitsSuccess(visits));
+        final sevice = await repository.getServices();
+        emit(ServiceSuccess(sevice));
       } catch (e) {
-        emit(VisitsError(e.toString()));
+        emit(ServiceError(e.toString()));
       }
     });
   }

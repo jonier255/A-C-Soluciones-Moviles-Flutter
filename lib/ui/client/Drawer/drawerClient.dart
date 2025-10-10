@@ -36,7 +36,7 @@ class DrawerClient extends StatelessWidget {
             title: const Text('Inicio'),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, '/client_home_page');
+              Navigator.pushNamed(context, '/client_home');
             },
           ),
           ListTile(

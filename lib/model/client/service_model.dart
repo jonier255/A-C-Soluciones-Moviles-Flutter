@@ -37,20 +37,4 @@ class ServiceModel {
       tecnicoId: json['tecnico_id'],
     );
   }
-
-  /// ✅ Método para convertir el modelo a JSON (por ejemplo, al enviar datos al backend)
-  // Map<String, dynamic> toJson() {
-  //   return {
-  //     'id': id,
-  //     'nombre': nombre,
-  //     'descripcion': descripcion,
-  //     'estado': estado,
-  //     'price': price,
-  //     'fecha_creacion': fechaCreacion.toIso8601String(),
-  //     'fecha_modificacion': fechaModificacion.toIso8601String(),
-  //     'creada_por_fk': creadaPorFk,
-  //     'id_administrador': idAdministrador,
-  //     'tecnico_id': tecnicoId,
-  //   };
-  // }
 }

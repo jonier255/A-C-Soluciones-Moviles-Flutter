@@ -15,15 +15,8 @@ class HistoryPage extends StatelessWidget {
       body: SafeArea(
         child: BlocBuilder<LoginBloc, LoginState>(
           builder: (context, state) {
-            String name = "Usuario";
-            String activity = "0%";
-
-            // Si el usuario ya inició sesión y el estado tiene datos
-            // if (state is LoginSuccess) {
-            //   name = state.user.name ?? "Cliente";
-            //   activity = "70%"; // Puedes hacerlo dinámico luego
-            // }
-
+            String name = "Jonier Urrea";
+            String activity = "70%";
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

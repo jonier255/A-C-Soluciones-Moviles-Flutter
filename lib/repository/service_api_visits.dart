@@ -1,4 +1,5 @@
 import 'dart:convert';
+// import 'package:flutter_a_c_soluciones/server/conexion.dart';
 import 'package:http/http.dart' as http;
 import '../model/visits_model.dart';
 import 'secure_storage_service.dart';
@@ -14,7 +15,8 @@ class VisitsRepository {
     }
 
     final response = await http.get(
-      Uri.parse('http://127.0.0.1:8000/api/visitas'),
+      // Uri.parse('https://a-c-soluciones.onrender.com/api/visitas'),
+      Uri.parse('https://flutter-58c3.onrender.com/api/visitas'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
