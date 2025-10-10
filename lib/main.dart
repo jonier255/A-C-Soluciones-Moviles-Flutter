@@ -13,6 +13,12 @@ import 'package:flutter_a_c_soluciones/ui/admin/admin_home.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/request_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/verifyCode.dart';
 
+import 'ui/client/Drawer/drawerClient.dart';
+import 'ui/client/Chat/chat_page.dart';
+import 'ui/client/History/history_page.dart';
+import 'ui/client/Requests/requests_page.dart';
+import 'ui/client/services/services_page.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -44,6 +50,13 @@ class MyApp extends StatelessWidget {
           '/client_home': (context) => const ClientScreen(),
           '/request': (context) => RequestScreen(),
           '/visits': (context) => VisitsScreen(),
+
+          // 🔹 Rutas del Drawer
+          // '/client_home_page': (context) => const HomePage(),
+          '/client_services': (context) => const ServicesPage(),
+          '/client_requests': (context) => const RequestsPage(),
+          '/client_history': (context) => const HistoryPage(),
+          '/client_chat': (context) => const ChatPage(),
         },
       ),
     );

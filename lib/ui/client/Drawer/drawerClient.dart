@@ -36,7 +36,7 @@ class DrawerClient extends StatelessWidget {
             title: const Text('Inicio'),
             onTap: () {
               Navigator.pop(context);
-              // Aquí puedes navegar al dashboard
+              Navigator.pushNamed(context, '/client_home_page');
             },
           ),
           ListTile(
@@ -44,7 +44,7 @@ class DrawerClient extends StatelessWidget {
             title: const Text('Servicios'),
             onTap: () {
               Navigator.pop(context);
-              // Aquí puedes navegar al perfil
+              Navigator.pushNamed(context, '/client_services');
             },
           ),
           ListTile(
@@ -52,7 +52,7 @@ class DrawerClient extends StatelessWidget {
             title: const Text('Solicitudes'),
             onTap: () {
               Navigator.pop(context);
-              // Aquí puedes navegar a pedidos
+              Navigator.pushNamed(context, '/client_requests');
             },
           ),
           ListTile(
@@ -60,7 +60,7 @@ class DrawerClient extends StatelessWidget {
             title: const Text('Historial'),
             onTap: () {
               Navigator.pop(context);
-              // Aquí puedes navegar a configuración
+              Navigator.pushNamed(context, '/client_history');
             },
           ),
           ListTile(
@@ -68,7 +68,7 @@ class DrawerClient extends StatelessWidget {
             title: const Text('Chat'),
             onTap: () {
               Navigator.pop(context);
-              // Aquí puedes navegar a configuración
+              Navigator.pushNamed(context, '/client_chat');
             },
           ),
           const Divider(),
