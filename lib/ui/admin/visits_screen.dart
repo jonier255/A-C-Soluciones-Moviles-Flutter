@@ -48,7 +48,8 @@ class _VisitsScreenState extends State<VisitsScreen> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Colors.white, size: 30),
+                    icon: const Icon(Icons.arrow_back,
+                        color: Colors.white, size: 30),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ),
@@ -99,8 +100,8 @@ class _VisitsScreenState extends State<VisitsScreen> {
                             // ontainer visitas
                             Flexible(
                               child: Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 35.0, vertical: 20),
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 35.0, vertical: 20),
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 8),
                                 decoration: BoxDecoration(
@@ -125,8 +126,9 @@ class _VisitsScreenState extends State<VisitsScreen> {
                                             child: Card(
                                               color: Colors.white,
                                               elevation: 4,
-                                              margin: const EdgeInsets.symmetric(
-                                                  vertical: 10),
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 10),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(25),
@@ -150,8 +152,9 @@ class _VisitsScreenState extends State<VisitsScreen> {
                                                                     0.3),
                                                             spreadRadius: 2,
                                                             blurRadius: 5,
-                                                            offset: const Offset(
-                                                                0, 3),
+                                                            offset:
+                                                                const Offset(
+                                                                    0, 3),
                                                           ),
                                                         ],
                                                         color: Colors.white,
@@ -269,8 +272,8 @@ class _VisitsScreenState extends State<VisitsScreen> {
                                         },
                                       )
                                     : const Center(
-                                        child: Text(
-                                            "No hay visitas registradas")),
+                                        child:
+                                            Text("No hay visitas registradas")),
                               ),
                             ),
 
@@ -316,18 +319,14 @@ class _VisitsScreenState extends State<VisitsScreen> {
                       } else {
                         return const Center(child: Text("No hay visitas"));
                       }
-
                     },
-                    
                   ),
-                  
                 ),
               ],
             ),
           ),
         ],
       ),
-      
     );
   }
 
@@ -339,8 +338,9 @@ class _VisitsScreenState extends State<VisitsScreen> {
         style: ElevatedButton.styleFrom(
           shape: const CircleBorder(),
           padding: const EdgeInsets.all(3),
-          backgroundColor:
-              selected ? const Color.fromARGB(255, 156, 204, 243) : Colors.white,
+          backgroundColor: selected
+              ? const Color.fromARGB(255, 156, 204, 243)
+              : Colors.white,
           foregroundColor: selected ? Colors.white : Colors.blue,
         ),
         onPressed: onPressed,

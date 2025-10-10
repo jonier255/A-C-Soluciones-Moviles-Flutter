@@ -13,6 +13,11 @@ import 'package:flutter_a_c_soluciones/ui/admin/admin_home.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/request_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/verifyCode.dart';
 
+import 'ui/client/Chat/chat_page.dart';
+import 'ui/client/History/history_page.dart';
+import 'ui/client/Requests/requests_page.dart';
+import 'ui/client/services/services_page.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -41,9 +46,15 @@ class MyApp extends StatelessWidget {
           '/forget': (context) => const ForgetScreen(),
           '/verify': (context) => VerifyCodeScreen(),
           '/admin_home': (context) => const AdminHomeScreen(),
-          '/client_home': (context) => const ClientScreen(),
           '/request': (context) => RequestScreen(),
           '/visits': (context) => VisitsScreen(),
+
+          // 🔹 Rutas del Drawer
+          '/client_home': (context) => const ClientScreen(),
+          '/client_services': (context) => const ServicesPage(),
+          '/client_requests': (context) => const RequestsPage(),
+          '/client_history': (context) => const HistoryPage(),
+          '/client_chat': (context) => const ChatPage(),
         },
       ),
     );
