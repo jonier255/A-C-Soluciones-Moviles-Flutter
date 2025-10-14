@@ -23,7 +23,7 @@ class APIServiceRegister {
 
     final url = Uri.parse(
       // 'https://a-c-soluciones.onrender.com/api/cliente',
-      'https://flutter-58c3.onrender.com/api/cliente',
+      'http://localhost:8000/api/cliente',
     );
 
     var response = await client.post(
