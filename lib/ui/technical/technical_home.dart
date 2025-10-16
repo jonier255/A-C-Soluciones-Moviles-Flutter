@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/assigned_visits_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/completed_visits_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/services_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_event.dart';
@@ -181,10 +182,13 @@ class _QuickAccessSection extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                // Aquí podrás navegar al inventario o reportes
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ServicesScreen()),
+                );
               },
               child:
-                  const _QuickButton(icon: Icons.build, label: "Herramientas"),
+                  const _QuickButton(icon: Icons.miscellaneous_services, label: "Servicios"),
             ),
           ),
           const SizedBox(width: 12),
