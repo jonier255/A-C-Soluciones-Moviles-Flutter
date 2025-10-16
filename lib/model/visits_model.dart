@@ -25,16 +25,16 @@ class VisitsModel {
 
   factory VisitsModel.fromJson(Map<String, dynamic> json) {
     return VisitsModel(
-      id: json['id'] as int? ?? 0,
+      id: int.tryParse(json['id']?.toString() ?? '0') ?? 0,
       fechaProgramada: DateTime.parse(json['fecha_programada']),
-      duracionEstimada: json['duracion_estimada'] as int? ?? 0,
+      duracionEstimada: int.tryParse(json['duracion_estimada']?.toString() ?? '0') ?? 0,
       estado: json['estado'] as String? ?? 'desconocido',
       notasPrevias: json['notas_previas'] ?? '',
       notasPosteriores: json['notas_posteriores'] ?? '',
       fechaCreacion: DateTime.parse(json['fecha_creacion']),
-      solicitudId: json['solicitud_id_fk'] as int? ?? 0,
-      tecnicoId: json['tecnico_id_fk'] as int? ?? 0,
-      servicioId: json['servicio_id_fk'] as int? ?? 0,
+      solicitudId: int.tryParse(json['solicitud_id_fk']?.toString() ?? '0') ?? 0,
+      tecnicoId: int.tryParse(json['tecnico_id_fk']?.toString() ?? '0') ?? 0,
+      servicioId: int.tryParse(json['servicio_id_fk']?.toString() ?? '0') ?? 0,
     );
   }
 }

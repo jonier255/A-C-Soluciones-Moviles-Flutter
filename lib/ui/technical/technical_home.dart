@@ -196,7 +196,7 @@ class _QuickAccessSection extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                // Aquí podrás navegar a reportes
+                Navigator.pushNamed(context, '/technical_reports');
               },
               child: const _QuickButton(
                   icon: Icons.file_copy_outlined, label: "Reportes"),
