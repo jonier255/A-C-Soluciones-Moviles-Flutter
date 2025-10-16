@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/assigned_visits_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/completed_visits_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_event.dart';
@@ -95,9 +97,25 @@ class _MainButtonsSection extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: const [
-          _MainButton(icon: Icons.work_outline, label: "Asignadas"),
-          _MainButton(icon: Icons.check_circle_outline, label: "Finalizadas"),
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AssignedVisitsScreen()),
+              );
+            },
+            child: const _MainButton(icon: Icons.work_outline, label: "Asignadas"),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CompletedVisitsScreen()),
+              );
+            },
+            child: const _MainButton(icon: Icons.check_circle_outline, label: "Finalizadas"),
+          ),
         ],
       ),
     );
@@ -292,7 +310,10 @@ class _RecentTasksSection extends StatelessWidget {
                     Center(
                       child: TextButton(
                         onPressed: () {
-                          // Navegar a la pantalla completa de tareas
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const AssignedVisitsScreen()),
+                          );
                         },
                         child: Text(
                           "Ver más...",
@@ -336,7 +357,7 @@ class _TaskCard extends StatelessWidget {
     return Card(
       elevation: 6,
       color: Colors.white,
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Padding(
         padding: const EdgeInsets.all(14.0),
