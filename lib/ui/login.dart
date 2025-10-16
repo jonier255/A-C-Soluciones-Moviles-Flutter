@@ -19,8 +19,12 @@ class LoginScreen extends StatelessWidget {
             final userRole = state.role.toLowerCase();
             if (userRole == 'admin' || userRole == 'administrador') {
               Navigator.pushReplacementNamed(context, '/admin_home');
-            } else {
-              Navigator.pushReplacementNamed(context, '/home');
+            } 
+            if(userRole == 'cliente'){
+              Navigator.pushReplacementNamed(context, '/client_home');
+            }
+            if(userRole == 'tecnico'){
+              Navigator.pushReplacementNamed(context, '/technical_home');
             }
           } else if (state is LoginFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -283,20 +287,4 @@ class WaveClipper extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
-}
-
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-      ),
-      body: const Center(
-        child: Text('Login Successful!'),
-      ),
-    );
-  }
 }

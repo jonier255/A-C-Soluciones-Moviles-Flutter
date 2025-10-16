@@ -12,6 +12,7 @@ import 'package:flutter_a_c_soluciones/ui/forget.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/admin_home.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/request_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/verifyCode.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/technical_home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
           '/admin_home': (context) => const AdminHomeScreen(),
           '/client_home': (context) => const ClientScreen(),
           '/request': (context) => RequestScreen(),
+          '/technical_home': (context) => const TechnicalHomeScreen(),
           '/visits': (context) => VisitsScreen(),
         },
       ),
