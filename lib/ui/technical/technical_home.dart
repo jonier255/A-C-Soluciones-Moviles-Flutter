@@ -348,15 +348,18 @@ class _TaskCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(task.title,
+                  Text(task.servicio.nombre,
                       style: const TextStyle(
                           fontSize: 14, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 4),
-                  Text(task.location,
-                      style:
-                          const TextStyle(fontSize: 12, color: Colors.grey)),
+                  Text(
+                    task.servicio.descripcion.length > 50
+                        ? '${task.servicio.descripcion.substring(0, 50)}...'
+                        : task.servicio.descripcion,
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
                   const SizedBox(height: 4),
-                  Text("Fecha: ${task.date}",
+                  Text("Fecha: ${task.fechaProgramada.toString().substring(0, 10)}",
                       style:
                           const TextStyle(fontSize: 12, color: Colors.grey)),
                 ],
@@ -364,15 +367,15 @@ class _TaskCard extends StatelessWidget {
             ),
             Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
-                color: task.status == "Completada"
+                color: task.estado == "completada"
                     ? Colors.green[100]
                     : Colors.orange[100],
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
-                task.status,
+                task.estado,
                 style: TextStyle(
-                  color: task.status == "Completada"
+                  color: task.estado == "completada"
                       ? Colors.green[800]
                       : Colors.orange[800],
                   fontWeight: FontWeight.bold,
