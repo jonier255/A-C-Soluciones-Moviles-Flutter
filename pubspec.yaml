@@ -16,6 +16,8 @@ dependencies:
   provider: ^6.0.0
   http: ^1.5.0
   flutter_bloc: ^9.1.1
+  jwt_decoder: ^2.0.1
+  flutter_secure_storage: ^9.2.4
 
 dev_dependencies:
   flutter_test:
@@ -27,4 +29,4 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/soluciones.png
+    - assets/
