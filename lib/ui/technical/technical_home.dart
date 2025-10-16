@@ -79,6 +79,7 @@ class _HeaderSection extends StatelessWidget {
                 ),
                 filled: true,
                 fillColor: const Color(0xFFF0F2F5),
+                contentPadding: const EdgeInsets.symmetric(vertical: 8.0),
               ),
             ),
           ),
