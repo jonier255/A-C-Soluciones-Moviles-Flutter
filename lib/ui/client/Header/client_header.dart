@@ -4,12 +4,14 @@ class ClientHeader extends StatelessWidget {
   final String name;
   final String activity;
   final VoidCallback? onEdit;
+  final VoidCallback onMenuPressed;
 
   const ClientHeader({
     super.key,
     required this.name,
     required this.activity,
     this.onEdit,
+    required this.onMenuPressed,
   });
 
   @override
@@ -26,26 +28,20 @@ class ClientHeader extends StatelessWidget {
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(20),
-          bottomRight: Radius.circular(20),
+          bottomLeft: Radius.circular(0),
+          bottomRight: Radius.circular(0),
         ),
       ),
-      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       child: Row(
         children: [
-          Builder(
-            builder: (ctx) {
-              return IconButton(
-                icon: const Icon(
-                  Icons.menu,
-                  size: 28,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  Scaffold.of(ctx).openDrawer();
-                },
-              );
-            },
+          IconButton(
+            icon: const Icon(
+              Icons.menu,
+              size: 28,
+              color: Colors.white,
+            ),
+            onPressed: onMenuPressed,
           ),
           const SizedBox(width: 8),
           const CircleAvatar(
@@ -69,11 +65,12 @@ class ClientHeader extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    IconButton(
-                      icon: const Icon(Icons.edit,
-                          color: Colors.white70, size: 20),
-                      onPressed: onEdit,
-                    ),
+                    if (onEdit != null)
+                      IconButton(
+                        icon: const Icon(Icons.edit,
+                            color: Colors.white70, size: 20),
+                        onPressed: onEdit,
+                      ),
                   ],
                 ),
                 const SizedBox(height: 8),
