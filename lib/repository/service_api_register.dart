@@ -22,8 +22,8 @@ class APIServiceRegister {
     // );
 
     final url = Uri.parse(
-      // 'https://a-c-soluciones.onrender.com/api/cliente',
-      'http://localhost:8001/api/cliente',
+      'https://a-c-soluciones.onrender.com/api/cliente',
+      //'http://localhost:8000/api/cliente',
     );
 
     var response = await client.post(

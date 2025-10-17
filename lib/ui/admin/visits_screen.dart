@@ -330,7 +330,7 @@ class _VisitsScreenState extends State<VisitsScreen> {
     );
   }
 
-  // Botón de paginación (números)
+  // Boton de paginacion 
   Widget _buildPageButton(String text, bool selected, VoidCallback onPressed) {
     return Container(
       padding: const EdgeInsets.all(2),
