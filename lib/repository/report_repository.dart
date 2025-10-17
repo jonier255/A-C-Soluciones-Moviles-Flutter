@@ -6,7 +6,6 @@ import '../model/visits_model.dart';
 import '../model/ficha_model.dart';
 import 'secure_storage_service.dart';
 
-// A new model class to hold the combined data
 class VisitWithReport {
   final VisitsModel visit;
   final String pdfPath;
@@ -30,7 +29,6 @@ class ReportRepository {
       throw Exception('Technical ID not found in token');
     }
 
-    // 1. Fetch assigned visits
     final visitResponse = await http.get(
       Uri.parse('$_baseUrl/visitas/asignados/$technicalId'),
       headers: {
@@ -56,7 +54,6 @@ class ReportRepository {
         .map((item) => VisitsModel.fromJson(item as Map<String, dynamic>))
         .toList();
 
-    // 2. Fetch all "fichas" (reports)
     final fichaResponse = await http.get(
       Uri.parse('$_baseUrl/fichas'),
       headers: {
@@ -74,10 +71,8 @@ class ReportRepository {
         .map((item) => FichaModel.fromJson(item as Map<String, dynamic>))
         .toList();
 
-    // 3. Create a map of visitId -> pdfPath
     final reportMap = {for (var ficha in allFichas) ficha.visitId.toString(): ficha.pdfPath};
 
-    // 4. Filter visits and combine data
     final List<VisitWithReport> visitsWithReports = assignedVisits
         .where((visit) => reportMap.containsKey(visit.id.toString()))
         .map((visit) => VisitWithReport(
