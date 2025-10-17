@@ -28,13 +28,9 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           contrasenia: event.contrasenia,
         );
 
-        final response = await APIServiceRegister.register(registerRequest);
-
-        if (response.message != null) {
-          emit(RegisterSuccess(message: response.message!));
-        } else {
-          emit(RegisterFailure(error: 'Registration Failed'));
-        }
+        // Se asume éxito si no hay excepción, ya que el backend devuelve el objeto de usuario en lugar de un mensaje.
+        await APIServiceRegister.register(registerRequest);
+        emit(RegisterSuccess(message: "Registro exitoso"));
       } catch (e) {
         emit(RegisterFailure(error: e.toString()));
       }

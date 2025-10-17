@@ -1,9 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_a_c_soluciones/bloc/visits/visits_bloc.dart';
-import 'package:flutter_a_c_soluciones/repository/service_api_visits.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/request_screen.dart';
-import 'package:flutter_a_c_soluciones/ui/admin/visits_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/admin_menu_visits.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/request/request_bloc.dart';
 import '../../bloc/request/request_event.dart';
@@ -386,15 +384,11 @@ class _QuickAccessSection extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                // navegacion a visitas, la lista de visitas
+                // Se cambió la navegación para dirigir al menú de visitas en lugar de la lista directa.
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    
-                    builder: (context) => BlocProvider(
-                      create: (context) => VisitsBloc(VisitsRepository()),
-                      child: VisitsScreen(),
-                    ),
+                    builder: (context) => const VisitasMenuScreen(),
                   ),
                 );
               },
