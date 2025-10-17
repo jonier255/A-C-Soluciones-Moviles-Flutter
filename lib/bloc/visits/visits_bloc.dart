@@ -3,7 +3,6 @@ import '../../repository/service_api_visits.dart';
 import 'package:flutter_a_c_soluciones/bloc/visits/visits_event.dart';
 import 'package:flutter_a_c_soluciones/bloc/visits/visits_state.dart';
 
-
 class VisitsBloc extends Bloc<VisitsEvent, VisitsState> {
   final VisitsRepository repository;
 

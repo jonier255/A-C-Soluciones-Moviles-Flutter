@@ -13,7 +13,7 @@ class TaskRepository {
     }
 
     final response = await http.get(
-      Uri.parse('http://10.0.2.2:8000/api/visitas/asignados/'),
+      Uri.parse('https://a-c-soluciones.onrender.com/api/visitas/asignados/'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',

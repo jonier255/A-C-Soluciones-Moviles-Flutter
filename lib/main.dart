@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_a_c_soluciones/ui/client/Chat/chat_page.dart';
+import 'package:flutter_a_c_soluciones/ui/client/History/history_page.dart';
 import 'package:flutter_a_c_soluciones/ui/client/Home/homeClient.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/visits_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/client/Requests/requests_page.dart';
+import 'package:flutter_a_c_soluciones/ui/client/services/services_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/login/login_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/request/request_bloc.dart';
@@ -54,6 +58,12 @@ class MyApp extends StatelessWidget {
             '/technical_home': (context) => const TechnicalHomeScreen(),
             '/visits': (context) => VisitsScreen(),
             '/technical_reports': (context) => const ViewReportListPageTc(), // Add new route
+
+            // 🔹 Rutas del Drawer
+            '/client_services': (context) => const ServicesPage(),
+            '/client_requests': (context) => const RequestsPage(),
+            '/client_history': (context) => const HistoryPage(),
+            '/client_chat': (context) => const ChatPage(),
           },
         ),
       ),

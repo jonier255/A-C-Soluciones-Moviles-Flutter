@@ -1,4 +1,5 @@
 import 'dart:convert';
+// import 'package:flutter_a_c_soluciones/server/conexion.dart';
 import 'package:http/http.dart' as http;
 import '../model/visits_model.dart';
 import 'secure_storage_service.dart';
@@ -9,11 +10,13 @@ class VisitsRepository {
   Future<List<VisitsModel>> getVisits() async {
     final token = await _storageService.getToken();
     if (token == null) {
-      throw Exception('Token no encontrado. Por favor, inicie sesión de nuevo.');
+      throw Exception(
+          'Token no encontrado. Por favor, inicie sesión de nuevo.');
     }
 
     final response = await http.get(
-      Uri.parse('http://10.0.2.2:8000/api/visitas'),
+      Uri.parse('https://a-c-soluciones.onrender.com/api/visitas'),
+      //Uri.parse('https://a-c-soluciones.onrender.com/api/visitas'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -21,7 +24,6 @@ class VisitsRepository {
     );
 
     if (response.statusCode == 200) {
-
       final decoded = json.decode(response.body);
 
       if (decoded is Map<String, dynamic> && decoded['data'] is List) {
