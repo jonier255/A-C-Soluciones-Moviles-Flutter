@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
-import 'package:open_file_plus/open_file_plus.dart';
+import 'package:open_file/open_file.dart';
 
 import '../../../bloc/report/report_bloc.dart';
 import '../../../repository/report_repository.dart';
@@ -52,12 +52,51 @@ class _ReportListState extends State<_ReportList> {
 
     try {
       // 1. Check and request permission
-      var status = await Permission.storage.status;
-      if (!status.isGranted) {
-        status = await Permission.storage.request();
-        if (!status.isGranted) {
-          throw Exception('Permiso de almacenamiento denegado.');
+      print('Requesting storage permission...');
+      var storageStatus = await Permission.storage.request();
+      print('Storage permission status: $storageStatus');
+
+      print('Requesting accessMediaLocation permission...');
+      var mediaStatus = await Permission.accessMediaLocation.request();
+      print('Access media location permission status: $mediaStatus');
+
+      if (!storageStatus.isGranted && !mediaStatus.isGranted) {
+        if (storageStatus.isPermanentlyDenied || mediaStatus.isPermanentlyDenied) {
+          // Show a dialog to open app settings
+          if (!mounted) return;
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Permiso Requerido'),
+              content: const Text(
+                  'El permiso de almacenamiento es necesario para descargar y guardar reportes. Por favor, habilite el permiso en la configuración de la aplicación.'),
+              actions: [
+                TextButton(
+                  child: const Text('Cancelar'),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                TextButton(
+                  child: const Text('Abrir Configuración'),
+                  onPressed: () {
+                    openAppSettings();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          );
+          return; // Stop further execution
         }
+
+        // Show a snackbar explaining why the permission is needed
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+                'El permiso de almacenamiento es necesario para descargar reportes.'),
+          ),
+        );
+        return; // Stop further execution
       }
 
       // 2. Get the downloads directory
