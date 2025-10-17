@@ -1,22 +1,19 @@
 import 'dart:convert';
-// import 'package:flutter_a_c_soluciones/server/conexion.dart';
 import 'package:http/http.dart' as http;
-import '../model/visits_model.dart';
+import '../model/technical/task_model.dart';
 import 'secure_storage_service.dart';
 
-class VisitsRepository {
+class TaskRepository {
   final _storageService = SecureStorageService();
 
-  Future<List<VisitsModel>> getVisits() async {
+  Future<List<TaskModel>> getTasks() async {
     final token = await _storageService.getToken();
     if (token == null) {
-      throw Exception(
-          'Token no encontrado. Por favor, inicie sesión de nuevo.');
+      throw Exception('Token no encontrado. Por favor, inicie sesión de nuevo.');
     }
 
     final response = await http.get(
-      Uri.parse('https://a-c-soluciones.onrender.com/api/visitas'),
-      //Uri.parse('https://a-c-soluciones.onrender.com/api/visitas'),
+      Uri.parse('https://a-c-soluciones.onrender.com/api/visitas/asignados/'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -30,7 +27,7 @@ class VisitsRepository {
         final List<dynamic> list = decoded['data'] as List<dynamic>;
 
         return list
-            .map((item) => VisitsModel.fromJson(item as Map<String, dynamic>))
+            .map((item) => TaskModel.fromJson(item as Map<String, dynamic>))
             .toList();
       } else {
         throw Exception('Estructura de respuesta inesperada');
