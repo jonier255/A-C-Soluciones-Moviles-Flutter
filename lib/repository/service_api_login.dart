@@ -13,11 +13,10 @@ class APIService {
       'Content-Type': 'application/json',
     };
 
-    // var url = Uri.parse('https://a-c-soluciones.onrender.com/api/login');
-    var url = Uri.parse('http://localhost:8000/api/login');
+    var url = Uri.parse('https://a-c-soluciones.onrender.com/api/login');
+    //var url = Uri.parse('http://localhost:8000/api/login');
 
-    print('🔹 Enviando solicitud POST a: $url');
-    print('🔹 Datos enviados: ${jsonEncode(model.toJson())}');
+    
 
     var response = await client.post(
       url,
@@ -25,8 +24,7 @@ class APIService {
       body: jsonEncode(model.toJson()),
     );
 
-    print('🔸 Código de estado: ${response.statusCode}');
-    print('🔸 Respuesta del servidor: ${response.body}');
+    
 
     if (response.statusCode == 200) {
       return loginResponseJson(response.body);
