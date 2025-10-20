@@ -111,12 +111,9 @@ class _MainButtonsSection extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const CompletedVisitsScreen()),
-              );
+              Navigator.pushNamed(context, '/technical_reports');
             },
-            child: const _MainButton(icon: Icons.check_circle_outline, label: "Finalizadas"),
+            child: const _MainButton(icon: Icons.file_copy_outlined, label: "Reportes"),
           ),
         ],
       ),
@@ -196,10 +193,13 @@ class _QuickAccessSection extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/technical_reports');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CompletedVisitsScreen()),
+                );
               },
               child: const _QuickButton(
-                  icon: Icons.file_copy_outlined, label: "Reportes"),
+                  icon: Icons.check_circle_outline, label: "Finalizadas"),
             ),
           ),
         ],
