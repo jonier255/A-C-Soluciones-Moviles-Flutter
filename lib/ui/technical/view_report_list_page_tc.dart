@@ -10,6 +10,7 @@ import 'package:open_file/open_file.dart';
 
 import '../../../bloc/report/report_bloc.dart';
 import '../../../repository/report_repository.dart';
+import '../../../repository/secure_storage_service.dart';
 
 class ViewReportListPageTc extends StatelessWidget {
   const ViewReportListPageTc({super.key});
@@ -110,7 +111,17 @@ class _ReportListState extends State<_ReportList> {
       final String savePath = '${downloadsDir.path}/$fileName';
 
       // 3. Download the file
-      final response = await http.get(Uri.parse(url));
+      final _storageService = SecureStorageService();
+      final token = await _storageService.getToken();
+      if (token == null) {
+        throw Exception('Token no encontrado. Por favor, inicie sesión de nuevo.');
+      }
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
 
       if (response.statusCode == 200) {
         // 4. Save the file
@@ -169,9 +180,11 @@ class _ReportListState extends State<_ReportList> {
               final bool isLoading = _loadingStates[visit.id] ?? false;
               final formattedDate =
                   DateFormat('dd/MM/yyyy').format(visit.fechaProgramada);
-              const String baseUrl = 'http://10.0.2.2:8000/api';
-              final String downloadUrl =
-                  '$baseUrl/fichas/descargar/${visit.id}';
+
+              const String apiKey = 'http://10.0.2.2:8000';
+              String relativePath = report.pdfPath.replaceFirst(RegExp(r'uploads[\\/]'), '');
+              relativePath = relativePath.replaceAll(r'\', '/');
+              final String downloadUrl = '$apiKey/$relativePath';
 
               return Card(
                 margin:
