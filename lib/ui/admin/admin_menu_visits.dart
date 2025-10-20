@@ -1,9 +1,4 @@
-// Se ha añadido una curva azul personalizada en la parte superior de la pantalla, similar a la de la pantalla de inicio de sesión.
-// Dentro de esta curva, se ha agregado un título "Visitas" centrado y un botón de retroceso a la izquierda.
-// El contenedor principal que envuelve las tarjetas de opciones se ha hecho más pequeño verticalmente para que esté más cerca de las tarjetas.
-// Se ha movido el título "Visitas" más arriba.
-// Se ha eliminado el contenedor que envuelve las tarjetas de opciones.
-// Se ha añadido el logo de la empresa arriba de las tarjetas.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/bloc/request/request_bloc.dart';
 import 'package:flutter_a_c_soluciones/repository/request_repository.dart';
@@ -11,10 +6,10 @@ import 'package:flutter_a_c_soluciones/ui/admin/request_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/visits/visits_bloc.dart';
 import '../../repository/service_api_visits.dart';
-import 'visits_screen.dart'; // Importa la pantalla a la que quieres navegar
+import 'visits_screen.dart'; 
 
 class VisitasMenuScreen extends StatelessWidget {
-  const VisitasMenuScreen({Key? key}) : super(key: key);
+  const VisitasMenuScreen ({super.key});
 
   @override
   Widget build(BuildContext context) {
