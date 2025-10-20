@@ -15,7 +15,7 @@ class VisitWithReport {
 
 class ReportRepository {
   final _storageService = SecureStorageService();
-  final String _baseUrl = 'https://a-c-soluciones.onrender.com/api';
+  final String _baseUrl = 'http://10.0.2.2:8000/api';
 
   Future<List<VisitWithReport>> getVisitsWithReports() async {
     final token = await _storageService.getToken();

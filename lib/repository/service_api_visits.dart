@@ -15,8 +15,8 @@ class VisitsRepository {
     }
 
     final response = await http.get(
-      Uri.parse('https://a-c-soluciones.onrender.com/api/visitas'),
-      //Uri.parse('https://a-c-soluciones.onrender.com/api/visitas'),
+      Uri.parse('http://10.0.2.2:8000/api/visitas'),
+      //Uri.parse('http://10.0.2.2:8000/api/visitas'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',

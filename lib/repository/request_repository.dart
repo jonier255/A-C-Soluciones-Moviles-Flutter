@@ -15,8 +15,8 @@ class RequestRepository {
     }
 
     final response = await http.get(
-      Uri.parse('https://a-c-soluciones.onrender.com/api/solicitudes'),
-      //Uri.parse('https://a-c-soluciones.onrender.com/api/solicitudes'),
+      Uri.parse('http://10.0.2.2:8000/api/solicitudes'),
+      //Uri.parse('http://10.0.2.2:8000/api/solicitudes'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',

@@ -169,7 +169,7 @@ class _ReportListState extends State<_ReportList> {
               final bool isLoading = _loadingStates[visit.id] ?? false;
               final formattedDate =
                   DateFormat('dd/MM/yyyy').format(visit.fechaProgramada);
-              const String baseUrl = 'https://a-c-soluciones.onrender.com/api';
+              const String baseUrl = 'http://10.0.2.2:8000/api';
               final String downloadUrl =
                   '$baseUrl/fichas/descargar/${visit.id}';
 

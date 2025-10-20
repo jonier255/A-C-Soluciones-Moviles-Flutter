@@ -14,7 +14,7 @@ class ServiceRepository {
     }
 
     final response = await http.get(
-      // Uri.parse('https://a-c-soluciones.onrender.com/api/servicios'),
+      // Uri.parse('http://10.0.2.2:8000/api/servicios'),
       Uri.parse('https://flutter-58c3.onrender.com/api/servicios'),
 
       headers: {
