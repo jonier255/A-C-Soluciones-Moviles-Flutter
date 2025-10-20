@@ -81,7 +81,10 @@ class _ClientLayoutState extends State<ClientLayout> {
                   },
                 ),
                 Expanded(
-                  child: _routes[_currentRoute] ?? const ClientHomeContent(),
+                  child: Container(
+                    color: Colors.white,
+                    child: _routes[_currentRoute] ?? const ClientHomeContent(),
+                  ),
                 ),
               ],
             ),

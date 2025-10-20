@@ -15,15 +15,8 @@ class APIServiceRegister {
       'Content-Type': 'application/json',
     };
 
-    // var url = Uri.http(
-    //   'localhost:8000',
-    //   // '127.0.0.1:8000',
-    //   '/api/cliente',
-    // );
-
     final url = Uri.parse(
-      'https://a-c-soluciones.onrender.com/api/cliente',
-      //'https://a-c-soluciones.onrender.com/api/cliente',
+      'https://flutter-58c3.onrender.com/api/cliente',
     );
 
     var response = await client.post(

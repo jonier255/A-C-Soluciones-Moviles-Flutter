@@ -15,8 +15,7 @@ class RequestRepository {
     }
 
     final response = await http.get(
-      Uri.parse('https://a-c-soluciones.onrender.com/api/solicitudes'),
-      //Uri.parse('https://a-c-soluciones.onrender.com/api/solicitudes'),
+      Uri.parse('https://flutter-58c3.onrender.com/api/solicitudes'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',

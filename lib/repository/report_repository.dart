@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -16,7 +15,7 @@ class VisitWithReport {
 
 class ReportRepository {
   final _storageService = SecureStorageService();
-  final String _baseUrl = 'https://a-c-soluciones.onrender.com/api';
+  final String _baseUrl = 'https://flutter-58c3.onrender.com/api';
 
   Future<List<VisitWithReport>> getVisitsWithReports() async {
     final token = await _storageService.getToken();
@@ -69,13 +68,16 @@ class ReportRepository {
       throw Exception('Failed to load fichas');
     }
 
-    final List<dynamic> fichaListJson = json.decode(fichaResponse.body) as List<dynamic>? ?? [];
+    final List<dynamic> fichaListJson =
+        json.decode(fichaResponse.body) as List<dynamic>? ?? [];
     final List<FichaModel> allFichas = fichaListJson
         .map((item) => FichaModel.fromJson(item as Map<String, dynamic>))
         .toList();
 
     // 3. Create a map of visitId -> pdfPath
-    final reportMap = {for (var ficha in allFichas) ficha.visitId.toString(): ficha.pdfPath};
+    final reportMap = {
+      for (var ficha in allFichas) ficha.visitId.toString(): ficha.pdfPath
+    };
 
     // 4. Filter visits and combine data
     final List<VisitWithReport> visitsWithReports = assignedVisits

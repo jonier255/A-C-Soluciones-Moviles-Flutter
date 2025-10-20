@@ -9,11 +9,12 @@ class ServiceRepository {
   Future<List<Servicio>> getServices() async {
     final token = await _storageService.getToken();
     if (token == null) {
-      throw Exception('Token no encontrado. Por favor, inicie sesión de nuevo.');
+      throw Exception(
+          'Token no encontrado. Por favor, inicie sesión de nuevo.');
     }
 
     final response = await http.get(
-      Uri.parse('https://a-c-soluciones.onrender.com/api/servicios'),
+      Uri.parse('https://flutter-58c3.onrender.com/api/servicios'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -28,12 +29,11 @@ class ServiceRepository {
         return list
             .map((item) => Servicio.fromJson(item as Map<String, dynamic>))
             .toList();
-      } else if (decoded is List) { 
+      } else if (decoded is List) {
         return decoded
             .map((item) => Servicio.fromJson(item as Map<String, dynamic>))
             .toList();
-      }
-      else {
+      } else {
         throw Exception('Estructura de respuesta inesperada');
       }
     } else if (response.statusCode == 401) {
