@@ -1,223 +1,92 @@
-// import 'package:flutter/material.dart';
-// import '../Drawer/drawerClient.dart';
-// import 'package:flutter_a_c_soluciones/ui/client/lib/client_header.dart';
-
-// class ClientScreen extends StatelessWidget {
-//   const ClientScreen({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       drawer: const DrawerClient(),
-//       body: SafeArea(
-//         child: SingleChildScrollView(
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               // 🔹 Aquí llamas directamente tu widget reutilizable
-//               const ClientHeader(
-//                 name: "Jonier Urrea",
-//                 activity: "70%",
-//               ),
-
-//               const SizedBox(height: 10),
-
-//               // Branding
-//               Padding(
-//                 padding: const EdgeInsets.symmetric(horizontal: 16),
-//                 child: Center(
-//                   child: Image.asset(
-//                     "assets/soluciones.png",
-//                     height: 250,
-//                     width: 250,
-//                   ),
-//                 ),
-//               ),
-
-//               const SizedBox(height: 10),
-//               SizedBox(
-//                 height: 250,
-//                 child: ListView(
-//                   scrollDirection: Axis.horizontal,
-//                   children: [
-//                     _buildImageCard("assets/servicio1.jpg", "Servicio 1"),
-//                     _buildImageCard("assets/servicio2.jpg", "Servicio 2"),
-//                     _buildImageCard("assets/servicio3.webp", "Servicio 3"),
-//                     _buildImageCard("assets/servicio4.jpg", "Servicio 4"),
-//                   ],
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-
-//   Widget _buildImageCard(String imagePath, String title) {
-//     return Container(
-//       width: 150,
-//       margin: const EdgeInsets.only(left: 16, right: 8),
-//       child: Card(
-//         clipBehavior: Clip.antiAlias,
-//         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-//         elevation: 3,
-//         child: Column(
-//           children: [
-//             Expanded(
-//               child: Image.asset(
-//                 imagePath,
-//                 fit: BoxFit.cover,
-//                 width: double.infinity,
-//               ),
-//             ),
-//             Padding(
-//               padding: const EdgeInsets.all(8.0),
-//               child: Text(
-//                 title,
-//                 style: const TextStyle(
-//                   fontSize: 14,
-//                   fontWeight: FontWeight.bold,
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
-import '../Drawer/drawerClient.dart';
-import 'package:flutter_a_c_soluciones/ui/client/lib/client_header.dart';
 
-class ClientScreen extends StatelessWidget {
-  const ClientScreen({super.key});
+class ClientHomeContent extends StatelessWidget {
+  const ClientHomeContent({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: const DrawerClient(),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return Padding(
+      padding: const EdgeInsets.all(32),
+      child: Column(
+        children: [
+          Center(
+            child: Image.asset(
+              "assets/bannercompany-removebg-preview.png",
+              height: 200,
+              fit: BoxFit.contain,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // 🔹 Encabezado del cliente
-              const ClientHeader(
-                name: "Jonier Urrea",
-                activity: "70%",
-              ),
-
-              const SizedBox(height: 10),
-
-              // 🔹 Logo central
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Center(
-                  child: Image.asset(
-                    "assets/soluciones.png",
-                    height: 220,
-                    width: 220,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              // 🔹 Cards horizontales de servicios
-              SizedBox(
-                height: 260,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    _buildServiceCard("assets/servicio1.jpg", "Instalaciones"),
-                    _buildServiceCard("assets/servicio2.jpg", "Mantenimiento"),
-                    _buildServiceCard("assets/servicio3.webp", "Reparaciones"),
-                    _buildServiceCard("assets/servicio4.jpg", "Consultoría"),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildServiceCard(String imagePath, String title) {
-    return Container(
-      width: 180,
-      margin: const EdgeInsets.only(left: 16, right: 8),
-      child: InkWell(
-        onTap: () {}, // puedes agregar acción
-        borderRadius: BorderRadius.circular(20),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeOut,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.blue.shade100.withOpacity(0.5),
-                blurRadius: 10,
-                offset: const Offset(0, 6),
-              ),
-            ],
-            gradient: LinearGradient(
-              colors: [
-                Colors.blue.shade50,
-                Colors.blue.shade100.withOpacity(0.3),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-          child: Card(
-            elevation: 0,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            clipBehavior: Clip.antiAlias,
-            color: Colors.white.withOpacity(0.9),
-            child: Column(
-              children: [
-                Expanded(
-                  child: Image.asset(
-                    imagePath,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
-                ),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.lightBlueAccent.withOpacity(0.6),
-                        Colors.blueAccent.withOpacity(0.6),
-                      ],
-                    ),
-                    borderRadius: const BorderRadius.vertical(
-                      bottom: Radius.circular(20),
-                    ),
-                  ),
-                  child: Text(
-                    title,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 15,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'A & C Soluciones',
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      letterSpacing: 0.5,
+                      fontSize: 18,
                     ),
                   ),
+                  Text(
+                    'Reparaciones y Mantenimientos',
+                    style: TextStyle(
+                        color: const Color.fromARGB(255, 145, 103, 103)),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Icon(Icons.star, color: Colors.red[500]),
+                  const SizedBox(width: 4),
+                  const Text('41'),
+                ],
+              ),
+            ],
+          ),
+
+          // iconos de acciones
+          const SizedBox(height: 16),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.lightGreen[50],
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey,
+                  blurRadius: 2,
+                  offset: Offset(0, 2),
                 ),
               ],
             ),
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Icon(Icons.call, color: Colors.blue[400]),
+                Icon(Icons.shopping_cart, color: Colors.blue[400]),
+                Icon(Icons.message, color: Colors.blue[400]),
+                Icon(Icons.share, color: Colors.blue[400]),
+              ],
+            ),
           ),
-        ),
+
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2),
+            child: Text(
+              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem",
+              style: TextStyle(
+                color: Colors.grey[600],
+                height: 1.5, // espaciado entre líneas (opcional)
+              ),
+              textAlign: TextAlign.justify, // para justificar el texto
+            ),
+          ),
+        ],
       ),
     );
   }

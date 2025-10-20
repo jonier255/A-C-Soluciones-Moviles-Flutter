@@ -1,25 +1,34 @@
-// custom_drawer.dart
 import 'package:flutter/material.dart';
 
 class DrawerClient extends StatelessWidget {
-  const DrawerClient({super.key});
+  final Function(String) onItemSelected;
+  final String userName;
+  final String userEmail;
+
+  const DrawerClient({
+    super.key,
+    required this.onItemSelected,
+    required this.userName,
+    required this.userEmail,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: Colors.white,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const UserAccountsDrawerHeader(
-            decoration: BoxDecoration(
+          UserAccountsDrawerHeader(
+            decoration: const BoxDecoration(
               color: Color.fromARGB(255, 46, 145, 216),
             ),
             accountName: Text(
-              "Jonier Urrea", // 👤 Nombre quemado
+              userName,
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             accountEmail: Text(
-              "jonier.urrea@correounivalle.edu.co", // 📧 Email quemado
+              userEmail,
               style: TextStyle(fontSize: 14),
             ),
             currentAccountPicture: CircleAvatar(
@@ -35,40 +44,35 @@ class DrawerClient extends StatelessWidget {
             leading: const Icon(Icons.home),
             title: const Text('Inicio'),
             onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/client_home');
+              onItemSelected('/client_home');
             },
           ),
           ListTile(
             leading: const Icon(Icons.miscellaneous_services),
             title: const Text('Servicios'),
             onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/client_services');
+              onItemSelected('/client_services');
             },
           ),
           ListTile(
             leading: const Icon(Icons.request_page),
             title: const Text('Solicitudes'),
             onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/client_requests');
+              onItemSelected('/client_requests');
             },
           ),
           ListTile(
             leading: const Icon(Icons.history),
             title: const Text('Historial'),
             onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/client_history');
+              onItemSelected('/client_history');
             },
           ),
           ListTile(
             leading: const Icon(Icons.chat),
             title: const Text('Chat'),
             onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/client_chat');
+              onItemSelected('/client_chat');
             },
           ),
           const Divider(),
@@ -77,7 +81,7 @@ class DrawerClient extends StatelessWidget {
             title: const Text('Cerrar Sesión'),
             onTap: () {
               Navigator.pop(context);
-              // Aquí puedes agregar lógica de logout
+              // Implement logout
             },
           ),
         ],
