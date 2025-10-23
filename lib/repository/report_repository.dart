@@ -17,6 +17,31 @@ class ReportRepository {
   final _storageService = SecureStorageService();
   final String _baseUrl = 'http://10.0.2.2:8000/api';
 
+  Future<String?> getPdfPathForVisit(int visitId) async {
+    final token = await _storageService.getToken();
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    final response = await http.get(
+      Uri.parse('$_baseUrl/fichas?id_visitas=$visitId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      if (data.isNotEmpty) {
+        return data[0]['pdf_path'];
+      }
+      return null;
+    } else {
+      throw Exception('Failed to load PDF path');
+    }
+  }
+
   Future<List<VisitWithReport>> getVisitsWithReports() async {
     final token = await _storageService.getToken();
     if (token == null) {

@@ -5,6 +5,27 @@ import 'secure_storage_service.dart';
 
 class TaskRepository {
   final _storageService = SecureStorageService();
+  final String _baseUrl = 'http://10.0.2.2:8000/api';
+
+  Future<void> updateTaskState(int taskId, String state) async {
+    final token = await _storageService.getToken();
+    if (token == null) {
+      throw Exception('Token no encontrado. Por favor, inicie sesión de nuevo.');
+    }
+
+    final response = await http.put(
+      Uri.parse('$_baseUrl/visitas/$taskId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode({'estado': state}),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Fallo en la actualización del estado (status: ${response.statusCode})');
+    }
+  }
 
   Future<List<TaskModel>> getTasks() async {
     final token = await _storageService.getToken();
