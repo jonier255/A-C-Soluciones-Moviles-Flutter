@@ -21,8 +21,10 @@ class ViewReportListPageTc extends StatelessWidget {
       create: (context) => ReportBloc(ReportRepository())..add(FetchReports()),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Mis Reportes'),
-          backgroundColor: Colors.blue.shade800,
+          title: const Text('Mis Reportes', style: TextStyle(color: Colors.black)),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          iconTheme: const IconThemeData(color: Colors.black),
         ),
         body: const _ReportList(),
       ),
@@ -151,7 +153,8 @@ class _ReportListState extends State<_ReportList> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: ${e.toString()}')),
       );
-    } finally {
+    }
+    finally {
       if (mounted) {
         setState(() {
           _loadingStates[visitId] = false;
@@ -178,50 +181,90 @@ class _ReportListState extends State<_ReportList> {
               final report = state.reports[index];
               final visit = report.visit;
               final bool isLoading = _loadingStates[visit.id] ?? false;
-              final formattedDate =
-                  DateFormat('dd/MM/yyyy').format(visit.fechaProgramada);
 
-              const String apiKey = 'http://10.0.2.2:8000';
-              String relativePath = report.pdfPath.replaceFirst(RegExp(r'uploads[\\/]'), '');
-              relativePath = relativePath.replaceAll(r'\', '/');
-              final String downloadUrl = '$apiKey/$relativePath';
-
-              return Card(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                elevation: 4,
-                child: ListTile(
-                  leading: Icon(Icons.article, color: Colors.blue.shade800),
-                  title: Text(
-                    'Visita: ${visit.notasPrevias.isNotEmpty ? visit.notasPrevias : "Sin notas previas"}',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  subtitle: Text(
-                    'Fecha: $formattedDate\nNotas post-visita: ${visit.notasPosteriores.isNotEmpty ? visit.notasPosteriores : "N/A"}',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  trailing: isLoading
-                      ? const CircularProgressIndicator()
-                      : IconButton(
-                          icon: const Icon(Icons.download_for_offline,
-                              color: Colors.green),
-                          tooltip: 'Descargar Reporte',
-                          onPressed: () {
-                            _downloadAndOpenFile(
-                                downloadUrl, report.pdfPath, visit.id);
-                          },
-                        ),
-                  isThreeLine: true,
-                ),
+              return _ReportCard(
+                report: report,
+                isLoading: isLoading,
+                onDownload: () {
+                  const String apiKey = 'http://10.0.2.2:8000';
+                  String relativePath = report.pdfPath.replaceFirst(RegExp(r'uploads[\\/]'), '');
+                  relativePath = relativePath.replaceAll(r'\', '/');
+                  final String downloadUrl = '$apiKey/$relativePath';
+                  _downloadAndOpenFile(downloadUrl, report.pdfPath, visit.id);
+                },
               );
             },
           );
         }
         return const Center(child: Text('Iniciando...'));
       },
+    );
+  }
+}
+
+class _ReportCard extends StatelessWidget {
+  final dynamic report;
+  final bool isLoading;
+  final VoidCallback onDownload;
+
+  const _ReportCard({
+    required this.report,
+    required this.isLoading,
+    required this.onDownload,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final visit = report.visit;
+    final formattedDate =
+        DateFormat('dd/MM/yyyy').format(visit.fechaProgramada);
+
+    return Card(
+      elevation: 6,
+      color: Colors.white,
+      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Padding(
+        padding: const EdgeInsets.all(14.0),
+        child: Row(
+          children: [
+            const Icon(Icons.article, size: 35, color: Colors.black),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Visita: ${visit.notasPrevias.isNotEmpty ? visit.notasPrevias : "Sin notas previas"}',
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Notas post-visita: ${visit.notasPosteriores.isNotEmpty ? visit.notasPosteriores : "N/A"}',
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text("Fecha: $formattedDate",
+                      style:
+                          const TextStyle(fontSize: 12, color: Colors.grey)),
+                ],
+              ),
+            ),
+            isLoading
+                ? const CircularProgressIndicator()
+                : IconButton(
+                    icon: const Icon(Icons.download_for_offline,
+                        color: Colors.green),
+                    tooltip: 'Descargar Reporte',
+                    onPressed: onDownload,
+                  ),
+          ],
+        ),
+      ),
     );
   }
 }

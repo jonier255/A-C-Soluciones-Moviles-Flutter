@@ -113,7 +113,7 @@ class _MainButtonsSection extends StatelessWidget {
             onTap: () {
               Navigator.pushNamed(context, '/technical_reports');
             },
-            child: const _MainButton(icon: Icons.file_copy_outlined, label: "Reportes"),
+            child: const _MainButton(icon: Icons.description, label: "Reportes"),
           ),
         ],
       ),
