@@ -11,10 +11,14 @@ class FichaModel {
   });
 
   factory FichaModel.fromJson(Map<String, dynamic> json) {
+    String pdfPath = json['pdf_path'] as String? ?? '';
+    if (pdfPath.startsWith('uploads/')) {
+      pdfPath = pdfPath.replaceFirst('uploads/', '');
+    }
     return FichaModel(
       id: int.tryParse(json['id']?.toString() ?? '0') ?? 0,
       visitId: int.tryParse(json['id_visitas']?.toString() ?? '0') ?? 0,
-      pdfPath: json['pdf_path'] as String? ?? '',
+      pdfPath: pdfPath,
     );
   }
 }

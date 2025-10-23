@@ -102,7 +102,10 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
     if (_pdfPath == null) return;
 
     try {
-      final url = 'http://10.0.2.2:8000/$_pdfPath';
+      // Replace backslashes with forward slashes for cross-platform compatibility
+      final pathFromServer = _pdfPath!.replaceAll(r'\', '/');
+      final fileName = pathFromServer.split('/').last;
+      final url = 'http://10.0.2.2:8000/fichas/$fileName';
       final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {

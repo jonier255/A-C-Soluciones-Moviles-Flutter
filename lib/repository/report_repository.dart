@@ -34,7 +34,8 @@ class ReportRepository {
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
       if (data.isNotEmpty) {
-        return data[0]['pdf_path'];
+        final ficha = FichaModel.fromJson(data[0] as Map<String, dynamic>);
+        return ficha.pdfPath;
       }
       return null;
     } else {
