@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -167,12 +166,17 @@ class _ReportListState extends State<_ReportList> {
   Widget build(BuildContext context) {
     return BlocBuilder<ReportBloc, ReportState>(
       builder: (context, state) {
+        print('[UI] BlocBuilder received state: ${state.runtimeType}');
         if (state is ReportLoading) {
+          print('[UI] Rendering CircularProgressIndicator.');
           return const Center(child: CircularProgressIndicator());
         } else if (state is ReportError) {
+          print('[UI] Rendering Error: ${state.message}');
           return Center(child: Text('Error: ${state.message}'));
         } else if (state is ReportLoaded) {
+          print('[UI] Rendering ReportLoaded with ${state.reports.length} reports.');
           if (state.reports.isEmpty) {
+            print('[UI] Report list is empty, rendering message.');
             return const Center(child: Text('No hay reportes disponibles.'));
           }
           return ListView.builder(
@@ -196,6 +200,7 @@ class _ReportListState extends State<_ReportList> {
             },
           );
         }
+        print('[UI] Rendering initial/unknown state.');
         return const Center(child: Text('Iniciando...'));
       },
     );
