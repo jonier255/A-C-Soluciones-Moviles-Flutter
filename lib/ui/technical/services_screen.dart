@@ -6,6 +6,7 @@ import '../../bloc/service/service_state.dart';
 import '../../model/servicio_model.dart';
 import '../../repository/service_repository.dart';
 import 'service_details_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/widgets/bottom_nav_bar.dart';
 
 class ServicesScreen extends StatelessWidget {
   const ServicesScreen({super.key});
@@ -18,6 +19,7 @@ class ServicesScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Servicios'),
         ),
+        bottomNavigationBar: const BottomNavBar(),
         body: BlocBuilder<ServiceBloc, ServiceState>(
           builder: (context, state) {
             if (state is ServiceLoading) {

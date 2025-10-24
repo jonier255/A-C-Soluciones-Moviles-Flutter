@@ -7,6 +7,7 @@ import 'package:flutter_a_c_soluciones/ui/technical/report_screen.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_file/open_file.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/widgets/bottom_nav_bar.dart';
 
 class VisitsDetailsScreen extends StatefulWidget {
   final TaskModel task;
@@ -133,6 +134,7 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
+      bottomNavigationBar: const BottomNavBar(),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(

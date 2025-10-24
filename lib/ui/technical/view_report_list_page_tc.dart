@@ -10,6 +10,7 @@ import 'package:open_file/open_file.dart';
 import '../../../bloc/report/report_bloc.dart';
 import '../../../repository/report_repository.dart';
 import '../../../repository/secure_storage_service.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/widgets/bottom_nav_bar.dart';
 
 class ViewReportListPageTc extends StatelessWidget {
   const ViewReportListPageTc({super.key});
@@ -25,6 +26,7 @@ class ViewReportListPageTc extends StatelessWidget {
           elevation: 0,
           iconTheme: const IconThemeData(color: Colors.black),
         ),
+        bottomNavigationBar: const BottomNavBar(),
         body: const _ReportList(),
       ),
     );

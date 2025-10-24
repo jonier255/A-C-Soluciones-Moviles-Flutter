@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_a_c_soluciones/ui/technical/assigned_visits_screen.dart';
-import 'package:flutter_a_c_soluciones/ui/technical/completed_visits_screen.dart';
-import 'package:flutter_a_c_soluciones/ui/technical/services_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_event.dart';
 import 'package:flutter_a_c_soluciones/model/technical/task_model.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_state.dart';
 import 'package:flutter_a_c_soluciones/repository/task_repository.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/widgets/bottom_nav_bar.dart';
 
 class TechnicalHomeScreen extends StatelessWidget {
   const TechnicalHomeScreen({super.key});
@@ -18,7 +16,7 @@ class TechnicalHomeScreen extends StatelessWidget {
       create: (context) => TaskBloc(TaskRepository())..add(FetchTasks()),
       child: Scaffold(
         backgroundColor: Colors.white,
-        bottomNavigationBar: const _BottomNavBar(),
+        bottomNavigationBar: const BottomNavBar(),
         body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -102,10 +100,7 @@ class _MainButtonsSection extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AssignedVisitsScreen()),
-              );
+              Navigator.pushNamed(context, '/technical_assigned_visits');
             },
             child: const _MainButton(icon: Icons.work_outline, label: "Asignadas"),
           ),
@@ -171,7 +166,7 @@ class _QuickAccessSection extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                // Aquí podrás navegar a tus pantallas de tareas
+                Navigator.pushNamed(context, '/technical_assigned_visits');
               },
               child: const _QuickButton(icon: Icons.assignment, label: "Tareas"),
             ),
@@ -180,10 +175,7 @@ class _QuickAccessSection extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ServicesScreen()),
-                );
+                Navigator.pushNamed(context, '/technical_services');
               },
               child:
                   const _QuickButton(icon: Icons.miscellaneous_services, label: "Servicios"),
@@ -193,10 +185,7 @@ class _QuickAccessSection extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CompletedVisitsScreen()),
-                );
+                Navigator.pushNamed(context, '/technical_completed_visits');
               },
               child: const _QuickButton(
                   icon: Icons.check_circle_outline, label: "Finalizadas"),
@@ -315,10 +304,7 @@ class _RecentTasksSection extends StatelessWidget {
                     Center(
                       child: TextButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const AssignedVisitsScreen()),
-                          );
+                          Navigator.pushNamed(context, '/technical_assigned_visits');
                         },
                         child: Text(
                           "Ver más...",
@@ -412,30 +398,6 @@ class _TaskCard extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-// Menú inferior
-class _BottomNavBar extends StatelessWidget {
-  const _BottomNavBar();
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      onTap: (index) {
-        // Aquí luego agregarás la navegación correspondiente
-      },
-      selectedItemColor: const Color.fromARGB(255, 46, 145, 216),
-      unselectedItemColor: Colors.black,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.task_alt), label: 'Tareas'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.inventory), label: 'Inventario'),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Cuenta'),
-      ],
     );
   }
 }
