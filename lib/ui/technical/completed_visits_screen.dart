@@ -5,6 +5,7 @@ import 'package:flutter_a_c_soluciones/bloc/task/task_event.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_state.dart';
 import 'package:flutter_a_c_soluciones/model/technical/task_model.dart';
 import 'package:flutter_a_c_soluciones/repository/task_repository.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/widgets/bottom_nav_bar.dart';
 
 class CompletedVisitsScreen extends StatelessWidget {
   const CompletedVisitsScreen({super.key});
@@ -17,6 +18,7 @@ class CompletedVisitsScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Visitas Terminadas'),
         ),
+        bottomNavigationBar: const BottomNavBar(),
         body: BlocBuilder<TaskBloc, TaskState>(
           builder: (context, state) {
             if (state is TaskLoading) {
