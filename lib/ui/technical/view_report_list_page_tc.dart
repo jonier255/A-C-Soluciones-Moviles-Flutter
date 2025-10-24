@@ -54,13 +54,9 @@ class _ReportListState extends State<_ReportList> {
 
     try {
       // 1. Check and request permission
-      print('Requesting storage permission...');
       var storageStatus = await Permission.storage.request();
-      print('Storage permission status: $storageStatus');
 
-      print('Requesting accessMediaLocation permission...');
       var mediaStatus = await Permission.accessMediaLocation.request();
-      print('Access media location permission status: $mediaStatus');
 
       if (!storageStatus.isGranted && !mediaStatus.isGranted) {
         if (storageStatus.isPermanentlyDenied || mediaStatus.isPermanentlyDenied) {
@@ -166,17 +162,12 @@ class _ReportListState extends State<_ReportList> {
   Widget build(BuildContext context) {
     return BlocBuilder<ReportBloc, ReportState>(
       builder: (context, state) {
-        print('[UI] BlocBuilder received state: ${state.runtimeType}');
         if (state is ReportLoading) {
-          print('[UI] Rendering CircularProgressIndicator.');
           return const Center(child: CircularProgressIndicator());
         } else if (state is ReportError) {
-          print('[UI] Rendering Error: ${state.message}');
           return Center(child: Text('Error: ${state.message}'));
         } else if (state is ReportLoaded) {
-          print('[UI] Rendering ReportLoaded with ${state.reports.length} reports.');
           if (state.reports.isEmpty) {
-            print('[UI] Report list is empty, rendering message.');
             return const Center(child: Text('No hay reportes disponibles.'));
           }
           return ListView.builder(
@@ -200,7 +191,6 @@ class _ReportListState extends State<_ReportList> {
             },
           );
         }
-        print('[UI] Rendering initial/unknown state.');
         return const Center(child: Text('Iniciando...'));
       },
     );

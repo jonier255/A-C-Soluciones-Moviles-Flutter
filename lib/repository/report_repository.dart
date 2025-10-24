@@ -1,6 +1,5 @@
 
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 import '../model/visits_model.dart';
@@ -45,26 +44,18 @@ class ReportRepository {
   }
 
   Future<List<VisitWithReport>> getVisitsWithReports() async {
-    print('[Repository] Starting getVisitsWithReports...');
     final token = await _storageService.getToken();
     if (token == null) {
-      print('[Repository] Error: Token not found.');
       throw Exception('Token not found');
     }
 
     Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-    if (kDebugMode) {
-      print('[Repository] Decoded Token: $decodedToken');
-    }
     final technicalId = decodedToken['id'];
     if (technicalId == null) {
-      print('[Repository] Error: Technical ID not found in token.');
       throw Exception('Technical ID not found in token');
     }
-    print('[Repository] Technician ID: $technicalId');
 
     // 1. Fetch all fichas (reports)
-    print('[Repository] Fetching all reports from /fichas...');
     final fichaResponse = await http.get(
       Uri.parse('$_baseUrl/fichas'),
       headers: {
@@ -74,7 +65,6 @@ class ReportRepository {
     );
 
     if (fichaResponse.statusCode != 200) {
-      print('[Repository] Error: Failed to load fichas. Status: ${fichaResponse.statusCode}');
       throw Exception('Failed to load fichas');
     }
 
@@ -82,19 +72,15 @@ class ReportRepository {
     final List<FichaModel> allFichas = fichaListJson
         .map((item) => FichaModel.fromJson(item as Map<String, dynamic>))
         .toList();
-    print('[Repository] Found a total of ${allFichas.length} reports.');
 
     // 2. Filter reports by the current technician's ID
     final technicianFichas = allFichas.where((ficha) => ficha.tecnicoId == technicalId).toList();
-    print('[Repository] Found ${technicianFichas.length} reports specifically for technician ID $technicalId');
 
     // 3. For each report, fetch its corresponding visit details
     final List<VisitWithReport> visitsWithReports = [];
-    print('[Repository] Fetching visit details for each of the ${technicianFichas.length} reports...');
     for (var ficha in technicianFichas) {
       try {
         final visitId = ficha.visitId;
-        print('[Repository]   - Fetching visit ID: $visitId for report ID: ${ficha.id}');
         final visitResponse = await http.get(
           Uri.parse('$_baseUrl/visitas/$visitId'), // Assuming this endpoint exists
           headers: {
@@ -112,16 +98,12 @@ class ReportRepository {
             visit: visit,
             pdfPath: ficha.pdfPath,
           ));
-          print('[Repository]   - Successfully fetched and added visit ID: $visitId');
-        } else {
-          print('[Repository]   - Failed to fetch visit details for visit ID: $visitId. Status: ${visitResponse.statusCode}');
         }
       } catch (e) {
-        print('[Repository]   - Error processing report ${ficha.id}: $e');
+        // Silenciado intencionalmente
       }
     }
     
-    print('[Repository] Finished. Successfully constructed ${visitsWithReports.length} VisitWithReport objects.');
     return visitsWithReports;
   }
 }
