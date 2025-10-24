@@ -52,7 +52,6 @@ class MyApp extends StatelessWidget {
             '/forget': (context) => const ForgetScreen(),
             '/verify': (context) => VerifyCodeScreen(),
             '/admin_home': (context) => const AdminHomeScreen(),
-            // '/client_home': (context) => const ClientScreen(),
             '/request': (context) => RequestScreen(),
             '/technical_home': (context) => const TechnicalHomeScreen(),
             '/visits': (context) => VisitsScreen(),
@@ -62,14 +61,7 @@ class MyApp extends StatelessWidget {
             '/technical_completed_visits': (context) => const CompletedVisitsScreen(),
 
             // En tu main.dart, actualiza la ruta:
-            '/client_home': (context) =>
-                const ClientLayout(), // En lugar de ClientScreen
-
-            // 🔹 Rutas del Drawer
-            // '/client_services': (context) => const ServicesPage(),
-            // '/client_requests': (context) => const RequestsPage(),
-            // '/client_history': (context) => const HistoryPage(),
-            // '/client_chat': (context) => const ChatPage(),
+            '/client_home': (context) => const ClientLayout(),
           },
         ),
       ),

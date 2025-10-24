@@ -5,54 +5,85 @@ class ClientHomeContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Center(
-              child: Image.asset(
-                "assets/soluciones.png",
-                height: 220,
-                width: 220,
-              ),
-            ),
-          ),
-          Column(
-            children: [
-              _buildServiceCard("assets/servicio2.jpg", "Mantenimiento"),
-              _buildServiceCard("assets/servicio3.webp", "Reparaciones"),
-              _buildServiceCard("assets/servicio4.jpg", "Consultoría"),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildServiceCard(String imagePath, String title) {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    return Padding(
+      padding: const EdgeInsets.all(32),
       child: Column(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
+          Center(
             child: Image.asset(
-              imagePath,
-              width: double.infinity,
-              height: 150,
-              fit: BoxFit.cover,
+              "assets/bannercompany-removebg-preview.png",
+              height: 200,
+              fit: BoxFit.contain,
             ),
           ),
           const SizedBox(height: 8),
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF2E91D8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'A & C Soluciones',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  Text(
+                    'Reparaciones y Mantenimientos',
+                    style: TextStyle(
+                        color: const Color.fromARGB(255, 145, 103, 103)),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Icon(Icons.star, color: Colors.red[500]),
+                  const SizedBox(width: 4),
+                  const Text('41'),
+                ],
+              ),
+            ],
+          ),
+
+          // iconos de acciones
+          const SizedBox(height: 16),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.lightGreen[50],
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey,
+                  blurRadius: 2,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Icon(Icons.call, color: Colors.blue[400]),
+                Icon(Icons.shopping_cart, color: Colors.blue[400]),
+                Icon(Icons.message, color: Colors.blue[400]),
+                Icon(Icons.share, color: Colors.blue[400]),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2),
+            child: Text(
+              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem",
+              style: TextStyle(
+                color: Colors.grey[600],
+                height: 1.5, // espaciado entre líneas (opcional)
+              ),
+              textAlign: TextAlign.justify, // para justificar el texto
             ),
           ),
         ],

@@ -30,7 +30,8 @@ class TaskRepository {
   Future<List<TaskModel>> getTasks() async {
     final token = await _storageService.getToken();
     if (token == null) {
-      throw Exception('Token no encontrado. Por favor, inicie sesión de nuevo.');
+      throw Exception(
+          'Token no encontrado. Por favor, inicie sesión de nuevo.');
     }
 
     final response = await http.get(
