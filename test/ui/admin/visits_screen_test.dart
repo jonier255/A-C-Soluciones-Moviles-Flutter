@@ -47,7 +47,7 @@ void main() {
 
     // Esta funcion  envuelve el widget que queremos probar en este caso pues visitsScreen
     // con los providers que necesitamos, como el BlocProvider
-    Future<void> pumpVisitsScreen(WidgetTester tester) async {
+    Future<void> pumpVisitsScreen(WidgetTester tester) async { //renderizar 
       await tester.pumpWidget(
         MaterialApp(
           home: BlocProvider<VisitsBloc>.value(
