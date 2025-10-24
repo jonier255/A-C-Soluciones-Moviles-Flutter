@@ -51,7 +51,6 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
 
   void _handleStateChange(String? newState) {
     if (newState == null) return;
-
     if (['completada', 'cancelada'].contains(newState)) {
       _showConfirmationDialog(newState);
     } else {
@@ -80,7 +79,8 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Confirmar cambio de estado'),
-        content: Text('¿Estás seguro de que deseas marcar esta visita como $newState? Esta acción podría ser irreversible.'),
+        content: Text(
+            '¿Estás seguro de que deseas marcar esta visita como $newState? Esta acción podría ser irreversible.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -100,9 +100,7 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
 
   Future<void> _openPdf() async {
     if (_pdfPath == null) return;
-
     try {
-      // Replace backslashes with forward slashes for cross-platform compatibility
       final pathFromServer = _pdfPath!.replaceAll(r'\', '/');
       final fileName = pathFromServer.split('/').last;
       final url = 'http://10.0.2.2:8000/fichas/$fileName';
@@ -125,49 +123,113 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.task.servicio.nombre),
+        title: const Text('Detalles de la Visita'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Detalles de la Visita',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: 20),
-                  _buildDetailRow('Servicio:', widget.task.servicio.nombre),
-                  _buildDetailRow('Descripción:', widget.task.servicio.descripcion),
-                  _buildDetailRow('Fecha Programada:', widget.task.fechaProgramada.toString().substring(0, 10)),
-                  _buildDetailRow('Duración estimada:', '${widget.task.duracionEstimada} minutos'),
-                  _buildDetailRow('Notas previas:', widget.task.notasPrevias ?? 'No hay notas previas'),
-                  _buildDetailRow('Notas posteriores:', widget.task.notasPosteriores ?? 'No hay notas posteriores'),
-                  const SizedBox(height: 20),
-                  _buildStateDropdown(),
-                  const SizedBox(height: 20),
-                  if (_pdfPath != null)
-                    ElevatedButton(
-                      onPressed: _openPdf,
-                      child: const Text('Ver Reporte'),
-                    )
-                  else
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ReportScreen(visitId: widget.task.id),
-                          ),
-                        );
-                      },
-                      child: const Text('Generar Reporte'),
+              padding: const EdgeInsets.all(20.0),
+              child: Center(
+                child: Container(
+                  width: screenWidth * 0.9,
+                  padding: const EdgeInsets.all(25),
+                  margin: const EdgeInsets.symmetric(vertical: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(18),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.blue.withOpacity(0.35),
+                        blurRadius: 15,
+                        spreadRadius: 3,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                    border: Border.all(
+                      color: Colors.blueAccent.withOpacity(0.3),
+                      width: 1.5,
                     ),
-                ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Descripción',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.black87),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(widget.task.servicio.descripcion,
+                          style: const TextStyle(fontSize: 17)),
+                      const SizedBox(height: 28),
+                      const Text(
+                        'Información',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.black87),
+                      ),
+                      const SizedBox(height: 16),
+                      _buildDetailRow(
+                          'Notas previas:', widget.task.notasPrevias ?? ''),
+                      const SizedBox(height: 10),
+                      _buildDetailRow('Notas posteriores:',
+                          widget.task.notasPosteriores ?? ''),
+                      const SizedBox(height: 10),
+                      _buildDetailRow(
+                          'Fecha programada:',
+                          widget.task.fechaProgramada
+                              .toString()
+                              .substring(0, 10)),
+                      const SizedBox(height: 10),
+                      _buildDetailRow('Duración estimada:',
+                          '${widget.task.duracionEstimada} minutos'),
+                      const SizedBox(height: 25),
+                      _buildStateDropdown(),
+                      const SizedBox(height: 25),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: _pdfPath != null
+                              ? _openPdf
+                              : () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ReportScreen(
+                                          visitId: widget.task.id),
+                                    ),
+                                  );
+                                },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueAccent,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: Text(
+                              _pdfPath != null
+                                  ? 'Ver reporte'
+                                  : 'Generar reporte',
+                              style: const TextStyle(
+                                  fontSize: 17, fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
     );
@@ -177,13 +239,15 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
     return DropdownButtonFormField<String>(
       value: _visitState,
       decoration: const InputDecoration(
-        labelText: 'Estado de la visita',
+        labelText: 'Estado',
+        labelStyle: TextStyle(fontSize: 17),
         border: OutlineInputBorder(),
+        contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       ),
       items: ['programada', 'en_camino', 'iniciada', 'completada', 'cancelada']
           .map((label) => DropdownMenuItem(
                 value: label,
-                child: Text(label),
+                child: Text(label, style: const TextStyle(fontSize: 17)),
               ))
           .toList(),
       onChanged: ['completada', 'cancelada'].contains(_visitState)
@@ -195,18 +259,26 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
   Widget _buildDetailRow(String title, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
+          Text(title,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 17,
+                  color: Colors.black87)),
+          const SizedBox(height: 4),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.only(bottom: 6, top: 3),
+            decoration: const BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Colors.lightBlueAccent, width: 1.2),
+              ),
+            ),
             child: Text(
-              value,
-              style: const TextStyle(fontSize: 16),
+              value.isNotEmpty ? value : '—',
+              style: const TextStyle(fontSize: 16.5, color: Colors.black87),
             ),
           ),
         ],
