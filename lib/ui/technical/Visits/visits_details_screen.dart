@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/model/technical/task_model.dart';
 import 'package:flutter_a_c_soluciones/repository/report_repository.dart';
 import 'package:flutter_a_c_soluciones/repository/task_repository.dart';
-import 'package:flutter_a_c_soluciones/ui/technical/screens/report_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/Reports/report_screen.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_file/open_file.dart';

@@ -5,7 +5,7 @@ import 'package:flutter_a_c_soluciones/bloc/task/task_event.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_state.dart';
 import 'package:flutter_a_c_soluciones/model/technical/task_model.dart';
 import 'package:flutter_a_c_soluciones/repository/task_repository.dart';
-import 'package:flutter_a_c_soluciones/ui/technical/screens/visits_details_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/Visits/visits_details_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/widgets/bottom_nav_bar.dart';
 
 class AssignedVisitsScreen extends StatelessWidget {

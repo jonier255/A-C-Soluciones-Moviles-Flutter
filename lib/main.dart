@@ -13,11 +13,11 @@ import 'package:flutter_a_c_soluciones/ui/forget.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/admin_home.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/request_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/verifyCode.dart';
-import 'package:flutter_a_c_soluciones/ui/technical/screens/technical_home.dart';
-import 'package:flutter_a_c_soluciones/ui/technical/screens/view_report_list_page_tc.dart'; // Import new screen
-import 'package:flutter_a_c_soluciones/ui/technical/screens/assigned_visits_screen.dart';
-import 'package:flutter_a_c_soluciones/ui/technical/screens/services_screen.dart';
-import 'package:flutter_a_c_soluciones/ui/technical/screens/completed_visits_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/Home/technical_home.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/Reports/view_report_list_page_tc.dart'; // Import new screen
+import 'package:flutter_a_c_soluciones/ui/technical/Visits/assigned_visits_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/Services/services_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/Visits/completed_visits_screen.dart';
 
 void main() {
   runApp(const MyApp());
