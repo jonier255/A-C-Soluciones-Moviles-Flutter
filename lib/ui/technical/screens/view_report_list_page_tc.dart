@@ -7,9 +7,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_file/open_file.dart';
 
-import '../../../bloc/report/report_bloc.dart';
-import '../../../repository/report_repository.dart';
-import '../../../repository/secure_storage_service.dart';
+import '../../../../bloc/report/report_bloc.dart';
+import '../../../../repository/report_repository.dart';
+import '../../../../repository/secure_storage_service.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/widgets/bottom_nav_bar.dart';
 
 class ViewReportListPageTc extends StatelessWidget {
