@@ -2,7 +2,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
-import '../model/visits_model.dart';
+import '../model/administrador/visits_model.dart';
 import '../model/ficha_model.dart';
 import 'secure_storage_service.dart';
 

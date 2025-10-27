@@ -1,13 +1,13 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_a_c_soluciones/ui/admin/request_screen.dart';
-import 'package:flutter_a_c_soluciones/ui/admin/admin_menu_visits.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/Visits/admin_menu_visits.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../bloc/request/request_bloc.dart';
-import '../../bloc/request/request_event.dart';
-import '../../bloc/request/request_state.dart';
-import '../../model/request_model.dart';
-import '../../repository/request_repository.dart';
+import '../../../bloc/request/request_bloc.dart';
+import '../../../bloc/request/request_event.dart';
+import '../../../bloc/request/request_state.dart';
+import '../../../model/administrador/request_model.dart';
+import '../../../repository/services_admin/request_repository.dart';
 
 // Pantalla principal del administrador
 class AdminHomeScreen extends StatelessWidget {

@@ -1,11 +1,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/bloc/request/request_bloc.dart';
-import 'package:flutter_a_c_soluciones/repository/request_repository.dart';
-import 'package:flutter_a_c_soluciones/ui/admin/request_screen.dart';
+import 'package:flutter_a_c_soluciones/repository/services_admin/request_repository.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../bloc/visits/visits_bloc.dart';
-import '../../repository/service_api_visits.dart';
+import '../../../bloc/visits/visits_bloc.dart';
+import '../../../repository/services_admin/service_api_visits.dart';
 import 'visits_screen.dart'; 
 
 class VisitasMenuScreen extends StatelessWidget {

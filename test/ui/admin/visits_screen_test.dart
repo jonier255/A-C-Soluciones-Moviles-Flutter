@@ -6,17 +6,15 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_a_c_soluciones/bloc/visits/visits_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/visits/visits_event.dart';
 import 'package:flutter_a_c_soluciones/bloc/visits/visits_state.dart';
-import 'package:flutter_a_c_soluciones/model/visits_model.dart';
-import 'package:flutter_a_c_soluciones/ui/admin/visits_screen.dart';
+import 'package:flutter_a_c_soluciones/model/administrador/visits_model.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/Visits/visits_screen.dart';
 
-// MockVisitsBloc (aqui pues se utliza un mock para una clase falsa que
-//simula el VisitsBloc).
-// Esto ayda a controlar los estados del BLoC para probar la interfaz.
-// Usamos la librería bloc_test para crear el mock.
+// primero  pues se utliza un mock para una clase falsa que simula el VisitsBloc).
+// Esto ayda a controlar los estados del bloc para probar la interfaz.
+// Usamos la libreria bloc_test
 class MockVisitsBloc extends MockBloc<VisitsEvent, VisitsState> implements VisitsBloc {}
 
 void main() {
-  // 'group' sirve para agrupar pruebas relacionadas bajo una misma descripcion
   group('VisitsScreen', () {
     // se colocan las variables que usaremos en las pruebs
     late MockVisitsBloc mockVisitsBloc;
@@ -61,7 +59,7 @@ void main() {
     // Prueba 1: vamos a probar que se muestre un CircularProgressIndicator
     testWidgets('Muestra CircularProgressIndicator cuando el estado es VisitsLoading', (WidgetTester tester) async {
       // Preparamos el mock para el estado 'VisitsLoading' cuando se pida
-      whenListen(
+      whenListen( 
         mockVisitsBloc,
         Stream.fromIterable([VisitsLoading()]),
         initialState: VisitsLoading(),
@@ -71,7 +69,7 @@ void main() {
       await pumpVisitsScreen(tester);
       
       // 'pump' avanza un frame para que la interfz se actualice
-      await tester.pump();
+      await tester.pump(); 
 
       // Verificamos que se encuentre un CircularProgressIndicator en la pantalla.
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
@@ -117,13 +115,11 @@ void main() {
       await pumpVisitsScreen(tester);
       await tester.pumpAndSettle();
 
-      // miramos que se encuentre el mensaje de error en la pantalla.
       expect(find.text('Error de prueba'), findsOneWidget);
     });
 
     // Prueba 4: Verificar que se muestra un mensaje inicial cuando no hay visitas.
     testWidgets('Muestra "No hay visitas" cuando el estado es VisitsInitial', (WidgetTester tester) async {
-      // Preparamos el mock para el estado inicial.
       whenListen(
         mockVisitsBloc,
         Stream.fromIterable([VisitsInitial()]),

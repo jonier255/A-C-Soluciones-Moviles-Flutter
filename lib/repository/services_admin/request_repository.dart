@@ -1,8 +1,8 @@
 import 'dart:convert';
 // import 'package:flutter_a_c_soluciones/server/conexion.dart';
 import 'package:http/http.dart' as http;
-import '../model/request_model.dart';
-import 'secure_storage_service.dart';
+import '../../model/administrador/request_model.dart';
+import '../secure_storage_service.dart';
 
 class RequestRepository {
   final _storageService = SecureStorageService();
