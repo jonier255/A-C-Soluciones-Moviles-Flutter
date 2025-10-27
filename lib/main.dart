@@ -15,6 +15,9 @@ import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/verifyCode.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/technical_home.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/view_report_list_page_tc.dart'; // Import new screen
+import 'package:flutter_a_c_soluciones/ui/technical/assigned_visits_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/services_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/completed_visits_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -52,8 +55,10 @@ class MyApp extends StatelessWidget {
             '/request': (context) => RequestScreen(),
             '/technical_home': (context) => const TechnicalHomeScreen(),
             '/visits': (context) => VisitsScreen(),
-            '/technical_reports': (context) =>
-                const ViewReportListPageTc(), // Add new route
+            '/technical_reports': (context) => const ViewReportListPageTc(), // Add new route
+            '/technical_assigned_visits': (context) => const AssignedVisitsScreen(),
+            '/technical_services': (context) => const ServicesScreen(),
+            '/technical_completed_visits': (context) => const CompletedVisitsScreen(),
 
             // En tu main.dart, actualiza la ruta:
             '/client_home': (context) => const ClientLayout(),
