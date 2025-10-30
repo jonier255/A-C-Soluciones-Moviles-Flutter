@@ -14,7 +14,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final direccionController = TextEditingController();
   final contraseniaController = TextEditingController();
 
-  RegisterBloc() : super(RegisterInitial()) {
+  final APIServiceRegister apiServiceRegister;
+
+  RegisterBloc({APIServiceRegister? apiServiceRegister})
+      : apiServiceRegister = apiServiceRegister ?? APIServiceRegister(),
+        super(RegisterInitial()) {
     on<RegisterButtonPressed>((event, emit) async {
       emit(RegisterLoading());
       try {
@@ -29,7 +33,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         );
 
         // Se asume éxito si no hay excepción, ya que el backend devuelve el objeto de usuario en lugar de un mensaje.
-        await APIServiceRegister.register(registerRequest);
+        await this.apiServiceRegister.register(registerRequest);
         emit(RegisterSuccess(message: "Registro exitoso"));
       } catch (e) {
         emit(RegisterFailure(error: e.toString()));
