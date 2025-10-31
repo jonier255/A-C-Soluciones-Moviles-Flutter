@@ -1,11 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/Profile/accountAdmin.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
 import 'package:flutter_a_c_soluciones/bloc/listAdmins/admins_bloc.dart';
 import 'package:flutter_a_c_soluciones/repository/services_admin/service_ListAdmin.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/Visits/admin_menu_visits.dart';
-import 'package:flutter_a_c_soluciones/ui/admin/listAdmins/list_admin_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/ListAdmins/list_admin_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../bloc/request/request_bloc.dart';
 import '../../../bloc/request/request_event.dart';
@@ -34,11 +33,12 @@ class AdminHomeScreen extends StatelessWidget {
                   height: 170,
                   color: const Color.fromARGB(255, 46, 145, 216),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20.0, horizontal: 16.0),
                     child: Center(
                       child: ColorFiltered(
-                        colorFilter:
-                            const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                        colorFilter: const ColorFilter.mode(
+                            Colors.white, BlendMode.srcIn),
                         child: Image.asset(
                           "assets/logo.png",
                           height: 120,
@@ -53,7 +53,7 @@ class AdminHomeScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 160),
-                    
+
                     const _MainButtonsSection(),
                     const SizedBox(height: 20),
                     const _QuickAccessSection(),
@@ -87,17 +87,15 @@ class _RecentRequestsSection extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 18.0),
             child: Text(
               "Solicitudes recientes",
-              
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                
                 color: Colors.blue,
                 shadows: [
-                  
                   Shadow(
                     blurRadius: 4.0,
-                    color: const Color.fromARGB(255, 25, 106, 172).withOpacity(0.5),
+                    color: const Color.fromARGB(255, 25, 106, 172)
+                        .withOpacity(0.5),
                     offset: const Offset(1.0, 1.0),
                   ),
                 ],
@@ -290,8 +288,6 @@ class _RequestCard extends StatelessWidget {
   }
 }
 
-
-
 //Botones de cliente y tecnico, los azules grandes
 class _MainButtonsSection extends StatelessWidget {
   const _MainButtonsSection();
@@ -368,16 +364,12 @@ class _QuickAccessSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(
-        
         children: [
-          
           Expanded(
             child: GestureDetector(
-              onTap: () {
-              },
+              onTap: () {},
               child: const _QuickButton(
                 icon: Icons.build,
                 label: "Servicios",
@@ -412,7 +404,7 @@ class _QuickAccessSection extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => BlocProvider(
                       create: (context) => AdminsBloc(AdminRepository()),
-                      child:  AdminsScreen(),
+                      child: AdminsScreen(),
                     ),
                   ),
                 );
@@ -450,9 +442,7 @@ class _QuickAccessSection extends StatelessWidget {
       ),
     );
   }
-  
 }
-
 
 class _QuickButton extends StatefulWidget {
   final IconData icon;
@@ -475,7 +465,9 @@ class _QuickButtonState extends State<_QuickButton> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 9),
         decoration: BoxDecoration(
-          color: _isHovered ? const Color.fromARGB(255, 5, 162, 235) : const Color(0xFFF0F2F5),
+          color: _isHovered
+              ? const Color.fromARGB(255, 5, 162, 235)
+              : const Color(0xFFF0F2F5),
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
@@ -490,13 +482,17 @@ class _QuickButtonState extends State<_QuickButton> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center, // Se centra el contenido
           children: [
-            Icon(widget.icon, color: _isHovered ? Colors.white : Colors.black, size: 20),
+            Icon(widget.icon,
+                color: _isHovered ? Colors.white : Colors.black, size: 20),
             const SizedBox(width: 8),
             //flexible es para que las palabras no se salgan del contenedor
             Flexible(
               child: Text(
                 widget.label,
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: _isHovered ? Colors.white : Colors.black),
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: _isHovered ? Colors.white : Colors.black),
                 overflow:
                     TextOverflow.ellipsis, // Corta el texto con "..." si no cbe
               ),
@@ -517,17 +513,18 @@ class _BottomNavBar extends StatelessWidget {
     return BottomNavigationBar(
       onTap: (index) {
         switch (index) {
-          case 0: 
-            Navigator.pushNamed(context, '/home'); 
+          case 0:
+            Navigator.pushNamed(context, '/home');
             break;
 
-          case 1: 
+          case 1:
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Sección de notificaciones en desarrollo')),
+              const SnackBar(
+                  content: Text('Sección de notificaciones en desarrollo')),
             );
             break;
 
-          case 2: 
+          case 2:
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -539,7 +536,7 @@ class _BottomNavBar extends StatelessWidget {
             );
             break;
 
-          case 3: 
+          case 3:
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -563,8 +560,7 @@ class _BottomNavBar extends StatelessWidget {
   }
 }
 
-
-/// curva de arriba 
+/// curva de arriba
 class WaveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
