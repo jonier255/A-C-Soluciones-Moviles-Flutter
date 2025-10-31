@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,8 +7,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_file/open_file.dart';
 
-import '../../../bloc/report/report_bloc.dart';
-import '../../../repository/report_repository.dart';
+import '../../../../bloc/report/report_bloc.dart';
+import '../../../../repository/report_repository.dart';
+import '../../../../repository/secure_storage_service.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/widgets/bottom_nav_bar.dart';
 
 class ViewReportListPageTc extends StatelessWidget {
   const ViewReportListPageTc({super.key});
@@ -20,9 +21,12 @@ class ViewReportListPageTc extends StatelessWidget {
       create: (context) => ReportBloc(ReportRepository())..add(FetchReports()),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Mis Reportes'),
-          backgroundColor: Colors.blue.shade800,
+          title: const Text('Mis Reportes', style: TextStyle(color: Colors.black)),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          iconTheme: const IconThemeData(color: Colors.black),
         ),
+        bottomNavigationBar: const BottomNavBar(),
         body: const _ReportList(),
       ),
     );
@@ -52,13 +56,9 @@ class _ReportListState extends State<_ReportList> {
 
     try {
       // 1. Check and request permission
-      print('Requesting storage permission...');
       var storageStatus = await Permission.storage.request();
-      print('Storage permission status: $storageStatus');
 
-      print('Requesting accessMediaLocation permission...');
       var mediaStatus = await Permission.accessMediaLocation.request();
-      print('Access media location permission status: $mediaStatus');
 
       if (!storageStatus.isGranted && !mediaStatus.isGranted) {
         if (storageStatus.isPermanentlyDenied || mediaStatus.isPermanentlyDenied) {
@@ -99,18 +99,32 @@ class _ReportListState extends State<_ReportList> {
         return; // Stop further execution
       }
 
-      // 2. Get the downloads directory
-      final Directory? downloadsDir = await getDownloadsDirectory();
-      if (downloadsDir == null) {
-        throw Exception('No se pudo encontrar el directorio de descargas.');
+      final Directory appDir = await getApplicationDocumentsDirectory();
+
+      // Crear subcarpeta 'reportes' dentro del directorio interno
+      final Directory safeDir = Directory('${appDir.path}/reportes');
+      if (!(await safeDir.exists())) {
+        await safeDir.create(recursive: true);
       }
-      
-      // Extract filename from the path
-      final String fileName = fullPdfPath.split(r'\').last;
-      final String savePath = '${downloadsDir.path}/$fileName';
+
+      // Extraer el nombre del archivo desde la ruta original
+      final String fileName = fullPdfPath.split(RegExp(r'[\\/]+')).last;
+
+      // Definir la ruta final donde se guardará
+      final String savePath = '${safeDir.path}/$fileName';
 
       // 3. Download the file
-      final response = await http.get(Uri.parse(url));
+      final _storageService = SecureStorageService();
+      final token = await _storageService.getToken();
+      if (token == null) {
+        throw Exception('Token no encontrado. Por favor, inicie sesión de nuevo.');
+      }
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
 
       if (response.statusCode == 200) {
         // 4. Save the file
@@ -140,7 +154,8 @@ class _ReportListState extends State<_ReportList> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: ${e.toString()}')),
       );
-    } finally {
+    }
+    finally {
       if (mounted) {
         setState(() {
           _loadingStates[visitId] = false;
@@ -167,48 +182,90 @@ class _ReportListState extends State<_ReportList> {
               final report = state.reports[index];
               final visit = report.visit;
               final bool isLoading = _loadingStates[visit.id] ?? false;
-              final formattedDate =
-                  DateFormat('dd/MM/yyyy').format(visit.fechaProgramada);
-              const String baseUrl = 'https://a-c-soluciones.onrender.com/api';
-              final String downloadUrl =
-                  '$baseUrl/fichas/descargar/${visit.id}';
 
-              return Card(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                elevation: 4,
-                child: ListTile(
-                  leading: Icon(Icons.article, color: Colors.blue.shade800),
-                  title: Text(
-                    'Visita: ${visit.notasPrevias.isNotEmpty ? visit.notasPrevias : "Sin notas previas"}',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  subtitle: Text(
-                    'Fecha: $formattedDate\nNotas post-visita: ${visit.notasPosteriores.isNotEmpty ? visit.notasPosteriores : "N/A"}',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  trailing: isLoading
-                      ? const CircularProgressIndicator()
-                      : IconButton(
-                          icon: const Icon(Icons.download_for_offline,
-                              color: Colors.green),
-                          tooltip: 'Descargar Reporte',
-                          onPressed: () {
-                            _downloadAndOpenFile(
-                                downloadUrl, report.pdfPath, visit.id);
-                          },
-                        ),
-                  isThreeLine: true,
-                ),
+              return _ReportCard(
+                report: report,
+                isLoading: isLoading,
+                onDownload: () {
+                  const String apiKey = 'https://flutter-58c3.onrender.com';
+                  String relativePath = report.pdfPath.replaceFirst(RegExp(r'uploads[\\/]'), '');
+                  relativePath = relativePath.replaceAll(r'\', '/');
+                  final String downloadUrl = '$apiKey/$relativePath';
+                  _downloadAndOpenFile(downloadUrl, report.pdfPath, visit.id);
+                },
               );
             },
           );
         }
         return const Center(child: Text('Iniciando...'));
       },
+    );
+  }
+}
+
+class _ReportCard extends StatelessWidget {
+  final dynamic report;
+  final bool isLoading;
+  final VoidCallback onDownload;
+
+  const _ReportCard({
+    required this.report,
+    required this.isLoading,
+    required this.onDownload,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final visit = report.visit;
+    final formattedDate =
+        DateFormat('dd/MM/yyyy').format(visit.fechaProgramada);
+
+    return Card(
+      elevation: 6,
+      color: Colors.white,
+      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Padding(
+        padding: const EdgeInsets.all(14.0),
+        child: Row(
+          children: [
+            const Icon(Icons.article, size: 35, color: Colors.black),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Visita: ${visit.notasPrevias.isNotEmpty ? visit.notasPrevias : "Sin notas previas"}',
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Notas post-visita: ${visit.notasPosteriores.isNotEmpty ? visit.notasPosteriores : "N/A"}',
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text("Fecha: $formattedDate",
+                      style:
+                          const TextStyle(fontSize: 12, color: Colors.grey)),
+                ],
+              ),
+            ),
+            isLoading
+                ? const CircularProgressIndicator()
+                : IconButton(
+                    icon: const Icon(Icons.download_for_offline,
+                        color: Colors.green),
+                    tooltip: 'Descargar Reporte',
+                    onPressed: onDownload,
+                  ),
+          ],
+        ),
+      ),
     );
   }
 }

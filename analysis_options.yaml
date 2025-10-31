@@ -8,5 +8,4 @@ linter:
     prefer_const_literals_to_create_immutables: false
     prefer_const_constructors_in_immutables: true
     avoid_print: true
-    unnecessary_null_comparison: true
     avoid_unnecessary_containers: true 

@@ -5,9 +5,10 @@ import 'package:flutter_a_c_soluciones/bloc/task/task_event.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_state.dart';
 import 'package:flutter_a_c_soluciones/model/technical/task_model.dart';
 import 'package:flutter_a_c_soluciones/repository/task_repository.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/widgets/bottom_nav_bar.dart';
 
-class AssignedVisitsScreen extends StatelessWidget {
-  const AssignedVisitsScreen({super.key});
+class CompletedVisitsScreen extends StatelessWidget {
+  const CompletedVisitsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,21 +16,23 @@ class AssignedVisitsScreen extends StatelessWidget {
       create: (context) => TaskBloc(TaskRepository())..add(FetchTasks()),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Visitas Asignadas'),
+          title: const Text('Visitas Terminadas'),
         ),
+        bottomNavigationBar: const BottomNavBar(),
         body: BlocBuilder<TaskBloc, TaskState>(
           builder: (context, state) {
             if (state is TaskLoading) {
               return const Center(child: CircularProgressIndicator());
             }
             if (state is TaskSuccess) {
-              if (state.tasks.isEmpty) {
-                return const Center(child: Text("No hay visitas asignadas."));
+              final completedTasks = state.tasks.where((task) => task.estado == 'completada').toList();
+              if (completedTasks.isEmpty) {
+                return const Center(child: Text("No hay visitas terminadas."));
               }
               return ListView.builder(
-                itemCount: state.tasks.length,
+                itemCount: completedTasks.length,
                 itemBuilder: (context, index) {
-                  return _TaskCard(task: state.tasks[index]);
+                  return _TaskCard(task: completedTasks[index]);
                 },
               );
             }
@@ -48,6 +51,7 @@ class _TaskCard extends StatelessWidget {
   final TaskModel task;
 
   const _TaskCard({required this.task});
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -59,7 +63,7 @@ class _TaskCard extends StatelessWidget {
         padding: const EdgeInsets.all(14.0),
         child: Row(
           children: [
-            const Icon(Icons.handyman, size: 35, color: Colors.black),
+            const Icon(Icons.check_circle, size: 35, color: Colors.green),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
@@ -84,17 +88,13 @@ class _TaskCard extends StatelessWidget {
             ),
             Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
-                color: task.estado == "completada"
-                    ? Colors.green[100]
-                    : Colors.orange[100],
+                color: Colors.green[100],
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
                 task.estado,
                 style: TextStyle(
-                  color: task.estado == "completada"
-                      ? Colors.green[800]
-                      : Colors.orange[800],
+                  color: Colors.green[800],
                   fontWeight: FontWeight.bold,
                   fontSize: 12,
                 ),

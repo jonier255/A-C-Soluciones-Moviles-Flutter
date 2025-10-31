@@ -1,13 +1,13 @@
 import 'dart:convert';
 // import 'package:flutter_a_c_soluciones/server/conexion.dart';
 import 'package:http/http.dart' as http;
-import '../model/request_model.dart';
-import 'secure_storage_service.dart';
+import '../../model/administrador/admin_model.dart';
+import '../secure_storage_service.dart';
 
-class RequestRepository {
+class AdminRepository {
   final _storageService = SecureStorageService();
 
-  Future<List<Request>> getRequests() async {
+  Future<List<UpdateAdminRequest>> getAdmins() async {
     final token = await _storageService.getToken();
     if (token == null) {
       throw Exception(
@@ -15,7 +15,7 @@ class RequestRepository {
     }
 
     final response = await http.get(
-      Uri.parse('https://flutter-58c3.onrender.com/api/solicitudes'),
+      Uri.parse('https://flutter-58c3.onrender.com/api/admin'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -24,11 +24,11 @@ class RequestRepository {
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
-      return data.map((json) => Request.fromJson(json)).toList();
+      return data.map((json) => UpdateAdminRequest.fromJson(json)).toList();
     } else if (response.statusCode == 401) {
       throw Exception('Sesión expirada. Por favor, inicie sesión de nuevo.');
     } else {
-      throw Exception('Failed to load requests');
+      throw Exception('Failed to load Admins');
     }
   }
 }

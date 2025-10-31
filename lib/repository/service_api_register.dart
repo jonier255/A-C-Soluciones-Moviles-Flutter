@@ -6,9 +6,9 @@ import 'package:flutter_a_c_soluciones/model/register_request_model.dart';
 import 'package:flutter_a_c_soluciones/model/register_response_model.dart';
 
 class APIServiceRegister {
-  static var client = http.Client();
+  var client = http.Client();
 
-  static Future<RegisterResponseModel> register(
+  Future<RegisterResponseModel> register(
     RegisterRequestModel model,
   ) async {
     Map<String, String> requestHeaders = {

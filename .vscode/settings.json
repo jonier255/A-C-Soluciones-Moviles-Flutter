@@ -1,0 +1,13 @@
+{
+    "errorLens.alignMessage": {
+        
+        "start": 0,
+        "end": 0,
+        "minimumMargin": 4,
+        "padding": [
+            0,
+            0
+        ],
+        "useFixedPosition": true
+    }
+}

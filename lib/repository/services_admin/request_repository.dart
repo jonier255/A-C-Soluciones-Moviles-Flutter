@@ -1,12 +1,13 @@
 import 'dart:convert';
+// import 'package:flutter_a_c_soluciones/server/conexion.dart';
 import 'package:http/http.dart' as http;
-import '../../model/client/service_model.dart';
+import '../../model/administrador/request_model.dart';
 import '../secure_storage_service.dart';
 
-class ServiceRepository {
+class RequestRepository {
   final _storageService = SecureStorageService();
 
-  Future<List<ServiceModel>> getServices() async {
+  Future<List<Request>> getRequests() async {
     final token = await _storageService.getToken();
     if (token == null) {
       throw Exception(
@@ -14,8 +15,7 @@ class ServiceRepository {
     }
 
     final response = await http.get(
-      // Uri.parse('https://flutter-58c3.onrender.com/api/servicios'),
-      Uri.parse('https://flutter-58c3.onrender.com/api/servicios'),
+      Uri.parse('https://flutter-58c3.onrender.com/api/solicitudes'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -23,16 +23,12 @@ class ServiceRepository {
     );
 
     if (response.statusCode == 200) {
-      final decoded = json.decode(response.body);
-
-      // 🔹 Si la API devuelve { "data": [...] }
-      final List<dynamic> data = decoded is List ? decoded : decoded['data'];
-
-      return data.map((json) => ServiceModel.fromJson(json)).toList();
+      final List<dynamic> data = json.decode(response.body);
+      return data.map((json) => Request.fromJson(json)).toList();
     } else if (response.statusCode == 401) {
       throw Exception('Sesión expirada. Por favor, inicie sesión de nuevo.');
     } else {
-      throw Exception('Error al cargar los servicios (${response.statusCode})');
+      throw Exception('Failed to load requests');
     }
   }
 }
