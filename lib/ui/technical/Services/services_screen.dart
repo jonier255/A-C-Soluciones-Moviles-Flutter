@@ -1,45 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_a_c_soluciones/bloc/task/task_bloc.dart';
-import 'package:flutter_a_c_soluciones/bloc/task/task_event.dart';
-import 'package:flutter_a_c_soluciones/bloc/task/task_state.dart';
-import 'package:flutter_a_c_soluciones/model/technical/task_model.dart';
-import 'package:flutter_a_c_soluciones/repository/task_repository.dart';
-import 'package:flutter_a_c_soluciones/ui/technical/visits_details_screen.dart';
+import '../../../bloc/service/service_bloc.dart';
+import '../../../bloc/service/service_event.dart';
+import '../../../bloc/service/service_state.dart';
+import '../../../model/servicio_model.dart';
+import '../../../repository/service_repository.dart';
+import 'service_details_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/widgets/bottom_nav_bar.dart';
 
-class AssignedVisitsScreen extends StatelessWidget {
-  const AssignedVisitsScreen({super.key});
+class ServicesScreen extends StatelessWidget {
+  const ServicesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => TaskBloc(TaskRepository())..add(FetchTasks()),
+      create: (context) => ServiceBloc(ServiceRepository())..add(FetchServices()),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Visitas Asignadas'),
+          title: const Text('Servicios'),
         ),
         bottomNavigationBar: const BottomNavBar(),
-        body: BlocBuilder<TaskBloc, TaskState>(
+        body: BlocBuilder<ServiceBloc, ServiceState>(
           builder: (context, state) {
-            if (state is TaskLoading) {
+            if (state is ServiceLoading) {
               return const Center(child: CircularProgressIndicator());
             }
-            if (state is TaskSuccess) {
-              if (state.tasks.isEmpty) {
-                return const Center(child: Text("No hay visitas asignadas."));
+            if (state is ServiceSuccess) {
+              if (state.services.isEmpty) {
+                return const Center(child: Text("No hay servicios disponibles."));
               }
               return ListView.builder(
-                itemCount: state.tasks.length,
+                itemCount: state.services.length,
                 itemBuilder: (context, index) {
-                  return _TaskCard(task: state.tasks[index]);
+                  return _ServiceCard(service: state.services[index]);
                 },
               );
             }
-            if (state is TaskError) {
+            if (state is ServiceError) {
               return Center(child: Text(state.message));
             }
-            return const Center(child: Text("Cargando visitas..."));
+            return const Center(child: Text("Cargando servicios..."));
           },
         ),
       ),
@@ -47,10 +47,11 @@ class AssignedVisitsScreen extends StatelessWidget {
   }
 }
 
-class _TaskCard extends StatelessWidget {
-  final TaskModel task;
+class _ServiceCard extends StatelessWidget {
+  final Servicio service;
 
-  const _TaskCard({required this.task});
+  const _ServiceCard({required this.service});
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -58,7 +59,7 @@ class _TaskCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => VisitsDetailsScreen(task: task),
+            builder: (context) => ServiceDetailsScreen(service: service),
           ),
         );
       },
@@ -71,40 +72,36 @@ class _TaskCard extends StatelessWidget {
           padding: const EdgeInsets.all(14.0),
           child: Row(
             children: [
-              const Icon(Icons.handyman, size: 35, color: Colors.black),
+              const Icon(Icons.miscellaneous_services, size: 35, color: Colors.black),
               const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(task.servicio.nombre,
+                    Text(service.nombre,
                         style: const TextStyle(
                             fontSize: 14, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 4),
                     Text(
-                      task.servicio.descripcion.length > 50
-                          ? '${task.servicio.descripcion.substring(0, 50)}...'
-                          : task.servicio.descripcion,
+                      service.descripcion.length > 50
+                          ? '${service.descripcion.substring(0, 50)}...'
+                          : service.descripcion,
                       style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
-                    const SizedBox(height: 4),
-                    Text("Fecha: ${task.fechaProgramada.toString().substring(0, 10)}",
-                        style:
-                            const TextStyle(fontSize: 12, color: Colors.grey)),
                   ],
                 ),
               ),
               Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
-                  color: task.estado == "completada"
+                  color: service.estado == "activo"
                       ? Colors.green[100]
                       : Colors.orange[100],
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  task.estado,
+                  service.estado,
                   style: TextStyle(
-                    color: task.estado == "completada"
+                    color: service.estado == "activo"
                         ? Colors.green[800]
                         : Colors.orange[800],
                     fontWeight: FontWeight.bold,

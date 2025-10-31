@@ -7,9 +7,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_file/open_file.dart';
 
-import '../../../bloc/report/report_bloc.dart';
-import '../../../repository/report_repository.dart';
-import '../../../repository/secure_storage_service.dart';
+import '../../../../bloc/report/report_bloc.dart';
+import '../../../../repository/report_repository.dart';
+import '../../../../repository/secure_storage_service.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/widgets/bottom_nav_bar.dart';
 
 class ViewReportListPageTc extends StatelessWidget {
@@ -99,15 +99,19 @@ class _ReportListState extends State<_ReportList> {
         return; // Stop further execution
       }
 
-      // 2. Get the downloads directory
-      final Directory? downloadsDir = await getDownloadsDirectory();
-      if (downloadsDir == null) {
-        throw Exception('No se pudo encontrar el directorio de descargas.');
+      final Directory appDir = await getApplicationDocumentsDirectory();
+
+      // Crear subcarpeta 'reportes' dentro del directorio interno
+      final Directory safeDir = Directory('${appDir.path}/reportes');
+      if (!(await safeDir.exists())) {
+        await safeDir.create(recursive: true);
       }
-      
-      // Extract filename from the path
-      final String fileName = fullPdfPath.split(r'\').last;
-      final String savePath = '${downloadsDir.path}/$fileName';
+
+      // Extraer el nombre del archivo desde la ruta original
+      final String fileName = fullPdfPath.split(RegExp(r'[\\/]+')).last;
+
+      // Definir la ruta final donde se guardará
+      final String savePath = '${safeDir.path}/$fileName';
 
       // 3. Download the file
       final _storageService = SecureStorageService();

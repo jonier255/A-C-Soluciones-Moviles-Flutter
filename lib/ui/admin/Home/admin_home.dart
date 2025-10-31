@@ -5,7 +5,7 @@ import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
 import 'package:flutter_a_c_soluciones/bloc/listAdmins/admins_bloc.dart';
 import 'package:flutter_a_c_soluciones/repository/services_admin/service_ListAdmin.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/Visits/admin_menu_visits.dart';
-import 'package:flutter_a_c_soluciones/ui/admin/list_admin_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/listAdmins/list_admin_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../bloc/request/request_bloc.dart';
 import '../../../bloc/request/request_event.dart';

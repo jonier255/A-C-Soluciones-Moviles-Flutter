@@ -9,15 +9,16 @@ import 'package:flutter_a_c_soluciones/repository/report_repository.dart'; // Im
 import 'package:flutter_a_c_soluciones/ui/login.dart';
 import 'package:flutter_a_c_soluciones/ui/registrarse.dart';
 import 'package:flutter_a_c_soluciones/ui/splash.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/Home/technical_home.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/Reports/view_report_list_page_tc.dart'; // Import new screen
+import 'package:flutter_a_c_soluciones/ui/technical/Visits/assigned_visits_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/Services/services_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/Visits/completed_visits_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/changePassword/forget.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/Home/admin_home.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/changePassword/verifyCode.dart';
-import 'package:flutter_a_c_soluciones/ui/technical/technical_home.dart';
-import 'package:flutter_a_c_soluciones/ui/technical/view_report_list_page_tc.dart'; // Import new screen
-import 'package:flutter_a_c_soluciones/ui/technical/assigned_visits_screen.dart';
-import 'package:flutter_a_c_soluciones/ui/technical/services_screen.dart';
-import 'package:flutter_a_c_soluciones/ui/technical/completed_visits_screen.dart';
+
 
 void main() {
   runApp(const MyApp());
