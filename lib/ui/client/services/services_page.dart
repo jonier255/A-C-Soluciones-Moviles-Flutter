@@ -25,16 +25,74 @@ class _ServicesContentState extends State<ServicesContent> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.only(top: 16, bottom: 8),
-          child: Text(
-            "Servicios",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF2E91D8),
-            ),
-            textAlign: TextAlign.center,
+        Container(
+          width: double.infinity,
+          height: 220,
+          alignment: Alignment.center,
+          color: const Color.fromARGB(255, 212, 212, 212),
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // --- Contador de solicitudes ---
+              FutureBuilder<List<ServiceModel>>(
+                future: _futureServices,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator(color: Colors.blue);
+                  } else if (snapshot.hasError) {
+                    return const Text(
+                      'Error',
+                      style: TextStyle(color: Colors.black, fontSize: 24),
+                    );
+                  } else if (snapshot.hasData) {
+                    final servicios = snapshot.data!;
+                    return Text(
+                      '${servicios.length} Servicios',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    );
+                  } else {
+                    return const Text(
+                      '0',
+                      style: TextStyle(
+                        fontSize: 48,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    );
+                  }
+                },
+              ),
+
+              const SizedBox(height: 16),
+              ElevatedButton.icon(
+                onPressed: () async {
+                  final result =
+                      await Navigator.pushNamed(context, '/crear-solicitud');
+
+                  if (result == true) {
+                    setState(() {
+                      _futureServices = _repository.getServices();
+                    });
+                  }
+                },
+                icon: const Icon(Icons.add),
+                label: const Text("Nuevo servicio"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         Expanded(
@@ -84,10 +142,11 @@ class _ServicesContentState extends State<ServicesContent> {
                               itemBuilder: (context, index) {
                                 final service = currentServices[index];
                                 return Card(
+                                  color: Colors.white,
                                   margin:
                                       const EdgeInsets.symmetric(vertical: 8),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16),
+                                    borderRadius: BorderRadius.circular(1),
                                   ),
                                   elevation: 4,
                                   child: ListTile(
@@ -98,6 +157,8 @@ class _ServicesContentState extends State<ServicesContent> {
                                     ),
                                     title: Text(
                                       service.nombre,
+                                      // mostrar menos caracteres si es muy largo
+                                      overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
