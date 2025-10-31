@@ -1,13 +1,17 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_a_c_soluciones/ui/admin/request_screen.dart';
-import 'package:flutter_a_c_soluciones/ui/admin/admin_menu_visits.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/Profile/accountAdmin.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
+import 'package:flutter_a_c_soluciones/bloc/listAdmins/admins_bloc.dart';
+import 'package:flutter_a_c_soluciones/repository/services_admin/service_ListAdmin.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/Visits/admin_menu_visits.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/listAdmins/list_admin_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../bloc/request/request_bloc.dart';
-import '../../bloc/request/request_event.dart';
-import '../../bloc/request/request_state.dart';
-import '../../model/request_model.dart';
-import '../../repository/request_repository.dart';
+import '../../../bloc/request/request_bloc.dart';
+import '../../../bloc/request/request_event.dart';
+import '../../../bloc/request/request_state.dart';
+import '../../../model/administrador/request_model.dart';
+import '../../../repository/services_admin/request_repository.dart';
 
 // Pantalla principal del administrador
 class AdminHomeScreen extends StatelessWidget {
@@ -399,8 +403,25 @@ class _QuickAccessSection extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          const Expanded(
-            child: _QuickButton(icon: Icons.security, label: "Admin"),
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                // Navegación a la lista de administradores usando BlocProvider.
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider(
+                      create: (context) => AdminsBloc(AdminRepository()),
+                      child:  AdminsScreen(),
+                    ),
+                  ),
+                );
+              },
+              child: const _QuickButton(
+                icon: Icons.security,
+                label: "Admin",
+              ),
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -495,15 +516,38 @@ class _BottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       onTap: (index) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => BlocProvider(
-              create: (context) => RequestBloc(RequestRepository()),
-              child: RequestScreen(),
-            ),
-          ),
-        );
+        switch (index) {
+          case 0: 
+            Navigator.pushNamed(context, '/home'); 
+            break;
+
+          case 1: 
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Sección de notificaciones en desarrollo')),
+            );
+            break;
+
+          case 2: 
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BlocProvider(
+                  create: (context) => RequestBloc(RequestRepository()),
+                  child: RequestScreen(),
+                ),
+              ),
+            );
+            break;
+
+          case 3: 
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CuentaScreen(),
+              ),
+            );
+            break;
+        }
       },
       selectedItemColor: const Color.fromARGB(255, 46, 145, 216),
       unselectedItemColor: Colors.black,
@@ -518,6 +562,7 @@ class _BottomNavBar extends StatelessWidget {
     );
   }
 }
+
 
 /// curva de arriba 
 class WaveClipper extends CustomClipper<Path> {

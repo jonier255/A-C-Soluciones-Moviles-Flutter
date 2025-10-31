@@ -1,9 +1,8 @@
-// import 'package:flutter_a_c_soluciones/server/conexion.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'package:flutter_a_c_soluciones/model/login_request_model.dart';
 import 'package:flutter_a_c_soluciones/model/login_response_model.dart';
+import 'package:flutter_a_c_soluciones/repository/secure_storage_service.dart';
 
 class APIService {
   static var client = http.Client();
@@ -14,7 +13,6 @@ class APIService {
     };
 
     var url = Uri.parse('https://flutter-58c3.onrender.com/api/login');
-    //var url = Uri.parse('https://a-c-soluciones.onrender.com/api/login');
 
     var response = await client.post(
       url,
@@ -23,6 +21,13 @@ class APIService {
     );
 
     if (response.statusCode == 200) {
+      final responseBody = jsonDecode(response.body);
+
+      final storage = SecureStorageService();
+      await storage.saveToken(responseBody['token']);
+      await storage.saveAdminId(responseBody['administrador'].toString());
+
+      // Retornar el modelo de respuesta
       return loginResponseJson(response.body);
     } else {
       throw Exception('Error al iniciar sesión: ${response.statusCode}');
