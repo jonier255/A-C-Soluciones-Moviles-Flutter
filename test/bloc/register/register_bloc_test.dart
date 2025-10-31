@@ -1,39 +1,47 @@
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
-import 'package:mockito/mockito.dart';
 import 'package:flutter_a_c_soluciones/bloc/register/register_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/register/register_event.dart';
 import 'package:flutter_a_c_soluciones/bloc/register/register_state.dart';
 import 'package:flutter_a_c_soluciones/model/register_request_model.dart';
+import 'package:flutter_a_c_soluciones/model/register_response_model.dart';
 import 'package:flutter_a_c_soluciones/repository/service_api_register.dart';
+import 'package:http/http.dart' as http;
 
-class MockAPIServiceRegister extends Mock implements APIServiceRegister {}
+// Manual mock for success case
+class MockAPIServiceRegisterSuccess implements APIServiceRegister {
+  @override
+  Future<RegisterResponseModel> register(RegisterRequestModel model) async {
+    return RegisterResponseModel(message: 'Success');
+  }
+  
+  @override
+  var client = http.Client();
+}
+
+// Manual mock for failure case
+class MockAPIServiceRegisterFailure implements APIServiceRegister {
+  @override
+  Future<RegisterResponseModel> register(RegisterRequestModel model) async {
+    throw Exception('Registration failed');
+  }
+
+  @override
+  var client = http.Client();
+}
 
 void main() {
   group('RegisterBloc', () {
     late RegisterBloc registerBloc;
-    late MockAPIServiceRegister mockAPIServiceRegister;
-
-    setUp(() {
-      mockAPIServiceRegister = MockAPIServiceRegister();
-      registerBloc = RegisterBloc(apiServiceRegister: mockAPIServiceRegister);
-    });
-
-    tearDown(() {
-      registerBloc.close();
-    });
 
     test('initial state is RegisterInitial', () {
+      registerBloc = RegisterBloc(apiServiceRegister: MockAPIServiceRegisterSuccess());
       expect(registerBloc.state, RegisterInitial());
     });
 
     blocTest<RegisterBloc, RegisterState>(
       'emits [RegisterLoading, RegisterSuccess] when RegisterButtonPressed is added and registration is successful.',
-      build: () {
-        when(mockAPIServiceRegister.register(any)).thenAnswer((_) async => Future.value());
-        return registerBloc;
-      },
+      build: () => RegisterBloc(apiServiceRegister: MockAPIServiceRegisterSuccess()),
       act: (bloc) => bloc.add(RegisterButtonPressed(
         nombre: 'test',
         apellido: 'test',
@@ -51,10 +59,7 @@ void main() {
 
     blocTest<RegisterBloc, RegisterState>(
       'emits [RegisterLoading, RegisterFailure] when RegisterButtonPressed is added and registration fails.',
-      build: () {
-        when(mockAPIServiceRegister.register(any)).thenThrow(Exception('Registration failed'));
-        return registerBloc;
-      },
+      build: () => RegisterBloc(apiServiceRegister: MockAPIServiceRegisterFailure()),
       act: (bloc) => bloc.add(RegisterButtonPressed(
         nombre: 'test',
         apellido: 'test',
