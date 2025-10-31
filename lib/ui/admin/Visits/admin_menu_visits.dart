@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/bloc/request/request_bloc.dart';
 import 'package:flutter_a_c_soluciones/repository/services_admin/request_repository.dart';
@@ -6,119 +5,125 @@ import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../bloc/visits/visits_bloc.dart';
 import '../../../repository/services_admin/service_api_visits.dart';
-import 'visits_screen.dart'; 
+import 'visits_screen.dart';
 
 class VisitasMenuScreen extends StatelessWidget {
-  const VisitasMenuScreen ({super.key});
+  const VisitasMenuScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: _BottomNavBar(),
-      body: Stack(
-        children: [
-          // Curva azul superior
-          ClipPath(
-            clipper: WaveClipper(),
-            child: Container(
-              height: 180,
-              color: Color.fromARGB(255, 46, 145, 216),
-            ),
-          ),
-          // Botón de retroceso y título
-          Positioned(
-            top: 40,
-            left: 10,
-            right: 10,
-            child: Stack(
-              alignment: Alignment.center,
+            body: Column(
               children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back,
-                        color: Colors.white, size: 30),
-                    onPressed: () => Navigator.pop(context),
-                  ),
+                Stack(
+                  children: [
+                    // Curva azul superior
+                    ClipPath(
+                      clipper: WaveClipper(),
+                      child: Container(
+                        height: 180,
+                        color: Color.fromARGB(255, 46, 145, 216),
+                      ),
+                    ),
+                    // Botón de retroceso y título
+                    Positioned(
+                      top: 40,
+                      left: 10,
+                      right: 10,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: IconButton(
+                              icon: const Icon(Icons.arrow_back,
+                                  color: Colors.white, size: 30),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                          ),
+                          Center(
+                            child: const Text(
+                              'Visitas',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                Center(
-                  child: const Text(
-                    'Visitas',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                    child: ListView(
+                      padding: EdgeInsets.zero, 
+                      children: [
+                        Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                "assets/soluciones.png",
+                                height: 130,
+                              ),
+                              const SizedBox(height: 20),
+                              // Se ha envuelto las tarjetas de opciones en un Card con sombra azul.
+                              Card(
+                                elevation: 10.0,
+                                shadowColor: const Color.fromARGB(255, 7, 110, 194),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const SizedBox(height: 20),
+                                    _buildOptionCard(
+                                      context,
+                                      title: "Asignar visitas",
+                                      icon: Icons.mouse,
+                                      color: const Color.fromARGB(255, 156, 109, 218),
+                                      onTap: () {
+                                      },
+                                    ),
+                                    const SizedBox(height: 30),
+                                    _buildOptionCard(
+                                      context,
+                                      title: "Lista de Visitas",
+                                      icon: Icons.list_alt,
+                                      color: const Color.fromARGB(255, 61, 197, 221),
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => BlocProvider(
+                                              create: (context) =>
+                                                  VisitsBloc(VisitsRepository()),
+                                              child: VisitsScreen(),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    const SizedBox(height: 20),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ],
-            ),
-          ),
-                    SizedBox(width: 10), 
-               
-          
-        
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 35.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    "assets/soluciones.png",
-                    height: 150,
-                  ),
-                  const SizedBox(height: 20),
-                  // Se ha envuelto las tarjetas de opciones en un Card con sombra azul.
-                  Card(
-                    elevation: 10.0,
-                    shadowColor: const Color.fromARGB(255, 7, 110, 194),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(height: 20),
-                        _buildOptionCard(
-                          context,
-                          title: "Asignar visitas",
-                          icon: Icons.mouse,
-                          color: const Color.fromARGB(255, 156, 109, 218),
-                          onTap: () {
-                            // Aquí puedes agregar la navegación al asignar visitas
-                          },
-                        ),
-                        const SizedBox(height: 30),
-                        _buildOptionCard(
-                          context,
-                          title: "Lista de Visitas",
-                          icon: Icons.list_alt,
-                          color: const Color.fromARGB(255, 61, 197, 221),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => BlocProvider(
-                                  create: (context) => VisitsBloc(VisitsRepository()),
-                                  child: VisitsScreen(),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 20),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+            ),    );
   }
 
   Widget _buildOptionCard(
@@ -132,7 +137,6 @@ class VisitasMenuScreen extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-
         margin: const EdgeInsets.symmetric(horizontal: 40),
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
         decoration: BoxDecoration(
@@ -153,16 +157,14 @@ class VisitasMenuScreen extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
                 color: Colors.black,
                 shadows: [
-                  
                   Shadow(
                     blurRadius: 4.0,
                     color: Colors.black.withOpacity(0.5),
-                    offset:   Offset(1.0, 1.0),
+                    offset: Offset(1.0, 1.0),
                   ),
                 ],
               ),

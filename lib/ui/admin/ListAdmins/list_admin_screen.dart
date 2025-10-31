@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../bloc/request/request_bloc.dart';
-import '../../../bloc/request/request_event.dart';
-import '../../../bloc/request/request_state.dart';
-import '../../admin/Home/admin_home.dart';
+import '../../../../bloc/listAdmins/admins_event.dart';
+import '../../../../bloc/listAdmins/admins_state.dart';
+import '../../../../bloc/listAdmins/admins_bloc.dart';
+import '../../../../ui/admin/Home/admin_home.dart';
+import '../../../../ui/admin/request/request_screen.dart';
+import '../../../../bloc/request/request_bloc.dart';
+import '../../../../repository/services_admin/request_repository.dart';
 
-class RequestScreen extends StatefulWidget {
+class AdminsScreen extends StatefulWidget {
   @override
-  _RequestScreenState createState() => _RequestScreenState();
+  _AdminsScreenState createState() => _AdminsScreenState();
 }
 
-class _RequestScreenState extends State<RequestScreen> {
+class _AdminsScreenState extends State<AdminsScreen> {
   int _currentPage = 1;
-  final int _requestsPerPage = 4;
+  final int _adminsPerPage = 4;
 
   @override
   void initState() {
     super.initState();
-    context.read<RequestBloc>().add(FetchRequests());
+    context.read<AdminsBloc>().add(FetchAdmins());
   }
 
   @override
@@ -35,6 +38,7 @@ class _RequestScreenState extends State<RequestScreen> {
             ),
           ),
 
+          // Botón de retroceso y título
           Positioned(
             top: 40,
             left: 10,
@@ -45,14 +49,14 @@ class _RequestScreenState extends State<RequestScreen> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: IconButton(
-                    icon: const Icon(Icons.arrow_back,
-                        color: Colors.white, size: 30),
+                    icon:
+                        const Icon(Icons.arrow_back, color: Colors.white, size: 30),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ),
                 const Center(
                   child: Text(
-                    'Lista de Solicitudes',
+                    'Lista de Administradores',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,
@@ -72,26 +76,25 @@ class _RequestScreenState extends State<RequestScreen> {
               children: [
                 const SizedBox(height: 16),
                 Expanded(
-                  child: BlocBuilder<RequestBloc, RequestState>(
+                  child: BlocBuilder<AdminsBloc, AdminsState>(
                     builder: (context, state) {
-                      if (state is RequestLoading) {
+                      if (state is AdminsLoading) {
                         return const Center(child: CircularProgressIndicator());
-                      } else if (state is RequestSuccess) {
-                        final totalPages = state.requests.isNotEmpty
-                            ? (state.requests.length / _requestsPerPage).ceil()
+                      } else if (state is AdminsSuccess) {
+                        final totalPages = state.admins.isNotEmpty
+                            ? (state.admins.length / _adminsPerPage).ceil()
                             : 1;
 
                         final safePage = _currentPage.clamp(1, totalPages);
-                        final startIndex = (safePage - 1) * _requestsPerPage;
+                        final startIndex = (safePage - 1) * _adminsPerPage;
                         final endIndex =
-                            (safePage * _requestsPerPage).clamp(0, state.requests.length);
-                        final currentRequests = state.requests.isNotEmpty
-                            ? state.requests.sublist(startIndex, endIndex)
+                            (safePage * _adminsPerPage).clamp(0, state.admins.length);
+                        final currentAdmins = state.admins.isNotEmpty
+                            ? state.admins.sublist(startIndex, endIndex)
                             : [];
 
                         return Column(
                           children: [
-                            // Contenedor con las solicitudes
                             Flexible(
                               child: Container(
                                 margin: const EdgeInsets.symmetric(
@@ -102,7 +105,7 @@ class _RequestScreenState extends State<RequestScreen> {
                                   borderRadius: BorderRadius.circular(30),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: const Color.fromARGB(255, 179, 46, 241).withOpacity(0.9),
+                                      color: const Color.fromARGB(255, 55, 214, 23).withOpacity(0.9),
                                       spreadRadius: 4,
                                       blurRadius: 8,
                                       offset: const Offset(0, 3),
@@ -110,12 +113,12 @@ class _RequestScreenState extends State<RequestScreen> {
                                   ],
                                   color: Colors.white,
                                 ),
-                                child: currentRequests.isNotEmpty
+                                child: currentAdmins.isNotEmpty
                                     ? ListView.builder(
                                         padding: const EdgeInsets.all(12),
-                                        itemCount: currentRequests.length,
+                                        itemCount: currentAdmins.length,
                                         itemBuilder: (context, index) {
-                                          final request = currentRequests[index];
+                                          final admin = currentAdmins[index];
                                           return Center(
                                             child: Card(
                                               color: Colors.white,
@@ -127,7 +130,8 @@ class _RequestScreenState extends State<RequestScreen> {
                                                     BorderRadius.circular(25),
                                               ),
                                               child: Padding(
-                                                padding: const EdgeInsets.all(16.0),
+                                                padding:
+                                                    const EdgeInsets.all(16.0),
                                                 child: Row(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
@@ -150,7 +154,7 @@ class _RequestScreenState extends State<RequestScreen> {
                                                         shape: BoxShape.circle,
                                                       ),
                                                       child: const Icon(
-                                                        Icons.assignment,
+                                                        Icons.person,
                                                         size: 28,
                                                       ),
                                                     ),
@@ -158,11 +162,12 @@ class _RequestScreenState extends State<RequestScreen> {
                                                     Expanded(
                                                       child: Column(
                                                         crossAxisAlignment:
-                                                            CrossAxisAlignment.start,
+                                                            CrossAxisAlignment
+                                                                .start,
                                                         children: [
                                                           RichText(
                                                             text: TextSpan(
-                                                              text: "Descripción: ",
+                                                              text: "Nombre: ",
                                                               style:
                                                                   const TextStyle(
                                                                 fontWeight:
@@ -171,11 +176,13 @@ class _RequestScreenState extends State<RequestScreen> {
                                                               ),
                                                               children: [
                                                                 TextSpan(
-                                                                  text: request.descripcion,
+                                                                  text:
+                                                                      "${admin.nombre} ${admin.apellido}",
                                                                   style:
                                                                       const TextStyle(
                                                                     fontWeight:
-                                                                        FontWeight.normal,
+                                                                        FontWeight
+                                                                            .normal,
                                                                   ),
                                                                 ),
                                                               ],
@@ -184,7 +191,7 @@ class _RequestScreenState extends State<RequestScreen> {
                                                           const SizedBox(height: 4),
                                                           RichText(
                                                             text: TextSpan(
-                                                              text: "Dirección: ",
+                                                              text: "Cédula: ",
                                                               style:
                                                                   const TextStyle(
                                                                 fontWeight:
@@ -193,11 +200,13 @@ class _RequestScreenState extends State<RequestScreen> {
                                                               ),
                                                               children: [
                                                                 TextSpan(
-                                                                  text: request.direccionServicio,
+                                                                  text: admin
+                                                                      .numeroCedula,
                                                                   style:
                                                                       const TextStyle(
                                                                     fontWeight:
-                                                                        FontWeight.normal,
+                                                                        FontWeight
+                                                                            .normal,
                                                                   ),
                                                                 ),
                                                               ],
@@ -206,7 +215,7 @@ class _RequestScreenState extends State<RequestScreen> {
                                                           const SizedBox(height: 4),
                                                           RichText(
                                                             text: TextSpan(
-                                                              text: "Fecha solicitud: ",
+                                                              text: "Correo: ",
                                                               style:
                                                                   const TextStyle(
                                                                 fontWeight:
@@ -215,14 +224,13 @@ class _RequestScreenState extends State<RequestScreen> {
                                                               ),
                                                               children: [
                                                                 TextSpan(
-                                                                  text: request.fechaSolicitud
-                                                                      .toIso8601String()
-                                                                      .split("T")
-                                                                      .first,
+                                                                  text: admin
+                                                                      .correoElectronico,
                                                                   style:
                                                                       const TextStyle(
                                                                     fontWeight:
-                                                                        FontWeight.normal,
+                                                                        FontWeight
+                                                                            .normal,
                                                                   ),
                                                                 ),
                                                               ],
@@ -239,15 +247,18 @@ class _RequestScreenState extends State<RequestScreen> {
                                         },
                                       )
                                     : const Center(
-                                        child: Text("No hay solicitudes registradas"),
+                                        child: Text(
+                                          "No hay administradores registrados",
+                                        ),
                                       ),
                               ),
                             ),
 
                             // Paginación
-                            if (state.requests.isNotEmpty)
+                            if (state.admins.isNotEmpty)
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 12),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -280,10 +291,11 @@ class _RequestScreenState extends State<RequestScreen> {
                               ),
                           ],
                         );
-                      } else if (state is RequestError) {
+                      } else if (state is AdminsError) {
                         return Center(child: Text(state.message));
                       } else {
-                        return const Center(child: Text("No hay solicitudes"));
+                        return const Center(
+                            child: Text("No hay administradores"));
                       }
                     },
                   ),
@@ -296,6 +308,7 @@ class _RequestScreenState extends State<RequestScreen> {
     );
   }
 
+  // Botones de paginación
   Widget _buildPageButton(String text, bool selected, VoidCallback onPressed) {
     return Container(
       padding: const EdgeInsets.all(2),
@@ -330,6 +343,7 @@ class _RequestScreenState extends State<RequestScreen> {
   }
 }
 
+// Menú inferior
 class _BottomNavBar extends StatelessWidget {
   const _BottomNavBar();
 
@@ -341,6 +355,16 @@ class _BottomNavBar extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const AdminHomeScreen()),
+          );
+        } else if (index == 2) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BlocProvider(
+                create: (context) => RequestBloc(RequestRepository()),
+                child: RequestScreen(),
+              ),
+            ),
           );
         }
       },
@@ -358,7 +382,7 @@ class _BottomNavBar extends StatelessWidget {
   }
 }
 
-// --- Curva superior azul ---
+// Curva superior azul
 class WaveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
