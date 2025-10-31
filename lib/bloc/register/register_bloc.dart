@@ -41,15 +41,5 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     });
   }
 
-  @override
-  Future<void> close() {
-    nombreController.dispose();
-    apellidoController.dispose();
-    numeroDeCedulaController.dispose();
-    correoElectronicoController.dispose();
-    telefonoController.dispose();
-    direccionController.dispose();
-    contraseniaController.dispose();
-    return super.close();
-  }
+
 }
