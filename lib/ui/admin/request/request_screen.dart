@@ -1,26 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_a_c_soluciones/ui/admin/admin_home.dart';
-import 'package:flutter_a_c_soluciones/ui/admin/request_screen.dart';
-import '../../bloc/request/request_bloc.dart';
-import '../../repository/request_repository.dart';
-import '../../bloc/visits/visits_bloc.dart';
-import '../../bloc/visits/visits_event.dart';
-import '../../bloc/visits/visits_state.dart';
+import '../../../bloc/request/request_bloc.dart';
+import '../../../bloc/request/request_event.dart';
+import '../../../bloc/request/request_state.dart';
+import '../../admin/Home/admin_home.dart';
 
-class VisitsScreen extends StatefulWidget {
+class RequestScreen extends StatefulWidget {
   @override
-  _VisitsScreenState createState() => _VisitsScreenState();
+  _RequestScreenState createState() => _RequestScreenState();
 }
 
-class _VisitsScreenState extends State<VisitsScreen> {
-  int _currentPage = 1; // página actual
-  final int _visitsPerPage = 4; // cantidad de cards por página
+class _RequestScreenState extends State<RequestScreen> {
+  int _currentPage = 1;
+  final int _requestsPerPage = 4;
 
   @override
   void initState() {
     super.initState();
-    context.read<VisitsBloc>().add(FetchVisits());
+    context.read<RequestBloc>().add(FetchRequests());
   }
 
   @override
@@ -34,10 +31,10 @@ class _VisitsScreenState extends State<VisitsScreen> {
             clipper: WaveClipper(),
             child: Container(
               height: 180,
-              color: Color.fromARGB(255, 46, 145, 216),
+              color: const Color.fromARGB(255, 46, 145, 216),
             ),
           ),
-          // Botón de retroceso y título
+
           Positioned(
             top: 40,
             left: 10,
@@ -53,9 +50,9 @@ class _VisitsScreenState extends State<VisitsScreen> {
                     onPressed: () => Navigator.pop(context),
                   ),
                 ),
-                Center(
-                  child: const Text(
-                    'Lista de Visitas',
+                const Center(
+                  child: Text(
+                    'Lista de Solicitudes',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,
@@ -66,6 +63,7 @@ class _VisitsScreenState extends State<VisitsScreen> {
               ],
             ),
           ),
+
           // Contenido principal
           Padding(
             padding: const EdgeInsets.only(top: 180.0),
@@ -73,31 +71,27 @@ class _VisitsScreenState extends State<VisitsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 16),
-                // Contenido principal
                 Expanded(
-                  child: BlocBuilder<VisitsBloc, VisitsState>(
+                  child: BlocBuilder<RequestBloc, RequestState>(
                     builder: (context, state) {
-                      if (state is VisitsLoading) {
+                      if (state is RequestLoading) {
                         return const Center(child: CircularProgressIndicator());
-                      } else if (state is VisitsSuccess) {
-                        final totalPages = state.visits.isNotEmpty
-                            ? (state.visits.length / _visitsPerPage).ceil()
+                      } else if (state is RequestSuccess) {
+                        final totalPages = state.requests.isNotEmpty
+                            ? (state.requests.length / _requestsPerPage).ceil()
                             : 1;
 
                         final safePage = _currentPage.clamp(1, totalPages);
-
-                        // calcular rango de visitas a mostrar
-                        final startIndex = (safePage - 1) * _visitsPerPage;
-                        final endIndex = (safePage * _visitsPerPage)
-                            .clamp(0, state.visits.length);
-
-                        final currentVisits = state.visits.isNotEmpty
-                            ? state.visits.sublist(startIndex, endIndex)
+                        final startIndex = (safePage - 1) * _requestsPerPage;
+                        final endIndex =
+                            (safePage * _requestsPerPage).clamp(0, state.requests.length);
+                        final currentRequests = state.requests.isNotEmpty
+                            ? state.requests.sublist(startIndex, endIndex)
                             : [];
 
                         return Column(
                           children: [
-                            // ontainer visitas
+                            // Contenedor con las solicitudes
                             Flexible(
                               child: Container(
                                 margin: const EdgeInsets.symmetric(
@@ -108,7 +102,7 @@ class _VisitsScreenState extends State<VisitsScreen> {
                                   borderRadius: BorderRadius.circular(30),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.blue.withOpacity(0.9),
+                                      color: const Color.fromARGB(255, 179, 46, 241).withOpacity(0.9),
                                       spreadRadius: 4,
                                       blurRadius: 8,
                                       offset: const Offset(0, 3),
@@ -116,146 +110,119 @@ class _VisitsScreenState extends State<VisitsScreen> {
                                   ],
                                   color: Colors.white,
                                 ),
-                                child: currentVisits.isNotEmpty
+                                child: currentRequests.isNotEmpty
                                     ? ListView.builder(
                                         padding: const EdgeInsets.all(12),
-                                        itemCount: currentVisits.length,
+                                        itemCount: currentRequests.length,
                                         itemBuilder: (context, index) {
-                                          final visit = currentVisits[index];
+                                          final request = currentRequests[index];
                                           return Center(
                                             child: Card(
                                               color: Colors.white,
                                               elevation: 4,
-                                              margin:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 10),
+                                              margin: const EdgeInsets.symmetric(
+                                                  vertical: 10),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(25),
                                               ),
                                               child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(16.0),
+                                                padding: const EdgeInsets.all(16.0),
                                                 child: Row(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     Container(
                                                       padding:
-                                                          const EdgeInsets.all(
-                                                              12),
+                                                          const EdgeInsets.all(12),
                                                       decoration: BoxDecoration(
                                                         boxShadow: [
                                                           BoxShadow(
                                                             color: Colors.black
-                                                                .withOpacity(
-                                                                    0.3),
+                                                                .withOpacity(0.3),
                                                             spreadRadius: 2,
                                                             blurRadius: 5,
                                                             offset:
-                                                                const Offset(
-                                                                    0, 3),
+                                                                const Offset(0, 3),
                                                           ),
                                                         ],
                                                         color: Colors.white,
                                                         shape: BoxShape.circle,
                                                       ),
                                                       child: const Icon(
-                                                          Icons.article,
-                                                          size: 28),
+                                                        Icons.assignment,
+                                                        size: 28,
+                                                      ),
                                                     ),
                                                     const SizedBox(width: 16),
                                                     Expanded(
                                                       child: Column(
                                                         crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
+                                                            CrossAxisAlignment.start,
                                                         children: [
                                                           RichText(
                                                             text: TextSpan(
-                                                              text:
-                                                                  "Notas previas: ",
+                                                              text: "Descripción: ",
                                                               style:
                                                                   const TextStyle(
                                                                 fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: Colors
-                                                                    .black,
+                                                                    FontWeight.bold,
+                                                                color: Colors.black,
                                                               ),
                                                               children: [
                                                                 TextSpan(
-                                                                  text: visit
-                                                                          .notasPrevias ??
-                                                                      "",
+                                                                  text: request.descripcion,
                                                                   style:
                                                                       const TextStyle(
                                                                     fontWeight:
-                                                                        FontWeight
-                                                                            .normal,
+                                                                        FontWeight.normal,
                                                                   ),
                                                                 ),
                                                               ],
                                                             ),
                                                           ),
-                                                          const SizedBox(
-                                                              height: 4),
+                                                          const SizedBox(height: 4),
                                                           RichText(
                                                             text: TextSpan(
-                                                              text:
-                                                                  "Notas posteriores: ",
+                                                              text: "Dirección: ",
                                                               style:
                                                                   const TextStyle(
                                                                 fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: Colors
-                                                                    .black,
+                                                                    FontWeight.bold,
+                                                                color: Colors.black,
                                                               ),
                                                               children: [
                                                                 TextSpan(
-                                                                  text: visit
-                                                                          .notasPosteriores ??
-                                                                      "",
+                                                                  text: request.direccionServicio,
                                                                   style:
                                                                       const TextStyle(
                                                                     fontWeight:
-                                                                        FontWeight
-                                                                            .normal,
+                                                                        FontWeight.normal,
                                                                   ),
                                                                 ),
                                                               ],
                                                             ),
                                                           ),
-                                                          const SizedBox(
-                                                              height: 4),
+                                                          const SizedBox(height: 4),
                                                           RichText(
                                                             text: TextSpan(
-                                                              text: "Fecha: ",
+                                                              text: "Fecha solicitud: ",
                                                               style:
                                                                   const TextStyle(
                                                                 fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: Colors
-                                                                    .black,
+                                                                    FontWeight.bold,
+                                                                color: Colors.black,
                                                               ),
                                                               children: [
                                                                 TextSpan(
-                                                                  text: visit.fechaProgramada !=
-                                                                          null
-                                                                      ? visit
-                                                                          .fechaProgramada
-                                                                          .toIso8601String()
-                                                                          .split(
-                                                                              "T")
-                                                                          .first
-                                                                      : "Sin fecha",
+                                                                  text: request.fechaSolicitud
+                                                                      .toIso8601String()
+                                                                      .split("T")
+                                                                      .first,
                                                                   style:
                                                                       const TextStyle(
                                                                     fontWeight:
-                                                                        FontWeight
-                                                                            .normal,
+                                                                        FontWeight.normal,
                                                                   ),
                                                                 ),
                                                               ],
@@ -272,16 +239,15 @@ class _VisitsScreenState extends State<VisitsScreen> {
                                         },
                                       )
                                     : const Center(
-                                        child:
-                                            Text("No hay visitas registradas")),
+                                        child: Text("No hay solicitudes registradas"),
+                                      ),
                               ),
                             ),
 
-                            // Paginacion afuera del container
-                            if (state.visits.isNotEmpty)
+                            // Paginación
+                            if (state.requests.isNotEmpty)
                               Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 12),
+                                padding: const EdgeInsets.symmetric(vertical: 12),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -314,10 +280,10 @@ class _VisitsScreenState extends State<VisitsScreen> {
                               ),
                           ],
                         );
-                      } else if (state is VisitsError) {
+                      } else if (state is RequestError) {
                         return Center(child: Text(state.message));
                       } else {
-                        return const Center(child: Text("No hay visitas"));
+                        return const Center(child: Text("No hay solicitudes"));
                       }
                     },
                   ),
@@ -330,7 +296,6 @@ class _VisitsScreenState extends State<VisitsScreen> {
     );
   }
 
-  // Boton de paginacion 
   Widget _buildPageButton(String text, bool selected, VoidCallback onPressed) {
     return Container(
       padding: const EdgeInsets.all(2),
@@ -338,9 +303,8 @@ class _VisitsScreenState extends State<VisitsScreen> {
         style: ElevatedButton.styleFrom(
           shape: const CircleBorder(),
           padding: const EdgeInsets.all(3),
-          backgroundColor: selected
-              ? const Color.fromARGB(255, 156, 204, 243)
-              : Colors.white,
+          backgroundColor:
+              selected ? const Color.fromARGB(255, 156, 204, 243) : Colors.white,
           foregroundColor: selected ? Colors.white : Colors.blue,
         ),
         onPressed: onPressed,
@@ -349,7 +313,6 @@ class _VisitsScreenState extends State<VisitsScreen> {
     );
   }
 
-  // Boton de paginacion (flechas)
   Widget _buildArrowButton(String text, VoidCallback onPressed) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -367,7 +330,6 @@ class _VisitsScreenState extends State<VisitsScreen> {
   }
 }
 
-// Menu bajo
 class _BottomNavBar extends StatelessWidget {
   const _BottomNavBar();
 
@@ -379,16 +341,6 @@ class _BottomNavBar extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const AdminHomeScreen()),
-          );
-        } else if (index == 2) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BlocProvider(
-                create: (context) => RequestBloc(RequestRepository()),
-                child: RequestScreen(),
-              ),
-            ),
           );
         }
       },
@@ -406,7 +358,7 @@ class _BottomNavBar extends StatelessWidget {
   }
 }
 
-/// curva de arriba
+// --- Curva superior azul ---
 class WaveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
