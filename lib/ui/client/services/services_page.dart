@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/repository/client/service_api_service.dart';
 import 'package:flutter_a_c_soluciones/model/client/service_model.dart';
+import 'package:flutter_a_c_soluciones/ui/client/Requests/create/create_request_modal.dart';
+import 'package:flutter_a_c_soluciones/repository/client/solicitud_api_solicitud.dart';
 
 class ServicesContent extends StatefulWidget {
-  const ServicesContent({super.key});
+  final int clienteId;
+
+  ServicesContent({Key? key, required this.clienteId}) : super(key: key);
 
   @override
   State<ServicesContent> createState() => _ServicesContentState();
@@ -67,31 +71,6 @@ class _ServicesContentState extends State<ServicesContent> {
                   }
                 },
               ),
-
-              const SizedBox(height: 16),
-              ElevatedButton.icon(
-                onPressed: () async {
-                  final result =
-                      await Navigator.pushNamed(context, '/crear-solicitud');
-
-                  if (result == true) {
-                    setState(() {
-                      _futureServices = _repository.getServices();
-                    });
-                  }
-                },
-                icon: const Icon(Icons.add),
-                label: const Text("Nuevo servicio"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
             ],
           ),
         ),
@@ -127,98 +106,153 @@ class _ServicesContentState extends State<ServicesContent> {
               return LayoutBuilder(
                 builder: (context, constraints) {
                   return ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight: constraints.maxHeight,
-                    ),
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.topCenter,
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: currentServices.length,
-                              padding: const EdgeInsets.all(12),
-                              itemBuilder: (context, index) {
-                                final service = currentServices[index];
-                                return Card(
-                                  color: Colors.white,
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 8),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(1),
-                                  ),
-                                  elevation: 4,
-                                  child: ListTile(
-                                    leading: const Icon(
-                                      Icons.build_circle_rounded,
-                                      color: Color.fromARGB(255, 46, 145, 216),
-                                      size: 40,
-                                    ),
-                                    title: Text(
-                                      service.nombre,
-                                      // mostrar menos caracteres si es muy largo
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight,
+                      ),
+                      child: Container(
+                        color: Colors.white,
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Align(
+                                alignment: Alignment.topCenter,
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: currentServices.length,
+                                  padding: const EdgeInsets.all(12),
+                                  itemBuilder: (context, index) {
+                                    final service = currentServices[index];
+                                    return GestureDetector(
+                                      onTap: () async {
+                                        final result = await showDialog(
+                                          context: context,
+                                          builder: (_) => CrearSolicitudModal(
+                                            clienteId: widget.clienteId,
+                                            servicio: service,
+                                            repository:
+                                                SolicitudApiRepository(),
+                                          ),
+                                        );
+                                        if (result == true) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Row(
+                                                children: const [
+                                                  Icon(Icons.check_circle,
+                                                      color: Colors.white),
+                                                  SizedBox(width: 12),
+                                                  Expanded(
+                                                    child: Text(
+                                                      'Solicitud creada con éxito',
+                                                      style: TextStyle(
+                                                          fontSize: 16),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              backgroundColor:
+                                                  Colors.green.shade600,
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              margin: const EdgeInsets.only(
+                                                top:
+                                                    20, // margen superior para que salga desde arriba
+                                                left: 16,
+                                                right: 16,
+                                              ),
+                                              elevation: 8,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                              duration:
+                                                  const Duration(seconds: 3),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      child: Card(
+                                        color: Colors.white,
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 8),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(1),
+                                        ),
+                                        elevation: 4,
+                                        child: ListTile(
+                                          leading: const Icon(
+                                            Icons.build_circle_rounded,
+                                            color: Color.fromARGB(
+                                                255, 46, 145, 216),
+                                            size: 40,
+                                          ),
+                                          title: Text(
+                                            service.nombre,
+                                            // mostrar menos caracteres si es muy largo
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                          subtitle: Text(
+                                            service.descripcion,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          trailing: Text(
+                                            "\$${service.price}",
+                                            style: const TextStyle(
+                                              color: Colors.green,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                    subtitle: Text(
-                                      service.descripcion,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    trailing: Text(
-                                      "\$${service.price}",
-                                      style: const TextStyle(
-                                        color: Colors.green,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
+                                    );
+                                  },
+                                ),
+                              ),
                             ),
-                          ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.arrow_back_ios),
+                                    onPressed: _currentPage > 0
+                                        ? () {
+                                            setState(() {
+                                              _currentPage--;
+                                            });
+                                          }
+                                        : null,
+                                  ),
+                                  Text(
+                                    "Página ${_currentPage + 1} de $totalPages",
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.arrow_forward_ios),
+                                    onPressed: _currentPage < totalPages - 1
+                                        ? () {
+                                            setState(() {
+                                              _currentPage++;
+                                            });
+                                          }
+                                        : null,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.arrow_back_ios),
-                                onPressed: _currentPage > 0
-                                    ? () {
-                                        setState(() {
-                                          _currentPage--;
-                                        });
-                                      }
-                                    : null,
-                              ),
-                              Text(
-                                "Página ${_currentPage + 1} de $totalPages",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.arrow_forward_ios),
-                                onPressed: _currentPage < totalPages - 1
-                                    ? () {
-                                        setState(() {
-                                          _currentPage++;
-                                        });
-                                      }
-                                    : null,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
+                      ));
                 },
               );
             },

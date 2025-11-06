@@ -57,4 +57,12 @@ class SecureStorageService {
   Future<String?> getAdminId() async {
     return await _storage.read(key: 'id_administrador');
   }
+
+  Future<void> saveClienteId(String id) async {
+    await _storage.write(key: 'cliente_id', value: id);
+  }
+
+  Future<String?> getClienteId() async {
+    return await _storage.read(key: 'cliente_id');
+  }
 }

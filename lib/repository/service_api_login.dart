@@ -27,6 +27,14 @@ class APIService {
       await storage.saveToken(responseBody['token']);
       await storage.saveAdminId(responseBody['administrador'].toString());
 
+      // Guardar datos del usuario
+      final user = responseBody['user'];
+      await storage.saveUserData({
+        'cliente_id': user['id'].toString(),
+        'user_name': user['nombre'],
+        'user_email': user['email'],
+      });
+
       // Retornar el modelo de respuesta
       return loginResponseJson(response.body);
     } else {
