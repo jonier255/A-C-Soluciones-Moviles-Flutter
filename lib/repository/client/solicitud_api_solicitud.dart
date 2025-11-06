@@ -35,4 +35,42 @@ class SolicitudApiRepository {
           'Error al cargar las solicitudes (${response.statusCode})');
     }
   }
+
+  // POST para crear solicitud
+  Future<Solicitud> crearSolicitud({
+    required int clienteId,
+    required int servicioId,
+    required String direccion,
+    required String descripcion,
+    String comentarios = '',
+    DateTime? fechaSolicitud,
+  }) async {
+    final token = await _storageService.getToken();
+    if (token == null) throw Exception('Token no encontrado');
+
+    final body = {
+      'cliente_id_fk': clienteId,
+      'servicio_id_fk': servicioId,
+      'direccion_servicio': direccion,
+      'descripcion': descripcion,
+      'comentarios': comentarios,
+      'fecha_solicitud': (fechaSolicitud ?? DateTime.now()).toIso8601String(),
+    };
+
+    final response = await http.post(
+      Uri.parse('https://flutter-58c3.onrender.com/api/solicitudes'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode(body),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final data = json.decode(response.body);
+      return Solicitud.fromJson(data);
+    } else {
+      throw Exception('Error al crear solicitud (${response.statusCode})');
+    }
+  }
 }

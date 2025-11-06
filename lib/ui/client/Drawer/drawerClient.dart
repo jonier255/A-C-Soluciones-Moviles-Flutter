@@ -16,8 +16,7 @@ class DrawerClient extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: Colors.white,
-      child: ListView(
-        padding: EdgeInsets.zero,
+      child: Column(
         children: [
           UserAccountsDrawerHeader(
             decoration: const BoxDecoration(
@@ -25,13 +24,13 @@ class DrawerClient extends StatelessWidget {
             ),
             accountName: Text(
               userName,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             accountEmail: Text(
               userEmail,
-              style: TextStyle(fontSize: 14),
+              style: const TextStyle(fontSize: 14),
             ),
-            currentAccountPicture: CircleAvatar(
+            currentAccountPicture: const CircleAvatar(
               backgroundColor: Colors.white,
               child: Icon(
                 Icons.person,
@@ -43,46 +42,36 @@ class DrawerClient extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.home),
             title: const Text('Inicio'),
-            onTap: () {
-              onItemSelected('/client_home');
-            },
+            onTap: () => onItemSelected('/client_home'),
           ),
           ListTile(
             leading: const Icon(Icons.miscellaneous_services),
             title: const Text('Servicios'),
-            onTap: () {
-              onItemSelected('/client_services');
-            },
+            onTap: () => onItemSelected('/client_services'),
           ),
           ListTile(
             leading: const Icon(Icons.request_page),
             title: const Text('Solicitudes'),
-            onTap: () {
-              onItemSelected('/client_requests');
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.history),
-            title: const Text('Historial'),
-            onTap: () {
-              onItemSelected('/client_history');
-            },
+            onTap: () => onItemSelected('/client_requests'),
           ),
           ListTile(
             leading: const Icon(Icons.chat),
             title: const Text('Chat'),
-            onTap: () {
-              onItemSelected('/client_chat');
-            },
+            onTap: () => onItemSelected('/client_chat'),
           ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.exit_to_app),
-            title: const Text('Cerrar Sesión'),
-            onTap: () {
-              Navigator.pop(context);
-              // Implement logout
-            },
+          const Spacer(),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 20),
+            child: ListTile(
+              leading: const Icon(Icons.exit_to_app, color: Colors.red),
+              title: const Text(
+                'Cerrar Sesión',
+                style: TextStyle(color: Colors.red),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
         ],
       ),

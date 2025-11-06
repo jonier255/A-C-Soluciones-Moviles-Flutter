@@ -207,106 +207,111 @@ class _RequestsContentState extends State<RequestsContent> {
               return LayoutBuilder(
                 builder: (context, constraints) {
                   return ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight: constraints.maxHeight,
-                    ),
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.topCenter,
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: currentSolicitudes.length,
-                              padding: const EdgeInsets.all(12),
-                              itemBuilder: (context, index) {
-                                final solicitud = currentSolicitudes[index];
-                                return Card(
-                                  color: Colors.white,
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 8),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(1),
-                                  ),
-                                  elevation: 4,
-                                  child: ListTile(
-                                    leading: const Icon(
-                                      Icons.request_page,
-                                      color: Color.fromARGB(255, 46, 145, 216),
-                                      size: 40,
-                                    ),
-                                    title: Text(
-                                      DateFormat('dd/MM/yyyy HH:mm').format(
-                                          DateTime.parse(
-                                              solicitud.fechaSolicitud)),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight,
+                      ),
+                      child: Container(
+                        color: Colors.white,
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Align(
+                                alignment: Alignment.topCenter,
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: currentSolicitudes.length,
+                                  padding: const EdgeInsets.all(12),
+                                  itemBuilder: (context, index) {
+                                    final solicitud = currentSolicitudes[index];
+                                    return Card(
+                                      color: Colors.white,
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 8),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(1),
                                       ),
-                                    ),
-                                    subtitle: Text(
-                                      solicitud.descripcion,
-                                      maxLines: 2,
-                                      style: const TextStyle(fontSize: 14),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    trailing: Text(
-                                      solicitud.estado,
-                                      // cambiar color segun estado
-                                      style: TextStyle(
-                                        color: solicitud.estado.toLowerCase() ==
-                                                'pendiente'
-                                            ? Colors.orange
-                                            : solicitud.estado.toLowerCase() ==
-                                                    'en proceso'
-                                                ? Colors.blue
-                                                : Colors.green,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
+                                      elevation: 4,
+                                      child: ListTile(
+                                        leading: const Icon(
+                                          Icons.request_page,
+                                          color:
+                                              Color.fromARGB(255, 46, 145, 216),
+                                          size: 40,
+                                        ),
+                                        title: Text(
+                                          DateFormat('dd/MM/yyyy HH:mm').format(
+                                              DateTime.parse(
+                                                  solicitud.fechaSolicitud)),
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        subtitle: Text(
+                                          solicitud.descripcion,
+                                          maxLines: 2,
+                                          style: const TextStyle(fontSize: 14),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        trailing: Text(
+                                          solicitud.estado,
+                                          // cambiar color segun estado
+                                          style: TextStyle(
+                                            color: solicitud.estado
+                                                        .toLowerCase() ==
+                                                    'pendiente'
+                                                ? Colors.orange
+                                                : solicitud.estado
+                                                            .toLowerCase() ==
+                                                        'en proceso'
+                                                    ? Colors.blue
+                                                    : Colors.green,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                );
-                              },
+                                    );
+                                  },
+                                ),
+                              ),
                             ),
-                          ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.arrow_back_ios),
+                                    onPressed: _currentPage > 0
+                                        ? () {
+                                            setState(() {
+                                              _currentPage--;
+                                            });
+                                          }
+                                        : null,
+                                  ),
+                                  Text(
+                                    "Página ${_currentPage + 1} de $totalPages",
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.arrow_forward_ios),
+                                    onPressed: _currentPage < totalPages - 1
+                                        ? () {
+                                            setState(() {
+                                              _currentPage++;
+                                            });
+                                          }
+                                        : null,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.arrow_back_ios),
-                                onPressed: _currentPage > 0
-                                    ? () {
-                                        setState(() {
-                                          _currentPage--;
-                                        });
-                                      }
-                                    : null,
-                              ),
-                              Text(
-                                "Página ${_currentPage + 1} de $totalPages",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.arrow_forward_ios),
-                                onPressed: _currentPage < totalPages - 1
-                                    ? () {
-                                        setState(() {
-                                          _currentPage++;
-                                        });
-                                      }
-                                    : null,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
+                      ));
                 },
               );
             },
