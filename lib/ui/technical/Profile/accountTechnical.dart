@@ -43,9 +43,9 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
                 padding: const EdgeInsets.all(20.0),
                 children: [
                   _buildProfileHeader(userTechnical.nombre, userTechnical.apellido, primaryColor),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 15),
                   _buildInfoCard(userTechnical, textColor, accentColor),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 15),
                   _buildActionButtons(context, primaryColor, accentColor),
                 ],
               );
@@ -90,11 +90,15 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
         child: Column(
           children: [
             _buildDetailItem(Icons.person, 'Nombre', userTechnical.nombre, textColor, accentColor),
-            const Divider(height: 20, thickness: 1),
+            const Divider(height: 10, thickness: 1),
             _buildDetailItem(Icons.person_outline, 'Apellido', userTechnical.apellido, textColor, accentColor),
-            const Divider(height: 20, thickness: 1),
+            const Divider(height: 10, thickness: 1),
             _buildDetailItem(Icons.credit_card, 'Cédula', userTechnical.numeroCedula, textColor, accentColor),
-            const Divider(height: 20, thickness: 1),
+            const Divider(height: 10, thickness: 1),
+            _buildDetailItem(Icons.phone, 'Teléfono', userTechnical.telefono, textColor, accentColor),
+            const Divider(height: 10, thickness: 1),
+            _buildDetailItem(Icons.work, 'Especialidad', userTechnical.especialidad, textColor, accentColor),
+            const Divider(height: 10, thickness: 1),
             _buildDetailItem(Icons.email, 'Correo electrónico', userTechnical.correoElectronico, textColor, accentColor, isEmail: true),
           ],
         ),
@@ -132,8 +136,7 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: primaryColor,
-              foregroundColor: Colors.white,
-              minimumSize: const Size(double.infinity, 55),
+              minimumSize: const Size(double.infinity, 45),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               elevation: 5,
             ),
@@ -153,7 +156,7 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
             },
             style: OutlinedButton.styleFrom(
               side: BorderSide(color: Colors.red),
-              minimumSize: const Size(double.infinity, 55),
+              minimumSize: const Size(double.infinity, 45),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             ),
           ),

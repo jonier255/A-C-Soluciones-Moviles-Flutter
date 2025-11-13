@@ -16,7 +16,9 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
   final TextEditingController nombreController = TextEditingController();
   final TextEditingController apellidoController = TextEditingController();
   final TextEditingController correoController = TextEditingController();
+  final TextEditingController telefonoController = TextEditingController();
   String numeroCedula = '';
+  String especialidad = '';
 
   @override
   void initState() {
@@ -30,6 +32,7 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
     nombreController.dispose();
     apellidoController.dispose();
     correoController.dispose();
+    telefonoController.dispose();
     super.dispose();
   }
 
@@ -52,7 +55,9 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
             nombreController.text = state.technical.nombre;
             apellidoController.text = state.technical.apellido;
             correoController.text = state.technical.correoElectronico;
+            telefonoController.text = state.technical.telefono;
             numeroCedula = state.technical.numeroCedula;
+            especialidad = state.technical.especialidad;
           } else if (state is EditProfileTechnicalSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -90,7 +95,15 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
                   primaryColor,
                   keyboardType: TextInputType.emailAddress,
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 20),
+                _buildTextField(
+                  telefonoController,
+                  "Teléfono",
+                  Icons.phone,
+                  primaryColor,
+                  keyboardType: TextInputType.phone,
+                ),
+                const SizedBox(height: 20),
                 ElevatedButton.icon(
                   icon: Icon(Icons.save, color: Colors.white),
                   label: const Text('Guardar Cambios'),
@@ -102,6 +115,8 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
                         apellido: apellidoController.text,
                         numeroCedula: numeroCedula, // Not editable, passed from initial state
                         correoElectronico: correoController.text,
+                        telefono: telefonoController.text,
+                        especialidad: especialidad,
                         rol: 'tecnico',
                       );
                       context.read<EditProfileTechnicalBloc>().add(
@@ -112,7 +127,7 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryColor,
                     foregroundColor: Colors.white,
-                    minimumSize: const Size(double.infinity, 55),
+                    minimumSize: const Size(double.infinity, 45),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                     elevation: 5,
                   ),
@@ -126,7 +141,7 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
                   },
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(color: Colors.grey[400]!),
-                    minimumSize: const Size(double.infinity, 55),
+                    minimumSize: const Size(double.infinity, 45),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                   ),
                 ),

@@ -35,7 +35,8 @@ class EditProfileTechnicalBloc extends Bloc<EditProfileTechnicalEvent, EditProfi
     emit(EditProfileTechnicalLoading());
     try {
       await technicalUpdateProfileRepository.updateTechnicalProfile(event.technicalData);
-      emit(EditProfileTechnicalSuccess());
+      final technical = await technicalUpdateProfileRepository.getTechnicalProfile(); // Reload data
+      emit(EditProfileTechnicalLoaded(technical)); // Emit loaded state with fresh data
     } catch (e) {
       emit(EditProfileTechnicalFailure(e.toString()));
     }

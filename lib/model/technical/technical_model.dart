@@ -5,6 +5,8 @@ class UpdateTechnicalRequest {
   final String numeroCedula;
   final String correoElectronico;
   final String rol;
+  final String telefono;
+  final String especialidad;
 
 
   UpdateTechnicalRequest({
@@ -13,7 +15,9 @@ class UpdateTechnicalRequest {
     required this.numeroCedula,
     required this.correoElectronico,
     required this.id,
-    required this.rol
+    required this.rol,
+    required this.telefono,
+    required this.especialidad,
   });
 
   factory UpdateTechnicalRequest.fromJson(Map<String, dynamic> json) {
@@ -24,6 +28,8 @@ class UpdateTechnicalRequest {
       numeroCedula: json['numero_de_cedula']?.toString() ?? '',
       correoElectronico: json['correo_electronico'] ?? '',
       rol: json['rol'] ?? '',
+      telefono: json['telefono'] ?? '',
+      especialidad: json['especialidad'] ?? '',
     );
   }
 
@@ -33,5 +39,7 @@ class UpdateTechnicalRequest {
         "numero_cedula": numeroCedula,
         "correo_electronico": correoElectronico,
         "rol": rol,
+        "telefono": telefono,
+        "especialidad": especialidad,
       };
 }
