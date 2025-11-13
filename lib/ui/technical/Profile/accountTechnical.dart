@@ -35,7 +35,7 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
         ),
         body: BlocBuilder<EditProfileTechnicalBloc, EditProfileTechnicalState>(
           builder: (context, state) {
-            if (state is EditProfileTechnicalLoading) {
+            if (state is EditProfileTechnicalLoading || state is EditProfileTechnicalSuccess) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is EditProfileTechnicalLoaded) {
               final userTechnical = state.technical;
