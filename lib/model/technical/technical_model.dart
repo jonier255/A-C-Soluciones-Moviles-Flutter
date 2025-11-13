@@ -1,4 +1,6 @@
-class UpdateTechnicalRequest {
+import 'package:equatable/equatable.dart';
+
+class UpdateTechnicalRequest extends Equatable {
   final int id;
   final String nombre;
   final String apellido;
@@ -42,4 +44,16 @@ class UpdateTechnicalRequest {
         "telefono": telefono,
         "especialidad": especialidad,
       };
+      
+  @override
+  List<Object?> get props => [
+        id,
+        nombre,
+        apellido,
+        numeroCedula,
+        correoElectronico,
+        rol,
+        telefono,
+        especialidad,
+      ];
 }
