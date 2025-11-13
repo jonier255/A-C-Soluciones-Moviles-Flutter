@@ -166,6 +166,8 @@ class _ReportListState extends State<_ReportList> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return BlocBuilder<ReportBloc, ReportState>(
       builder: (context, state) {
         if (state is ReportLoading) {
@@ -216,6 +218,8 @@ class _ReportCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     final visit = report.visit;
     final formattedDate =
         DateFormat('dd/MM/yyyy').format(visit.fechaProgramada);
@@ -223,43 +227,43 @@ class _ReportCard extends StatelessWidget {
     return Card(
       elevation: 6,
       color: Colors.white,
-      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      margin: EdgeInsets.symmetric(vertical: screenHeight * 0.01, horizontal: screenWidth * 0.04),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(screenWidth * 0.05)),
       child: Padding(
-        padding: const EdgeInsets.all(14.0),
+        padding: EdgeInsets.all(screenWidth * 0.035),
         child: Row(
           children: [
-            const Icon(Icons.article, size: 35, color: Colors.black),
-            const SizedBox(width: 16),
+            Icon(Icons.article, size: screenWidth * 0.09, color: Colors.black),
+            SizedBox(width: screenWidth * 0.04),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Visita: ${visit.notasPrevias.isNotEmpty ? visit.notasPrevias : "Sin notas previas"}',
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: screenWidth * 0.038, fontWeight: FontWeight.bold),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: screenHeight * 0.005),
                   Text(
                     'Notas post-visita: ${visit.notasPosteriores.isNotEmpty ? visit.notasPosteriores : "N/A"}',
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    style: TextStyle(fontSize: screenWidth * 0.032, color: Colors.grey),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: screenHeight * 0.005),
                   Text("Fecha: $formattedDate",
                       style:
-                          const TextStyle(fontSize: 12, color: Colors.grey)),
+                          TextStyle(fontSize: screenWidth * 0.032, color: Colors.grey)),
                 ],
               ),
             ),
             isLoading
                 ? const CircularProgressIndicator()
                 : IconButton(
-                    icon: const Icon(Icons.download_for_offline,
-                        color: Colors.green),
+                    icon: Icon(Icons.download_for_offline,
+                        color: Colors.green, size: screenWidth * 0.07),
                     tooltip: 'Descargar Reporte',
                     onPressed: onDownload,
                   ),

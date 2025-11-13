@@ -16,6 +16,9 @@ class AccountTechnicalScreen extends StatefulWidget {
 class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     // Define colors for a cleaner look
     final primaryColor = Color(0xFF0D47A1); // Dark Blue
     final backgroundColor = Color(0xFFF5F5F5); // Light Gray
@@ -40,13 +43,13 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
             } else if (state is EditProfileTechnicalLoaded) {
               final userTechnical = state.technical;
               return ListView(
-                padding: const EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(screenWidth * 0.05), // Responsive padding
                 children: [
-                  _buildProfileHeader(userTechnical.nombre, userTechnical.apellido, primaryColor),
-                  const SizedBox(height: 15),
-                  _buildInfoCard(userTechnical, textColor, accentColor),
-                  const SizedBox(height: 15),
-                  _buildActionButtons(context, primaryColor, accentColor),
+                  _buildProfileHeader(userTechnical.nombre, userTechnical.apellido, primaryColor, screenWidth, screenHeight),
+                  SizedBox(height: screenHeight * 0.015), // Responsive height
+                  _buildInfoCard(userTechnical, textColor, accentColor, screenWidth, screenHeight),
+                  SizedBox(height: screenHeight * 0.015), // Responsive height
+                  _buildActionButtons(context, primaryColor, accentColor, screenWidth, screenHeight),
                 ],
               );
             } else if (state is EditProfileTechnicalFailure) {
@@ -59,19 +62,19 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
     );
   }
 
-  Widget _buildProfileHeader(String nombre, String apellido, Color primaryColor) {
+  Widget _buildProfileHeader(String nombre, String apellido, Color primaryColor, double screenWidth, double screenHeight) {
     return Column(
       children: [
         CircleAvatar(
-          radius: 70,
+          radius: screenWidth * 0.18, // Responsive radius
           backgroundImage: NetworkImage('https://cdn-icons-png.flaticon.com/512/219/219983.png'),
           backgroundColor: Colors.white,
         ),
-        const SizedBox(height: 15),
+        SizedBox(height: screenHeight * 0.015), // Responsive height
         Text(
           '$nombre $apellido',
           style: TextStyle(
-            fontSize: 26,
+            fontSize: screenWidth * 0.065, // Responsive font size
             fontWeight: FontWeight.bold,
             color: primaryColor,
           ),
@@ -80,44 +83,44 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
     );
   }
 
-  Widget _buildInfoCard(dynamic userTechnical, Color textColor, Color accentColor) {
+  Widget _buildInfoCard(dynamic userTechnical, Color textColor, Color accentColor, double screenWidth, double screenHeight) {
     return Card(
       elevation: 2,
-      margin: const EdgeInsets.symmetric(horizontal: 10),
+      margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.025), // Responsive margin
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+        padding: EdgeInsets.symmetric(vertical: screenHeight * 0.025, horizontal: screenWidth * 0.025), // Responsive padding
         child: Column(
           children: [
-            _buildDetailItem(Icons.person, 'Nombre', userTechnical.nombre, textColor, accentColor),
-            const Divider(height: 10, thickness: 1),
-            _buildDetailItem(Icons.person_outline, 'Apellido', userTechnical.apellido, textColor, accentColor),
-            const Divider(height: 10, thickness: 1),
-            _buildDetailItem(Icons.credit_card, 'Cédula', userTechnical.numeroCedula, textColor, accentColor),
-            const Divider(height: 10, thickness: 1),
-            _buildDetailItem(Icons.phone, 'Teléfono', userTechnical.telefono, textColor, accentColor),
-            const Divider(height: 10, thickness: 1),
-            _buildDetailItem(Icons.work, 'Especialidad', userTechnical.especialidad, textColor, accentColor),
-            const Divider(height: 10, thickness: 1),
-            _buildDetailItem(Icons.email, 'Correo electrónico', userTechnical.correoElectronico, textColor, accentColor, isEmail: true),
+            _buildDetailItem(Icons.person, 'Nombre', userTechnical.nombre, textColor, accentColor, screenWidth),
+            Divider(height: screenHeight * 0.012, thickness: 1), // Responsive height
+            _buildDetailItem(Icons.person_outline, 'Apellido', userTechnical.apellido, textColor, accentColor, screenWidth),
+            Divider(height: screenHeight * 0.012, thickness: 1), // Responsive height
+            _buildDetailItem(Icons.credit_card, 'Cédula', userTechnical.numeroCedula, textColor, accentColor, screenWidth),
+            Divider(height: screenHeight * 0.012, thickness: 1), // Responsive height
+            _buildDetailItem(Icons.phone, 'Teléfono', userTechnical.telefono, textColor, accentColor, screenWidth),
+            Divider(height: screenHeight * 0.012, thickness: 1), // Responsive height
+            _buildDetailItem(Icons.work, 'Especialidad', userTechnical.especialidad, textColor, accentColor, screenWidth),
+            Divider(height: screenHeight * 0.012, thickness: 1), // Responsive height
+            _buildDetailItem(Icons.email, 'Correo electrónico', userTechnical.correoElectronico, textColor, accentColor, screenWidth, isEmail: true),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildDetailItem(IconData icon, String title, String value, Color textColor, Color accentColor, {bool isEmail = false}) {
+  Widget _buildDetailItem(IconData icon, String title, String value, Color textColor, Color accentColor, double screenWidth, {bool isEmail = false}) {
     return ListTile(
-      leading: Icon(icon, color: accentColor, size: 30),
+      leading: Icon(icon, color: accentColor, size: screenWidth * 0.075), // Responsive icon size
       title: Text(title, style: TextStyle(fontWeight: FontWeight.w600, color: textColor.withOpacity(0.7))),
-      subtitle: Text(value, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: textColor)),
+      subtitle: Text(value, style: TextStyle(fontSize: screenWidth * 0.04, fontWeight: FontWeight.bold, color: textColor)), // Responsive font size
     );
   }
 
-  Widget _buildActionButtons(BuildContext context, Color primaryColor, Color accentColor) {
+  Widget _buildActionButtons(BuildContext context, Color primaryColor, Color accentColor, double screenWidth, double screenHeight) {
     final editProfileBloc = BlocProvider.of<EditProfileTechnicalBloc>(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025), // Responsive horizontal padding
       child: Column(
         children: [
           ElevatedButton.icon(
@@ -136,12 +139,12 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: primaryColor,
-              minimumSize: const Size(double.infinity, 45),
+              minimumSize: Size(double.infinity, screenHeight * 0.055), // Responsive height
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               elevation: 5,
             ),
           ),
-          const SizedBox(height: 15),
+          SizedBox(height: screenHeight * 0.015), // Responsive height
           OutlinedButton.icon(
             icon: Icon(Icons.logout, color: Colors.red),
             label: const Text('Cerrar Sesión', style: TextStyle(color: Colors.red)),
@@ -156,7 +159,7 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
             },
             style: OutlinedButton.styleFrom(
               side: BorderSide(color: Colors.red),
-              minimumSize: const Size(double.infinity, 45),
+              minimumSize: Size(double.infinity, screenHeight * 0.055), // Responsive height
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             ),
           ),

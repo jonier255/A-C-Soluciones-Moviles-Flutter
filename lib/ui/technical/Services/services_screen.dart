@@ -54,6 +54,8 @@ class _ServiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -66,37 +68,37 @@ class _ServiceCard extends StatelessWidget {
       child: Card(
         elevation: 6,
         color: Colors.white,
-        margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        margin: EdgeInsets.symmetric(vertical: screenHeight * 0.01, horizontal: screenWidth * 0.04),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(screenWidth * 0.05)),
         child: Padding(
-          padding: const EdgeInsets.all(14.0),
+          padding: EdgeInsets.all(screenWidth * 0.035),
           child: Row(
             children: [
-              const Icon(Icons.miscellaneous_services, size: 35, color: Colors.black),
-              const SizedBox(width: 16),
+              Icon(Icons.miscellaneous_services, size: screenWidth * 0.09, color: Colors.black),
+              SizedBox(width: screenWidth * 0.04),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(service.nombre,
-                        style: const TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 4),
+                        style: TextStyle(
+                            fontSize: screenWidth * 0.038, fontWeight: FontWeight.bold)),
+                    SizedBox(height: screenHeight * 0.005),
                     Text(
                       service.descripcion.length > 50
                           ? '${service.descripcion.substring(0, 50)}...'
                           : service.descripcion,
-                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                      style: TextStyle(fontSize: screenWidth * 0.032, color: Colors.grey),
                     ),
                   ],
                 ),
               ),
-              Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              Container(padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025, vertical: screenHeight * 0.008),
                 decoration: BoxDecoration(
                   color: service.estado == "activo"
                       ? Colors.green[100]
                       : Colors.orange[100],
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(screenWidth * 0.03),
                 ),
                 child: Text(
                   service.estado,
@@ -105,7 +107,7 @@ class _ServiceCard extends StatelessWidget {
                         ? Colors.green[800]
                         : Colors.orange[800],
                     fontWeight: FontWeight.bold,
-                    fontSize: 12,
+                    fontSize: screenWidth * 0.03,
                   ),
                 ),
               )

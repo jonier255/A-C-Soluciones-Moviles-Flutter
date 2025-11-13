@@ -40,6 +40,8 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
   Widget build(BuildContext context) {
     final primaryColor = Color(0xFF0D47A1); // Dark Blue
     final backgroundColor = Color(0xFFF5F5F5); // Light Gray
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -86,12 +88,12 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
           return Form(
             key: _formKey,
             child: ListView(
-              padding: const EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(screenWidth * 0.05),
               children: [
                 _buildTextField(nombreController, "Nombre", Icons.person, primaryColor),
-                const SizedBox(height: 20),
+                SizedBox(height: screenHeight * 0.025),
                 _buildTextField(apellidoController, "Apellido", Icons.person_outline, primaryColor),
-                const SizedBox(height: 20),
+                SizedBox(height: screenHeight * 0.025),
                 _buildTextField(
                   correoController,
                   "Correo electrónico",
@@ -99,7 +101,7 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
                   primaryColor,
                   keyboardType: TextInputType.emailAddress,
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: screenHeight * 0.025),
                 _buildTextField(
                   telefonoController,
                   "Teléfono",
@@ -107,7 +109,7 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
                   primaryColor,
                   keyboardType: TextInputType.phone,
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: screenHeight * 0.025),
                 ElevatedButton.icon(
                   icon: Icon(Icons.save, color: Colors.white),
                   label: const Text('Guardar Cambios'),
@@ -131,12 +133,12 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryColor,
                     foregroundColor: Colors.white,
-                    minimumSize: const Size(double.infinity, 45),
+                    minimumSize: Size(double.infinity, screenHeight * 0.06),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                     elevation: 5,
                   ),
                 ),
-                const SizedBox(height: 15),
+                SizedBox(height: screenHeight * 0.02),
                 OutlinedButton.icon(
                   icon: Icon(Icons.cancel, color: Colors.grey[600]),
                   label: Text('Cancelar', style: TextStyle(color: Colors.grey[600])),
@@ -145,7 +147,7 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
                   },
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(color: Colors.grey[400]!),
-                    minimumSize: const Size(double.infinity, 45),
+                    minimumSize: Size(double.infinity, screenHeight * 0.06),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                   ),
                 ),

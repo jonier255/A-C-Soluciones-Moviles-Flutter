@@ -6,6 +6,8 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     final currentRoute = ModalRoute.of(context)!.settings.name;
 
     int currentIndex = 0;
@@ -42,13 +44,15 @@ class BottomNavBar extends StatelessWidget {
       },
       selectedItemColor: const Color.fromARGB(255, 46, 145, 216),
       unselectedItemColor: Colors.black,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
+      selectedLabelStyle: TextStyle(fontSize: screenWidth * 0.03),
+      unselectedLabelStyle: TextStyle(fontSize: screenWidth * 0.028),
+      items: [
+        BottomNavigationBarItem(icon: Icon(Icons.home, size: screenWidth * 0.06), label: 'Inicio'),
         BottomNavigationBarItem(
-            icon: Icon(Icons.work_outline), label: 'Asignadas'),
+            icon: Icon(Icons.work_outline, size: screenWidth * 0.06), label: 'Asignadas'),
         BottomNavigationBarItem(
-            icon: Icon(Icons.miscellaneous_services), label: 'Servicios'),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Cuenta'),
+            icon: Icon(Icons.miscellaneous_services, size: screenWidth * 0.06), label: 'Servicios'),
+        BottomNavigationBarItem(icon: Icon(Icons.person, size: screenWidth * 0.06), label: 'Cuenta'),
       ],
     );
   }

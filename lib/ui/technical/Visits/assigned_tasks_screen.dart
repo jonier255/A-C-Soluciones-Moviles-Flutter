@@ -53,6 +53,8 @@ class _TaskCard extends StatelessWidget {
   const _TaskCard({required this.task});
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -65,41 +67,41 @@ class _TaskCard extends StatelessWidget {
       child: Card(
         elevation: 6,
         color: Colors.white,
-        margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        margin: EdgeInsets.symmetric(vertical: screenHeight * 0.01, horizontal: screenWidth * 0.04),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(screenWidth * 0.05)),
         child: Padding(
-          padding: const EdgeInsets.all(14.0),
+          padding: EdgeInsets.all(screenWidth * 0.035),
           child: Row(
             children: [
-              const Icon(Icons.handyman, size: 35, color: Colors.black),
-              const SizedBox(width: 16),
+              Icon(Icons.handyman, size: screenWidth * 0.09, color: Colors.black),
+              SizedBox(width: screenWidth * 0.04),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(task.servicio.nombre,
-                        style: const TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 4),
+                        style: TextStyle(
+                            fontSize: screenWidth * 0.038, fontWeight: FontWeight.bold)),
+                    SizedBox(height: screenHeight * 0.005),
                     Text(
                       task.servicio.descripcion.length > 50
                           ? '${task.servicio.descripcion.substring(0, 50)}...'
                           : task.servicio.descripcion,
-                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                      style: TextStyle(fontSize: screenWidth * 0.032, color: Colors.grey),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: screenHeight * 0.005),
                     Text("Fecha: ${task.fechaProgramada.toString().substring(0, 10)}",
                         style:
-                            const TextStyle(fontSize: 12, color: Colors.grey)),
+                            TextStyle(fontSize: screenWidth * 0.032, color: Colors.grey)),
                   ],
                 ),
               ),
-              Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              Container(padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025, vertical: screenHeight * 0.008),
                 decoration: BoxDecoration(
                   color: task.estado == "completada"
                       ? Colors.green[100]
                       : Colors.orange[100],
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(screenWidth * 0.03),
                 ),
                 child: Text(
                   task.estado,
@@ -108,7 +110,7 @@ class _TaskCard extends StatelessWidget {
                         ? Colors.green[800]
                         : Colors.orange[800],
                     fontWeight: FontWeight.bold,
-                    fontSize: 12,
+                    fontSize: screenWidth * 0.03,
                   ),
                 ),
               )
