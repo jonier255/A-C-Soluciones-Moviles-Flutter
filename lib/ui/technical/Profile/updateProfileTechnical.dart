@@ -102,7 +102,7 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
                         apellido: apellidoController.text,
                         numeroCedula: numeroCedula, // Not editable, passed from initial state
                         correoElectronico: correoController.text,
-                        rol: 'technical',
+                        rol: 'tecnico',
                       );
                       context.read<EditProfileTechnicalBloc>().add(
                             UpdateTechnicalProfile(technicalData: updatedTechnical),
