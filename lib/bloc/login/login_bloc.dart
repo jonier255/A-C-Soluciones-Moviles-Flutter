@@ -5,7 +5,6 @@ import 'package:flutter_a_c_soluciones/bloc/login/login_state.dart';
 import 'package:flutter_a_c_soluciones/model/login_request_model.dart';
 import 'package:flutter_a_c_soluciones/repository/service_api_login.dart';
 import 'package:flutter_a_c_soluciones/repository/secure_storage_service.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final emailController = TextEditingController();
