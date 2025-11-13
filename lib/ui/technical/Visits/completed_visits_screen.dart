@@ -13,7 +13,7 @@ class CompletedVisitsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => TaskBloc(TaskRepository())..add(FetchTasks()),
+      create: (context) => TaskBloc(taskRepository: TaskRepository())..add(LoadTasks()),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Visitas Terminadas'),
@@ -36,8 +36,8 @@ class CompletedVisitsScreen extends StatelessWidget {
                 },
               );
             }
-            if (state is TaskError) {
-              return Center(child: Text(state.message));
+            if (state is TaskFailure) {
+              return Center(child: Text(state.error));
             }
             return const Center(child: Text("Cargando visitas..."));
           },
