@@ -14,7 +14,7 @@ class ServicesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ServiceBloc(ServiceRepository())..add(FetchServices()),
+      create: (context) => ServiceBloc(repository: ServiceRepository())..add(LoadServices()),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Servicios'),
@@ -36,8 +36,8 @@ class ServicesScreen extends StatelessWidget {
                 },
               );
             }
-            if (state is ServiceError) {
-              return Center(child: Text(state.message));
+            if (state is ServiceFailure) {
+              return Center(child: Text(state.error));
             }
             return const Center(child: Text("Cargando servicios..."));
           },

@@ -6,14 +6,16 @@ import 'service_state.dart';
 class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
   final ServiceRepository repository;
 
-  ServiceBloc(this.repository) : super(ServiceInitial()) {
-    on<FetchServices>((event, emit) async {
+  ServiceBloc({ServiceRepository? repository})
+      : repository = repository ?? ServiceRepository(),
+        super(ServiceInitial()) {
+    on<LoadServices>((event, emit) async {
       emit(ServiceLoading());
       try {
-        final services = await repository.getServices();
+        final services = await this.repository.getServices();
         emit(ServiceSuccess(services));
       } catch (e) {
-        emit(ServiceError(e.toString()));
+        emit(ServiceFailure(error: e.toString()));
       }
     });
   }
