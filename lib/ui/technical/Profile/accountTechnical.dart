@@ -15,25 +15,23 @@ class AccountTechnicalScreen extends StatefulWidget {
 
 class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
   @override
-  void initState() {
-    super.initState();
-    // Assuming EditProfileTechnicalBloc is provided higher up in the widget tree
-    // If not, you would need to provide it here.
-    // For demonstration, let's assume it's provided.
-    // If you need to create it here, you would do it in the build method with a BlocProvider.
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // Define colors for a cleaner look
+    final primaryColor = Color(0xFF0D47A1); // Dark Blue
+    final backgroundColor = Color(0xFFF5F5F5); // Light Gray
+    final accentColor = Color(0xFFFFC107); // Amber
+    final textColor = Color(0xFF212121); // Dark Gray
+
     return BlocProvider(
       create: (context) => EditProfileTechnicalBloc(
         technicalUpdateProfileRepository: TechnicalUpdateProfileRepository(),
       )..add(LoadTechnicalProfile()),
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: backgroundColor,
         appBar: AppBar(
-          title: const Text('Perfil del Técnico'),
-          backgroundColor: const Color.fromARGB(255, 46, 145, 216),
+          title: Text('Mi Perfil', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          backgroundColor: primaryColor,
+          elevation: 0,
         ),
         body: BlocBuilder<EditProfileTechnicalBloc, EditProfileTechnicalState>(
           builder: (context, state) {
@@ -41,84 +39,15 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
               return const Center(child: CircularProgressIndicator());
             } else if (state is EditProfileTechnicalLoaded) {
               final userTechnical = state.technical;
-              return SingleChildScrollView(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const CircleAvatar(
-                          radius: 60,
-                          backgroundImage: NetworkImage(
-                              'https://cdn-icons-png.flaticon.com/512/219/219983.png'),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Text(
-                            '${userTechnical.nombre} ${userTechnical.apellido}',
-                            style: const TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-                    const Divider(),
-                    const SizedBox(height: 16),
-                    _buildDetailItem('Cédula', userTechnical.numeroCedula),
-                    _buildDetailItem('Nombre', userTechnical.nombre),
-                    _buildDetailItem('Apellido', userTechnical.apellido),
-                    _buildDetailItem('Correo electrónico', userTechnical.correoElectronico, isEmail: true),
-                    const SizedBox(height: 24),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BlocProvider(
-                              create: (context) => EditProfileTechnicalBloc(
-                                technicalUpdateProfileRepository:
-                                    TechnicalUpdateProfileRepository(),
-                              ),
-                              child: const EditarInformacionScreenTechnical(),
-                            ),
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 24),
-                        textStyle: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      child: const Text('Editar información personal'),
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () async {
-                        final secureStorage = SecureStorageService();
-                        await secureStorage.clearAll();
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LoginScreen(),
-                          ),
-                          (route) => false,
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 24),
-                        textStyle: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      child: const Text('Cerrar Sesión'),
-                    ),
-                  ],
-                ),
+              return ListView(
+                padding: const EdgeInsets.all(20.0),
+                children: [
+                  _buildProfileHeader(userTechnical.nombre, userTechnical.apellido, primaryColor),
+                  const SizedBox(height: 30),
+                  _buildInfoCard(userTechnical, textColor, accentColor),
+                  const SizedBox(height: 30),
+                  _buildActionButtons(context, primaryColor, accentColor),
+                ],
               );
             } else if (state is EditProfileTechnicalFailure) {
               return Center(child: Text('Error: ${state.error}'));
@@ -130,29 +59,104 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
     );
   }
 
-  Widget _buildDetailItem(String title, String value, {bool isEmail = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+  Widget _buildProfileHeader(String nombre, String apellido, Color primaryColor) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 70,
+          backgroundImage: NetworkImage('https://cdn-icons-png.flaticon.com/512/219/219983.png'),
+          backgroundColor: Colors.white,
+        ),
+        const SizedBox(height: 15),
+        Text(
+          '$nombre $apellido',
+          style: TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
+            color: primaryColor,
           ),
-          const SizedBox(height: 4),
-          isEmail
-              ? SelectableText(
-                  value,
-                  style: const TextStyle(fontSize: 16, color: Colors.blue),
-                  onTap: () {
-                    // Handle email tap if needed, e.g., launch email client
-                  },
-                )
-              : Text(
-                  value,
-                  style: const TextStyle(fontSize: 16),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoCard(dynamic userTechnical, Color textColor, Color accentColor) {
+    return Card(
+      elevation: 2,
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+        child: Column(
+          children: [
+            _buildDetailItem(Icons.person, 'Nombre', userTechnical.nombre, textColor, accentColor),
+            const Divider(height: 20, thickness: 1),
+            _buildDetailItem(Icons.person_outline, 'Apellido', userTechnical.apellido, textColor, accentColor),
+            const Divider(height: 20, thickness: 1),
+            _buildDetailItem(Icons.credit_card, 'Cédula', userTechnical.numeroCedula, textColor, accentColor),
+            const Divider(height: 20, thickness: 1),
+            _buildDetailItem(Icons.email, 'Correo electrónico', userTechnical.correoElectronico, textColor, accentColor, isEmail: true),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDetailItem(IconData icon, String title, String value, Color textColor, Color accentColor, {bool isEmail = false}) {
+    return ListTile(
+      leading: Icon(icon, color: accentColor, size: 30),
+      title: Text(title, style: TextStyle(fontWeight: FontWeight.w600, color: textColor.withOpacity(0.7))),
+      subtitle: Text(value, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: textColor)),
+    );
+  }
+
+  Widget _buildActionButtons(BuildContext context, Color primaryColor, Color accentColor) {
+    final editProfileBloc = BlocProvider.of<EditProfileTechnicalBloc>(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Column(
+        children: [
+          ElevatedButton.icon(
+            icon: Icon(Icons.edit, color: Colors.white),
+            label: const Text('Editar Información'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BlocProvider.value(
+                    value: editProfileBloc,
+                    child: const EditarInformacionScreenTechnical(),
+                  ),
                 ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: primaryColor,
+              foregroundColor: Colors.white,
+              minimumSize: const Size(double.infinity, 55),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              elevation: 5,
+            ),
+          ),
+          const SizedBox(height: 15),
+          OutlinedButton.icon(
+            icon: Icon(Icons.logout, color: Colors.red),
+            label: const Text('Cerrar Sesión', style: TextStyle(color: Colors.red)),
+            onPressed: () async {
+              final secureStorage = SecureStorageService();
+              await secureStorage.clearAll();
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+                (route) => false,
+              );
+            },
+            style: OutlinedButton.styleFrom(
+              side: BorderSide(color: Colors.red),
+              minimumSize: const Size(double.infinity, 55),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            ),
+          ),
         ],
       ),
     );

@@ -21,6 +21,7 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
   @override
   void initState() {
     super.initState();
+    // The BLoC is provided by the previous screen, so we can access it directly.
     context.read<EditProfileTechnicalBloc>().add(LoadTechnicalProfile());
   }
 
@@ -34,189 +35,127 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<EditProfileTechnicalBloc, EditProfileTechnicalState>(
-      listener: (context, state) {
-        if (state is EditProfileTechnicalLoaded) {
-          nombreController.text = state.technical.nombre;
-          apellidoController.text = state.technical.apellido;
-          correoController.text = state.technical.correoElectronico;
-          numeroCedula = state.technical.numeroCedula;
-        } else if (state is EditProfileTechnicalSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Perfil actualizado correctamente'),
-              backgroundColor: Colors.green,
-            ),
-          );
-          Navigator.pop(context);
-        } else if (state is EditProfileTechnicalFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Error: ${state.error}'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-      },
-      builder: (context, state) {
-        return Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            elevation: 0,
-            leading: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF007BFF),
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  elevation: 4,
-                ),
-                child: const Text(
-                  "Volver",
-                  style: TextStyle(fontSize: 14, color: Colors.white),
-                ),
+    final primaryColor = Color(0xFF0D47A1); // Dark Blue
+    final backgroundColor = Color(0xFFF5F5F5); // Light Gray
+
+    return Scaffold(
+      backgroundColor: backgroundColor,
+      appBar: AppBar(
+        title: Text('Editar Perfil', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        backgroundColor: primaryColor,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.white),
+      ),
+      body: BlocConsumer<EditProfileTechnicalBloc, EditProfileTechnicalState>(
+        listener: (context, state) {
+          if (state is EditProfileTechnicalLoaded) {
+            nombreController.text = state.technical.nombre;
+            apellidoController.text = state.technical.apellido;
+            correoController.text = state.technical.correoElectronico;
+            numeroCedula = state.technical.numeroCedula;
+          } else if (state is EditProfileTechnicalSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Perfil actualizado correctamente'),
+                backgroundColor: Colors.green,
               ),
-            ),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 20.0),
-                child: Image.asset(
-                  'assets/logo.png',
-                  height: 40,
-                ),
+            );
+            Navigator.pop(context);
+          } else if (state is EditProfileTechnicalFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Error: ${state.error}'),
+                backgroundColor: Colors.red,
               ),
-            ],
-          ),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-            child: Column(
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state is EditProfileTechnicalLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return Form(
+            key: _formKey,
+            child: ListView(
+              padding: const EdgeInsets.all(20.0),
               children: [
-                const SizedBox(height: 10),
-                const Icon(Icons.account_circle, size: 90, color: Colors.teal),
+                _buildTextField(nombreController, "Nombre", Icons.person, primaryColor),
                 const SizedBox(height: 20),
-                const Text(
-                  "Editar información personal",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                _buildTextField(apellidoController, "Apellido", Icons.person_outline, primaryColor),
+                const SizedBox(height: 20),
+                _buildTextField(
+                  correoController,
+                  "Correo electrónico",
+                  Icons.email,
+                  primaryColor,
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 40),
+                ElevatedButton.icon(
+                  icon: Icon(Icons.save, color: Colors.white),
+                  label: const Text('Guardar Cambios'),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      final updatedTechnical = UpdateTechnicalRequest(
+                        id: 0, // The ID is not editable, but required by the model
+                        nombre: nombreController.text,
+                        apellido: apellidoController.text,
+                        numeroCedula: numeroCedula, // Not editable, passed from initial state
+                        correoElectronico: correoController.text,
+                        rol: 'technical',
+                      );
+                      context.read<EditProfileTechnicalBloc>().add(
+                            UpdateTechnicalProfile(technicalData: updatedTechnical),
+                          );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: primaryColor,
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(double.infinity, 55),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                    elevation: 5,
                   ),
                 ),
-                const SizedBox(height: 25),
-                if (state is EditProfileTechnicalLoading)
-                  const Center(child: CircularProgressIndicator())
-                else
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0x33000000),
-                          blurRadius: 10,
-                          offset: Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          _buildTextField(nombreController, "Nombre"),
-                          const SizedBox(height: 15),
-                          _buildTextField(apellidoController, "Apellido"),
-                          const SizedBox(height: 15),
-                          _buildTextField(
-                            correoController,
-                            "Correo electrónico",
-                            keyboardType: TextInputType.emailAddress,
-                          ),
-                          const SizedBox(height: 30),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF007BFF),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 25, vertical: 12),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  elevation: 5,
-                                ),
-                                onPressed: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    final updatedTechnical = UpdateTechnicalRequest(
-                                      id: 0,
-                                      nombre: nombreController.text,
-                                      apellido: apellidoController.text,
-                                      numeroCedula: numeroCedula,
-                                      correoElectronico: correoController.text,
-                                      rol: 'technical',
-                                    );
-                                    context.read<EditProfileTechnicalBloc>().add(
-                                          UpdateTechnicalProfile(technicalData: updatedTechnical),
-                                        );
-                                  }
-                                },
-                                child: const Text(
-                                  "Guardar cambios",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 25, vertical: 12),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  elevation: 5,
-                                ),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text(
-                                  "Cancelar",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  )
+                const SizedBox(height: 15),
+                OutlinedButton.icon(
+                  icon: Icon(Icons.cancel, color: Colors.grey[600]),
+                  label: Text('Cancelar', style: TextStyle(color: Colors.grey[600])),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: Colors.grey[400]!),
+                    minimumSize: const Size(double.infinity, 55),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  ),
+                ),
               ],
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label,
+  Widget _buildTextField(TextEditingController controller, String label, IconData icon, Color primaryColor,
       {TextInputType keyboardType = TextInputType.text}) {
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
       decoration: InputDecoration(
         labelText: label,
+        labelStyle: TextStyle(color: primaryColor.withOpacity(0.7)),
+        prefixIcon: Icon(icon, color: primaryColor),
+        filled: true,
+        fillColor: Colors.white,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6),
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.teal, width: 2),
-          borderRadius: BorderRadius.circular(6),
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: primaryColor, width: 2),
         ),
       ),
       validator: (value) {
