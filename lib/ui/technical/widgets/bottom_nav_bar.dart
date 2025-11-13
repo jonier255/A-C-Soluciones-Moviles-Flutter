@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/Profile/accountTechnical.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key});
@@ -12,7 +13,7 @@ class BottomNavBar extends StatelessWidget {
       currentIndex = 1;
     } else if (currentRoute == '/technical_services') {
       currentIndex = 2;
-    } else if (currentRoute == '/technical_reports') {
+    } else if (currentRoute == '/technical_profile') {
       currentIndex = 3;
     }
 
@@ -30,7 +31,12 @@ class BottomNavBar extends StatelessWidget {
             Navigator.pushReplacementNamed(context, '/technical_services');
             break;
           case 3:
-            Navigator.pushReplacementNamed(context, '/technical_reports');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AccountTechnicalScreen(),
+              ),
+            );
             break;
         }
       },
@@ -42,7 +48,7 @@ class BottomNavBar extends StatelessWidget {
             icon: Icon(Icons.work_outline), label: 'Asignadas'),
         BottomNavigationBarItem(
             icon: Icon(Icons.miscellaneous_services), label: 'Servicios'),
-        BottomNavigationBarItem(icon: Icon(Icons.description), label: 'Reportes'),
+        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Cuenta'),
       ],
     );
   }

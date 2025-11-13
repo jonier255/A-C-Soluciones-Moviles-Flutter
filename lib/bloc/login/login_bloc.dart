@@ -21,17 +21,24 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
         final response = await APIService.login(loginRequest);
 
-        if (response.token != null) {
+        if (response.token != null && response.user != null) {
           // Guardar el token en el almacenamiento seguro
           await _storageService.saveToken(response.token!);
 
-          Map<String, dynamic> decodedToken =
-              JwtDecoder.decode(response.token!);
-          // Asegúrate de que la clave del rol sea la correcta. Aquí asumimos 'rol'.
-          final String role = decodedToken['rol'] ?? 'user';
+          final user = response.user!;
+          final String role = user['rol'] ?? 'user';
+          final String userId = user['id'].toString();
 
-          final String userName = decodedToken['nombre'] ?? 'Usuario';
-          final String userEmail = decodedToken['email'] ?? '';
+          if (role.toLowerCase() == 'admin' || role.toLowerCase() == 'administrador') {
+            await _storageService.saveAdminId(userId);
+          } else if (role.toLowerCase() == 'cliente') {
+            await _storageService.saveClienteId(userId);
+          } else if (role.toLowerCase() == 'tecnico') {
+            await _storageService.saveTechnicalId(userId);
+          }
+
+          final String userName = user['nombre'] ?? 'Usuario';
+          final String userEmail = user['email'] ?? '';
 
           emit(LoginSuccess(
             token: response.token!,
@@ -40,7 +47,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             correoElectronico: userEmail,
           ));
         } else {
-          emit(LoginFailure(error: 'Login Failed'));
+          emit(LoginFailure(error: 'Login Failed: Token or user data is null'));
         }
       } catch (e) {
         emit(LoginFailure(error: e.toString()));
