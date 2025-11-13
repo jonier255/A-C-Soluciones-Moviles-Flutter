@@ -65,7 +65,11 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
                 backgroundColor: Colors.green,
               ),
             );
-            Navigator.pop(context);
+            Future.delayed(const Duration(seconds: 2), () {
+              if (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
+              }
+            });
           } else if (state is EditProfileTechnicalFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
