@@ -1,21 +1,29 @@
 
 part of 'report_bloc.dart';
 
+abstract class ReportState extends Equatable {
+  const ReportState();
 
-abstract class ReportState {}
+  @override
+  List<Object> get props => [];
+}
 
 class ReportInitial extends ReportState {}
 
 class ReportLoading extends ReportState {}
 
-class ReportLoaded extends ReportState {
+class ReportSuccess extends ReportState {
   final List<VisitWithReport> reports;
+  const ReportSuccess(this.reports);
 
-  ReportLoaded(this.reports);
+  @override
+  List<Object> get props => [reports];
 }
 
-class ReportError extends ReportState {
-  final String message;
+class ReportFailure extends ReportState {
+  final String error;
+  const ReportFailure({required this.error});
 
-  ReportError(this.message);
+  @override
+  List<Object> get props => [error];
 }

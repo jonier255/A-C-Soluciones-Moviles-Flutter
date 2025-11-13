@@ -1,6 +1,11 @@
 
 part of 'report_bloc.dart';
 
-abstract class ReportEvent {}
+abstract class ReportEvent extends Equatable {
+  const ReportEvent();
 
-class FetchReports extends ReportEvent {}
+  @override
+  List<Object> get props => [];
+}
+
+class LoadReports extends ReportEvent {}

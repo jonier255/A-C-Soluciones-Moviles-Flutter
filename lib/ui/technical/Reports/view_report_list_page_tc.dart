@@ -18,7 +18,7 @@ class ViewReportListPageTc extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ReportBloc(ReportRepository())..add(FetchReports()),
+      create: (context) => ReportBloc(reportRepository: ReportRepository())..add(LoadReports()),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Mis Reportes', style: TextStyle(color: Colors.black)),
@@ -170,9 +170,9 @@ class _ReportListState extends State<_ReportList> {
       builder: (context, state) {
         if (state is ReportLoading) {
           return const Center(child: CircularProgressIndicator());
-        } else if (state is ReportError) {
-          return Center(child: Text('Error: ${state.message}'));
-        } else if (state is ReportLoaded) {
+        } else if (state is ReportFailure) {
+          return Center(child: Text('Error: ${state.error}'));
+        } else if (state is ReportSuccess) {
           if (state.reports.isEmpty) {
             return const Center(child: Text('No hay reportes disponibles.'));
           }
