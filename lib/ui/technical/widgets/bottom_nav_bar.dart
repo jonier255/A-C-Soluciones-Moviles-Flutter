@@ -7,7 +7,6 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     final currentRoute = ModalRoute.of(context)!.settings.name;
 
     int currentIndex = 0;

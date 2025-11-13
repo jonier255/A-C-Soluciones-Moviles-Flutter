@@ -166,8 +166,6 @@ class _ReportListState extends State<_ReportList> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     return BlocBuilder<ReportBloc, ReportState>(
       builder: (context, state) {
         if (state is ReportLoading) {
