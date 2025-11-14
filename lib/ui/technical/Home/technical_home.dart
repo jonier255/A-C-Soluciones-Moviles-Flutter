@@ -18,19 +18,16 @@ class TechnicalHomeScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         bottomNavigationBar: const BottomNavBar(),
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                _HeaderSection(),
-                SizedBox(height: 20),
-                _MainButtonsSection(),
-                SizedBox(height: 20),
-                _QuickAccessSection(),
-                SizedBox(height: 20),
-                _RecentTasksSection(), // Reemplaza solicitudes por tareas o mantenimientos
-              ],
-            ),
+          child: ListView(
+            children: const [
+              _HeaderSection(),
+              SizedBox(height: 20),
+              _MainButtonsSection(),
+              SizedBox(height: 20),
+              _QuickAccessSection(),
+              SizedBox(height: 20),
+              _RecentTasksSection(), // Reemplaza solicitudes por tareas o mantenimientos
+            ],
           ),
         ),
       ),
@@ -98,7 +95,7 @@ class _MainButtonsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025), // Responsive horizontal padding
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.005), // Responsive horizontal padding
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -170,14 +167,6 @@ class _QuickAccessSection extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04), // Responsive horizontal padding
       child: Row(
         children: [
-          Expanded(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, '/technical_assigned_visits');
-              },
-              child: const _QuickButton(icon: Icons.assignment, label: "Tareas"),
-            ),
-          ),
           SizedBox(width: screenWidth * 0.03), // Responsive width
           Expanded(
             child: GestureDetector(
