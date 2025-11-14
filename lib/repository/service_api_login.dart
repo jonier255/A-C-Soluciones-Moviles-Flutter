@@ -1,3 +1,4 @@
+import 'package:flutter_a_c_soluciones/repository/secure_storage_service.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_a_c_soluciones/model/login_request_model.dart';
@@ -20,6 +21,29 @@ class APIService {
     );
 
     if (response.statusCode == 200) {
+      final responseBody = jsonDecode(response.body);
+
+      final storage = SecureStorageService();
+      final token = responseBody['token'] as String?;
+      if (token != null) {
+        await storage.saveToken(token);
+      }
+      final administrador = responseBody['administrador'];
+      if (administrador != null) {
+        await storage.saveAdminId(administrador.toString());
+      }
+
+      // Guardar datos del usuario
+      final user = responseBody['user'] as Map<String, dynamic>?;
+      if (user != null) {
+        await storage.saveUserData({
+          'cliente_id': (user['id'] ?? 0).toString(),
+          'user_name': (user['nombre'] ?? user['user_name'] ?? '').toString(),
+          'user_email': (user['correo_electronico'] ?? user['email'] ?? user['user_email'] ?? '').toString(),
+        });
+      }
+
+      // Retornar el modelo de respuesta
       return loginResponseJson(response.body);
     } else {
       throw Exception('Error al iniciar sesión: ${response.statusCode}');
