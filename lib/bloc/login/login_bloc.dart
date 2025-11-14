@@ -22,12 +22,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         final response = await APIService.login(loginRequest);
 
         if (response.token != null) {
-          // Guardar el token en el almacenamiento seguro
           await _storageService.saveToken(response.token!);
 
           Map<String, dynamic> decodedToken =
               JwtDecoder.decode(response.token!);
-          // Asegúrate de que la clave del rol sea la correcta. Aquí asumimos 'rol'.
           final String role = decodedToken['rol'] ?? 'user';
 
           final String userName = decodedToken['nombre'] ?? 'Usuario';

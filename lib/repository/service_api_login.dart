@@ -1,8 +1,8 @@
+import 'package:flutter_a_c_soluciones/repository/secure_storage_service.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_a_c_soluciones/model/login_request_model.dart';
 import 'package:flutter_a_c_soluciones/model/login_response_model.dart';
-import 'package:flutter_a_c_soluciones/repository/secure_storage_service.dart';
 
 class APIService {
   static var client = http.Client();
@@ -26,9 +26,7 @@ class APIService {
       final storage = SecureStorageService();
       await storage.saveToken(responseBody['token']);
 
-      // Try to find an admin id in several common places.
       String? adminId;
-      // Helper to attempt extracting id from a dynamic structure
       String? tryExtractId(dynamic data) {
         if (data == null) return null;
         if (data is int) return data.toString();
@@ -44,7 +42,6 @@ class APIService {
         return null;
       }
 
-      // Common top-level keys used by different backends
       final candidates = [
         responseBody['administrador'],
         responseBody['admin'],
@@ -61,7 +58,6 @@ class APIService {
         }
       }
 
-      // As a last resort, look for top-level numeric/string id fields
       if (adminId == null) {
         final fallback = responseBody['id'] ?? responseBody['admin_id'] ?? responseBody['id_administrador'];
         adminId = tryExtractId(fallback);

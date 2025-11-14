@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/model/technical/task_model.dart';
 import 'package:flutter_a_c_soluciones/repository/report_repository.dart';
 import 'package:flutter_a_c_soluciones/repository/task_repository.dart';
-import 'package:flutter_a_c_soluciones/ui/technical/Reports/report_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/Reports/create_report_screen.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_file/open_file.dart';
@@ -125,6 +125,7 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -138,15 +139,15 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              padding: const EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(screenWidth * 0.05),
               child: Center(
                 child: Container(
                   width: screenWidth * 0.9,
-                  padding: const EdgeInsets.all(25),
-                  margin: const EdgeInsets.symmetric(vertical: 20),
+                  padding: EdgeInsets.all(screenWidth * 0.06),
+                  margin: EdgeInsets.symmetric(vertical: screenHeight * 0.025),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.circular(screenWidth * 0.045),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.blue.withOpacity(0.35),
@@ -163,42 +164,42 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Descripción',
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                            fontSize: screenWidth * 0.05,
                             color: Colors.black87),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: screenHeight * 0.01),
                       Text(widget.task.servicio.descripcion,
-                          style: const TextStyle(fontSize: 17)),
-                      const SizedBox(height: 28),
-                      const Text(
+                          style: TextStyle(fontSize: screenWidth * 0.042)),
+                      SizedBox(height: screenHeight * 0.035),
+                      Text(
                         'Información',
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                            fontSize: screenWidth * 0.05,
                             color: Colors.black87),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: screenHeight * 0.02),
                       _buildDetailRow(
-                          'Notas previas:', widget.task.notasPrevias ?? ''),
-                      const SizedBox(height: 10),
+                          'Notas previas:', widget.task.notasPrevias ?? '', screenWidth, screenHeight),
+                      SizedBox(height: screenHeight * 0.012),
                       _buildDetailRow('Notas posteriores:',
-                          widget.task.notasPosteriores ?? ''),
-                      const SizedBox(height: 10),
+                          widget.task.notasPosteriores ?? '', screenWidth, screenHeight),
+                      SizedBox(height: screenHeight * 0.012),
                       _buildDetailRow(
                           'Fecha programada:',
                           widget.task.fechaProgramada
                               .toString()
-                              .substring(0, 10)),
-                      const SizedBox(height: 10),
+                              .substring(0, 10), screenWidth, screenHeight),
+                      SizedBox(height: screenHeight * 0.012),
                       _buildDetailRow('Duración estimada:',
-                          '${widget.task.duracionEstimada} minutos'),
-                      const SizedBox(height: 25),
-                      _buildStateDropdown(),
-                      const SizedBox(height: 25),
+                          '${widget.task.duracionEstimada} minutos', screenWidth, screenHeight),
+                      SizedBox(height: screenHeight * 0.03),
+                      _buildStateDropdown(screenWidth, screenHeight),
+                      SizedBox(height: screenHeight * 0.03),
                       Center(
                         child: ElevatedButton(
                           onPressed: _pdfPath != null
@@ -207,7 +208,7 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => ReportScreen(
+                                      builder: (context) => CreateReportScreen(
                                           visitId: widget.task.id),
                                     ),
                                   );
@@ -215,18 +216,18 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blueAccent,
                             foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 14),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: screenWidth * 0.075, vertical: screenHeight * 0.017),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(screenWidth * 0.02),
                             ),
                           ),
                           child: Text(
                               _pdfPath != null
                                   ? 'Ver reporte'
                                   : 'Generar reporte',
-                              style: const TextStyle(
-                                  fontSize: 17, fontWeight: FontWeight.bold)),
+                              style: TextStyle(
+                                  fontSize: screenWidth * 0.042, fontWeight: FontWeight.bold)),
                         ),
                       ),
                     ],
@@ -237,19 +238,19 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
     );
   }
 
-  Widget _buildStateDropdown() {
+  Widget _buildStateDropdown(double screenWidth, double screenHeight) {
     return DropdownButtonFormField<String>(
       value: _visitState,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         labelText: 'Estado',
-        labelStyle: TextStyle(fontSize: 17),
-        border: OutlineInputBorder(),
-        contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        labelStyle: TextStyle(fontSize: screenWidth * 0.042),
+        border: const OutlineInputBorder(),
+        contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.035, vertical: screenHeight * 0.015),
       ),
       items: ['programada', 'en_camino', 'iniciada', 'completada', 'cancelada']
           .map((label) => DropdownMenuItem(
                 value: label,
-                child: Text(label, style: const TextStyle(fontSize: 17)),
+                child: Text(label, style: TextStyle(fontSize: screenWidth * 0.042)),
               ))
           .toList(),
       onChanged: ['completada', 'cancelada'].contains(_visitState)
@@ -258,21 +259,21 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
     );
   }
 
-  Widget _buildDetailRow(String title, String value) {
+  Widget _buildDetailRow(String title, String value, double screenWidth, double screenHeight) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title,
-              style: const TextStyle(
+              style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 17,
+                  fontSize: screenWidth * 0.042,
                   color: Colors.black87)),
-          const SizedBox(height: 4),
+          SizedBox(height: screenHeight * 0.005),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.only(bottom: 6, top: 3),
+            padding: EdgeInsets.only(bottom: screenHeight * 0.008, top: screenHeight * 0.004),
             decoration: const BoxDecoration(
               border: Border(
                 bottom: BorderSide(color: Colors.lightBlueAccent, width: 1.2),
@@ -280,7 +281,7 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
             ),
             child: Text(
               value.isNotEmpty ? value : '—',
-              style: const TextStyle(fontSize: 16.5, color: Colors.black87),
+              style: TextStyle(fontSize: screenWidth * 0.038, color: Colors.black87),
             ),
           ),
         ],

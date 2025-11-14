@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/repository/client/service_api_service.dart';
 import 'package:flutter_a_c_soluciones/model/client/service_model.dart';
+import 'package:flutter_a_c_soluciones/ui/client/Requests/create/create_request_modal.dart';
+import 'package:flutter_a_c_soluciones/repository/client/solicitud_api_solicitud.dart';
 
 class ServicesContent extends StatefulWidget {
-  const ServicesContent({super.key});
+  final int clienteId;
+
+  ServicesContent({Key? key, required this.clienteId}) : super(key: key);
 
   @override
   State<ServicesContent> createState() => _ServicesContentState();
@@ -23,208 +27,483 @@ class _ServicesContentState extends State<ServicesContent> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final screenWidth = mediaQuery.size.width;
+    final screenHeight = mediaQuery.size.height;
+    final isTablet = screenWidth > 600;
+    final isDesktop = screenWidth > 1024;
+
     return Column(
       children: [
+        // Header con contador de servicios
         Container(
           width: double.infinity,
-          height: 220,
-          alignment: Alignment.center,
-          color: const Color.fromARGB(255, 212, 212, 212),
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // --- Contador de solicitudes ---
-              FutureBuilder<List<ServiceModel>>(
-                future: _futureServices,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator(color: Colors.blue);
-                  } else if (snapshot.hasError) {
-                    return const Text(
-                      'Error',
-                      style: TextStyle(color: Colors.black, fontSize: 24),
-                    );
-                  } else if (snapshot.hasData) {
-                    final servicios = snapshot.data!;
-                    return Text(
-                      '${servicios.length} Servicios',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    );
-                  } else {
-                    return const Text(
-                      '0',
-                      style: TextStyle(
-                        fontSize: 48,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    );
-                  }
-                },
-              ),
-
-              const SizedBox(height: 16),
-              ElevatedButton.icon(
-                onPressed: () async {
-                  final result =
-                      await Navigator.pushNamed(context, '/crear-solicitud');
-
-                  if (result == true) {
-                    setState(() {
-                      _futureServices = _repository.getServices();
-                    });
-                  }
-                },
-                icon: const Icon(Icons.add),
-                label: const Text("Nuevo servicio"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
+          padding: EdgeInsets.symmetric(
+            vertical: isTablet ? 32 : 24,
+            horizontal: isTablet ? 32 : 20,
+          ),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF2E91D8),
+                Color(0xFF56AFEC),
+              ],
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
               ),
             ],
           ),
-        ),
-        Expanded(
           child: FutureBuilder<List<ServiceModel>>(
             future: _futureServices,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    "Error: ${snapshot.error}",
-                    style: const TextStyle(color: Colors.red),
-                    textAlign: TextAlign.center,
+                return const Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   ),
                 );
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(
-                  child: Text("No hay servicios disponibles"),
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.error_outline_rounded,
+                        color: Colors.white,
+                        size: isTablet ? 48 : 40,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Error al cargar',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: isTablet ? 20 : 16,
+                        ),
+                      ),
+                    ],
+                  ),
                 );
-              }
-
-              final services = snapshot.data!;
-              final totalPages = (services.length / _itemsPerPage).ceil();
-              final startIndex = _currentPage * _itemsPerPage;
-              final endIndex = (_currentPage + 1) * _itemsPerPage;
-              final currentServices = services.sublist(
-                startIndex,
-                endIndex > services.length ? services.length : endIndex,
-              );
-
-              return LayoutBuilder(
-                builder: (context, constraints) {
-                  return ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight: constraints.maxHeight,
-                    ),
-                    child: Column(
+              } else if (snapshot.hasData) {
+                final servicios = snapshot.data!;
+                return Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.topCenter,
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: currentServices.length,
-                              padding: const EdgeInsets.all(12),
-                              itemBuilder: (context, index) {
-                                final service = currentServices[index];
-                                return Card(
-                                  color: Colors.white,
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 8),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(1),
-                                  ),
-                                  elevation: 4,
-                                  child: ListTile(
-                                    leading: const Icon(
-                                      Icons.build_circle_rounded,
-                                      color: Color.fromARGB(255, 46, 145, 216),
-                                      size: 40,
-                                    ),
-                                    title: Text(
-                                      service.nombre,
-                                      // mostrar menos caracteres si es muy largo
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                    subtitle: Text(
-                                      service.descripcion,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    trailing: Text(
-                                      "\$${service.price}",
-                                      style: const TextStyle(
-                                        color: Colors.green,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
+                        Container(
+                          padding: EdgeInsets.all(isTablet ? 16 : 12),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Icon(
+                            Icons.miscellaneous_services_rounded,
+                            color: Colors.white,
+                            size: isTablet ? 40 : 32,
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.arrow_back_ios),
-                                onPressed: _currentPage > 0
+                        SizedBox(width: isTablet ? 16 : 12),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${servicios.length}',
+                              style: TextStyle(
+                                fontSize: isTablet ? 48 : 36,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              'Servicios Disponibles',
+                              style: TextStyle(
+                                fontSize: isTablet ? 18 : 14,
+                                color: Colors.white70,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              } else {
+                return Center(
+                  child: Text(
+                    '0 Servicios',
+                    style: TextStyle(
+                      fontSize: isTablet ? 24 : 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
+        ),
+        Expanded(
+          child: Container(
+            color: const Color(0xFFF5F7FA),
+            child: FutureBuilder<List<ServiceModel>>(
+              future: _futureServices,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Color(0xFF2E91D8),
+                      ),
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Container(
+                      margin: EdgeInsets.all(isTablet ? 32 : 20),
+                      padding: EdgeInsets.all(isTablet ? 24 : 20),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.08),
+                            blurRadius: 20,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.error_outline_rounded,
+                            color: Colors.red,
+                            size: isTablet ? 64 : 48,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            "Error: ${snapshot.error}",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: isTablet ? 18 : 16,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(
+                    child: Container(
+                      margin: EdgeInsets.all(isTablet ? 32 : 20),
+                      padding: EdgeInsets.all(isTablet ? 32 : 24),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.08),
+                            blurRadius: 20,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.inbox_rounded,
+                            color: Colors.grey[400],
+                            size: isTablet ? 64 : 48,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            "No hay servicios disponibles",
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: isTablet ? 18 : 16,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+
+                final services = snapshot.data!;
+                final totalPages = (services.length / _itemsPerPage).ceil();
+                final startIndex = _currentPage * _itemsPerPage;
+                final endIndex = (_currentPage + 1) * _itemsPerPage;
+                final currentServices = services.sublist(
+                  startIndex,
+                  endIndex > services.length ? services.length : endIndex,
+                );
+
+                return Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                        padding: EdgeInsets.all(isTablet ? 24 : 16),
+                        itemCount: currentServices.length,
+                        itemBuilder: (context, index) {
+                          final service = currentServices[index];
+                          return _buildServiceCard(
+                            context: context,
+                            service: service,
+                            isTablet: isTablet,
+                          );
+                        },
+                      ),
+                    ),
+                    if (totalPages > 1)
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: isTablet ? 16 : 12,
+                          horizontal: isTablet ? 24 : 16,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 10,
+                              offset: const Offset(0, -2),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: _currentPage > 0
                                     ? () {
                                         setState(() {
                                           _currentPage--;
                                         });
                                       }
                                     : null,
+                                borderRadius: BorderRadius.circular(12),
+                                child: Container(
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: _currentPage > 0
+                                        ? const Color(0xFF2E91D8)
+                                        : Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Icon(
+                                    Icons.arrow_back_ios_rounded,
+                                    color: _currentPage > 0
+                                        ? Colors.white
+                                        : Colors.grey[600],
+                                    size: isTablet ? 24 : 20,
+                                  ),
+                                ),
                               ),
-                              Text(
+                            ),
+                            SizedBox(width: isTablet ? 24 : 16),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: isTablet ? 20 : 16,
+                                vertical: isTablet ? 12 : 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF2E91D8).withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
                                 "Página ${_currentPage + 1} de $totalPages",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: isTablet ? 16 : 14,
+                                  color: const Color(0xFF2E91D8),
+                                ),
                               ),
-                              IconButton(
-                                icon: const Icon(Icons.arrow_forward_ios),
-                                onPressed: _currentPage < totalPages - 1
+                            ),
+                            SizedBox(width: isTablet ? 24 : 16),
+                            Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: _currentPage < totalPages - 1
                                     ? () {
                                         setState(() {
                                           _currentPage++;
                                         });
                                       }
                                     : null,
+                                borderRadius: BorderRadius.circular(12),
+                                child: Container(
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: _currentPage < totalPages - 1
+                                        ? const Color(0xFF2E91D8)
+                                        : Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    color: _currentPage < totalPages - 1
+                                        ? Colors.white
+                                        : Colors.grey[600],
+                                    size: isTablet ? 24 : 20,
+                                  ),
+                                ),
                               ),
-                            ],
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildServiceCard({
+    required BuildContext context,
+    required ServiceModel service,
+    required bool isTablet,
+  }) {
+    return Container(
+      margin: EdgeInsets.only(bottom: isTablet ? 16 : 12),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () async {
+            final result = await showDialog(
+              context: context,
+              builder: (_) => CrearSolicitudModal(
+                clienteId: widget.clienteId,
+                servicio: service,
+                repository: SolicitudApiRepository(),
+              ),
+            );
+            if (result == true) {
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Row(
+                      children: const [
+                        Icon(Icons.check_circle, color: Colors.white),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'Solicitud creada con éxito',
+                            style: TextStyle(fontSize: 16),
                           ),
                         ),
                       ],
                     ),
-                  );
-                },
-              );
-            },
+                    backgroundColor: Colors.green.shade600,
+                    behavior: SnackBarBehavior.floating,
+                    margin: const EdgeInsets.only(
+                      top: 20,
+                      left: 16,
+                      right: 16,
+                    ),
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    duration: const Duration(seconds: 3),
+                  ),
+                );
+              }
+            }
+          },
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            padding: EdgeInsets.all(isTablet ? 20 : 16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 20,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(isTablet ? 16 : 12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF2E91D8).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Icon(
+                    Icons.build_circle_rounded,
+                    color: const Color(0xFF2E91D8),
+                    size: isTablet ? 40 : 32,
+                  ),
+                ),
+                SizedBox(width: isTablet ? 16 : 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        service.nombre,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: isTablet ? 20 : 18,
+                          color: Colors.black87,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        service.descripcion,
+                        style: TextStyle(
+                          fontSize: isTablet ? 14 : 12,
+                          color: Colors.grey[600],
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(width: isTablet ? 16 : 12),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isTablet ? 16 : 12,
+                    vertical: isTablet ? 10 : 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.green.shade50,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    "\$${service.price}",
+                    style: TextStyle(
+                      color: Colors.green.shade700,
+                      fontWeight: FontWeight.bold,
+                      fontSize: isTablet ? 18 : 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ],
+      ),
     );
   }
 }

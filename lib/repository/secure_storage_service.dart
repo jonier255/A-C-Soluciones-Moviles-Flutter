@@ -51,7 +51,7 @@ class SecureStorageService {
   }
 
   Future<void> saveAdminId(String id) async {
-    await _storage.write(key: 'admin_id', value: id);
+    await _storage.write(key: 'id_administrador', value: id);
   }
 
   Future<String?> getAdminId() async {
@@ -70,5 +70,21 @@ class SecureStorageService {
       if (normalized == 'null' || normalized.isEmpty) legacy = null;
     }
     return legacy;
+  }
+
+  Future<void> saveClienteId(String id) async {
+    await _storage.write(key: 'cliente_id', value: id);
+  }
+
+  Future<String?> getClienteId() async {
+    return await _storage.read(key: 'cliente_id');
+  }
+
+  Future<void> saveTechnicalId(String id) async {
+    await _storage.write(key: 'id_tecnico', value: id);
+  }
+
+  Future<String?> getTechnicalId() async {
+    return await _storage.read(key: 'id_tecnico');
   }
 }

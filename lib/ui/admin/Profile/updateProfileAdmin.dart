@@ -249,7 +249,8 @@ class _EditarInformacionScreenState extends State<EditarInformacionScreen> {
                                             apellido: apellidoController.text,
                                             numeroCedula: cedulaController.text,
                                             correoElectronico: correoController.text,
-                                            rol: 'admin',
+                                            // backend enum expects the role value for administrador
+                                            rol: 'administrador',
                                           );
 
                                           context.read<EditProfileAdminBloc>().add(
