@@ -6,7 +6,7 @@ import 'secure_storage_service.dart';
 
 class TaskRepository {
   final _storageService = SecureStorageService();
-  final String _baseUrl = 'http://10.0.2.2:8000/api';
+  final String _baseUrl = 'https://flutter-58c3.onrender.com/api';
 
   Future<VisitsModel> getTaskById(int taskId) async {
     final token = await _storageService.getToken();
@@ -59,7 +59,7 @@ class TaskRepository {
     }
 
     final response = await http.get(
-      Uri.parse('http://10.0.2.2:8000/api/visitas/asignados/'),
+      Uri.parse('https://flutter-58c3.onrender.com/api/visitas/asignados/'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',

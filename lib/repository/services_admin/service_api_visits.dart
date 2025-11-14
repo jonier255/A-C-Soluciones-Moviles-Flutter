@@ -15,7 +15,7 @@ class VisitsRepository {
     }
 
     final response = await http.get(
-      Uri.parse('http://10.0.2.2:8000/api/visitas'),
+      Uri.parse('https://flutter-58c3.onrender.com/api/visitas'),
       //Uri.parse('https://a-c-soluciones.onrender.com/api/visitas'),
       headers: {
         'Content-Type': 'application/json',

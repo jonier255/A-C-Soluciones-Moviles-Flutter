@@ -15,7 +15,7 @@ class AdminRepository {
     }
 
     final response = await http.get(
-      Uri.parse('http://10.0.2.2:8000/api/admin'),
+      Uri.parse('https://flutter-58c3.onrender.com/api/admin'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
