@@ -24,22 +24,9 @@ class _EditarInformacionScreenState extends State<EditarInformacionScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final storage = SecureStorageService();
-      final token = await storage.getToken();
-      final adminId = await storage.getAdminId();
-      if (token == null || adminId == null) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Token o ID de administrador no encontrados. Por favor inicie sesión.'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-      } else {
-        context.read<EditProfileAdminBloc>().add(LoadAdminProfile());
-      }
+    
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<EditProfileAdminBloc>().add(LoadAdminProfile());
     });
   }
 

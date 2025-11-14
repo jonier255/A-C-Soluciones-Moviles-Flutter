@@ -38,7 +38,7 @@ class _AdminsScreenState extends State<AdminsScreen> {
             ),
           ),
 
-          // Botón de retroceso y título
+          // Botn de retroceso y titulo
           Positioned(
             top: 40,
             left: 10,
