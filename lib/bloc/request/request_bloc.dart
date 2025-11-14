@@ -11,7 +11,7 @@ class RequestBloc extends Bloc<RequestEvent, RequestState> {
       emit(RequestLoading());
       try {
         final requests = await repository.getRequests();
-        emit(RequestSuccess(requests));
+        emit(RequestLoaded(requests));
       } catch (e) {
         emit(RequestError(e.toString()));
       }

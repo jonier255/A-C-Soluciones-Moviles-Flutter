@@ -1,14 +1,14 @@
 class VisitsModel {
   final int id;
-  final DateTime fechaProgramada;
-  final int duracionEstimada;
+  final DateTime fechaProgramada; //campo para asignar visita
+  final int duracionEstimada; //campo para asignar visita
   final String estado;
-  final String notasPrevias;
-  final String notasPosteriores;
+  final String notasPrevias; //campo para asignar visita
+  final String notasPosteriores; //campo para asignar visita
   final DateTime fechaCreacion;
-  final int solicitudId;
-  final int tecnicoId;
-  final int servicioId;
+  final int solicitudId; //campo para asignar visita
+  final int tecnicoId; //campo para asignar visita 
+  final int servicioId;//campo para asignar visita
 
   VisitsModel({
     required this.id,

@@ -15,8 +15,12 @@ class AdminUpdateProfileRepository {
       throw Exception('Token o ID de administrador no encontrados');
     }
 
+    // Use the configured baseUrl and the stored adminId in the endpoint
+    final url = '$_baseUrl/admin/$adminId';
+    // production: no debug prints
+
     final response = await http.get(
-      Uri.parse('$_baseUrl/admin/$adminId'),
+      Uri.parse(url),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -24,7 +28,26 @@ class AdminUpdateProfileRepository {
     );
 
     if (response.statusCode == 200) {
-      return UpdateAdminRequest.fromJson(jsonDecode(response.body));
+      final decoded = jsonDecode(response.body);
+      // Backend may return the admin inside a wrapper, try common keys
+      Map<String, dynamic> adminMap;
+      if (decoded is Map<String, dynamic>) {
+        if (decoded.containsKey('administrador')) {
+          adminMap = Map<String, dynamic>.from(decoded['administrador']);
+        } else if (decoded.containsKey('data')) {
+          adminMap = Map<String, dynamic>.from(decoded['data']);
+        } else {
+          adminMap = decoded;
+        }
+      } else {
+        throw Exception('Respuesta inesperada del servidor: ${response.body}');
+      }
+
+      try {
+        return UpdateAdminRequest.fromJson(adminMap);
+      } catch (e) {
+        throw Exception('Error parseando perfil de administrador: $e -- raw: ${response.body}');
+      }
     } else {
       throw Exception('Error al obtener el perfil: ${response.body}');
     }
@@ -40,7 +63,7 @@ class AdminUpdateProfileRepository {
     }
 
     final response = await http.put(
-      Uri.parse('$_baseUrl/admin/$adminId'), 
+      Uri.parse('$_baseUrl/admin/$adminId'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -48,8 +71,11 @@ class AdminUpdateProfileRepository {
       body: jsonEncode(data.toJson()),
     );
 
-    if (response.statusCode != 200) {
-      throw Exception('Error al actualizar el perfil: ${response.body}');
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      return;
+    } else {
+      // include response body for easier debugging
+      throw Exception('Error al actualizar el perfil: HTTP ${response.statusCode} - ${response.body}');
     }
   }
 }

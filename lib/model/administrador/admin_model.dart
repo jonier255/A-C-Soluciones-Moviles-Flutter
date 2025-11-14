@@ -28,10 +28,12 @@ class UpdateAdminRequest {
   }
 
   Map<String, dynamic> toJson() => {
-        "nombre": nombre,
-        "apellido": apellido,
-        "numero_cedula": numeroCedula,
-        "correo_electronico": correoElectronico,
-        "rol": rol,
+      "id": id,
+      "nombre": nombre,
+      "apellido": apellido,
+      // send numero_cedula as int when possible, otherwise send string
+      "numero_cedula": int.tryParse(numeroCedula) ?? numeroCedula,
+      "correo_electronico": correoElectronico,
+      "rol": rol,
       };
 }

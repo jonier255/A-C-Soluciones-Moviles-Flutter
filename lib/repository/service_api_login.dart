@@ -25,7 +25,51 @@ class APIService {
 
       final storage = SecureStorageService();
       await storage.saveToken(responseBody['token']);
-      await storage.saveAdminId(responseBody['administrador'].toString());
+
+      // Try to find an admin id in several common places.
+      String? adminId;
+      // Helper to attempt extracting id from a dynamic structure
+      String? tryExtractId(dynamic data) {
+        if (data == null) return null;
+        if (data is int) return data.toString();
+        if (data is String) {
+          final s = data.trim();
+          if (s.isNotEmpty && s.toLowerCase() != 'null') return s;
+          return null;
+        }
+        if (data is Map) {
+          final candidate = data['id'] ?? data['admin_id'] ?? data['id_administrador'] ?? data['usuario_id'] ?? data['user_id'];
+          if (candidate != null) return candidate.toString();
+        }
+        return null;
+      }
+
+      // Common top-level keys used by different backends
+      final candidates = [
+        responseBody['administrador'],
+        responseBody['admin'],
+        responseBody['user'],
+        responseBody['usuario'],
+        responseBody['data'],
+      ];
+
+      for (var c in candidates) {
+        final found = tryExtractId(c);
+        if (found != null) {
+          adminId = found;
+          break;
+        }
+      }
+
+      // As a last resort, look for top-level numeric/string id fields
+      if (adminId == null) {
+        final fallback = responseBody['id'] ?? responseBody['admin_id'] ?? responseBody['id_administrador'];
+        adminId = tryExtractId(fallback);
+      }
+
+      if (adminId != null && adminId.isNotEmpty) {
+        await storage.saveAdminId(adminId);
+      }
 
       // Retornar el modelo de respuesta
       return loginResponseJson(response.body);

@@ -28,7 +28,7 @@ class AdminRepository {
     } else if (response.statusCode == 401) {
       throw Exception('Sesión expirada. Por favor, inicie sesión de nuevo.');
     } else {
-      throw Exception('Failed to load Admins');
+      throw Exception('Fallo al cargar los Admins');
     }
   }
 }

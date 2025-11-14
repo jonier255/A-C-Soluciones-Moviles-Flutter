@@ -33,6 +33,20 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           final String userName = decodedToken['nombre'] ?? 'Usuario';
           final String userEmail = decodedToken['email'] ?? '';
 
+          
+          try {
+            final existingAdminId = await _storageService.getAdminId();
+            if (existingAdminId == null) {
+              final possibleId = decodedToken['id'] ?? decodedToken['sub'] ?? decodedToken['user_id'] ?? decodedToken['admin_id'];
+              if (possibleId != null) {
+                final idStr = possibleId.toString();
+                if (idStr.isNotEmpty && idStr.toLowerCase() != 'null') {
+                  await _storageService.saveAdminId(idStr);
+                }
+              }
+            }
+          } catch (_) {}
+
           emit(LoginSuccess(
             token: response.token!,
             role: role,

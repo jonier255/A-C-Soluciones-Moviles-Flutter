@@ -22,6 +22,23 @@ class _RequestScreenState extends State<RequestScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+    final height = size.height;
+    final topCurveHeight = height * 0.225; 
+    final titleTop = height * 0.05; 
+    final titleSidePadding = width * 0.025; 
+    final titleFontSize = width * 0.06; 
+    final smallGap = height * 0.02; 
+    final containerMarginHorizontal = width * 0.09; 
+    final containerMarginVertical = height * 0.025; 
+    final containerInnerPadding = width * 0.02; 
+    final listPadding = width * 0.03; 
+    final cardPadding = width * 0.04;
+    final cardMarginVertical = height * 0.012; 
+    final iconCircleSize = width * 0.07;
+    
+
     return Scaffold(
       bottomNavigationBar: const _BottomNavBar(),
       body: Stack(
@@ -30,32 +47,31 @@ class _RequestScreenState extends State<RequestScreen> {
           ClipPath(
             clipper: WaveClipper(),
             child: Container(
-              height: 180,
+              height: topCurveHeight,
               color: const Color.fromARGB(255, 46, 145, 216),
             ),
           ),
 
           Positioned(
-            top: 40,
-            left: 10,
-            right: 10,
+            top: titleTop,
+            left: titleSidePadding,
+            right: titleSidePadding,
             child: Stack(
               alignment: Alignment.center,
               children: [
                 Align(
                   alignment: Alignment.centerLeft,
                   child: IconButton(
-                    icon: const Icon(Icons.arrow_back,
-                        color: Colors.white, size: 30),
+                    icon: Icon(Icons.arrow_back, color: Colors.white, size: width * 0.075),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ),
-                const Center(
+                Center(
                   child: Text(
                     'Lista de Solicitudes',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 24,
+                      fontSize: titleFontSize,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -66,17 +82,17 @@ class _RequestScreenState extends State<RequestScreen> {
 
           // Contenido principal
           Padding(
-            padding: const EdgeInsets.only(top: 180.0),
+            padding: EdgeInsets.only(top: topCurveHeight),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 16),
+                SizedBox(height: smallGap),
                 Expanded(
                   child: BlocBuilder<RequestBloc, RequestState>(
                     builder: (context, state) {
                       if (state is RequestLoading) {
                         return const Center(child: CircularProgressIndicator());
-                      } else if (state is RequestSuccess) {
+                      } else if (state is RequestLoaded) {
                         final totalPages = state.requests.isNotEmpty
                             ? (state.requests.length / _requestsPerPage).ceil()
                             : 1;
@@ -94,15 +110,18 @@ class _RequestScreenState extends State<RequestScreen> {
                             // Contenedor con las solicitudes
                             Flexible(
                               child: Container(
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 35.0, vertical: 20),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 8),
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: containerMarginHorizontal,
+                                    vertical: containerMarginVertical),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: containerInnerPadding,
+                                    vertical: containerInnerPadding),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: const Color.fromARGB(255, 179, 46, 241).withOpacity(0.9),
+                                      color: const Color.fromARGB(255, 179, 46, 241)
+                                          .withOpacity(0.9),
                                       spreadRadius: 4,
                                       blurRadius: 8,
                                       offset: const Offset(0, 3),
@@ -112,7 +131,7 @@ class _RequestScreenState extends State<RequestScreen> {
                                 ),
                                 child: currentRequests.isNotEmpty
                                     ? ListView.builder(
-                                        padding: const EdgeInsets.all(12),
+                                        padding: EdgeInsets.all(listPadding),
                                         itemCount: currentRequests.length,
                                         itemBuilder: (context, index) {
                                           final request = currentRequests[index];
@@ -120,21 +139,21 @@ class _RequestScreenState extends State<RequestScreen> {
                                             child: Card(
                                               color: Colors.white,
                                               elevation: 4,
-                                              margin: const EdgeInsets.symmetric(
-                                                  vertical: 10),
+                                              margin: EdgeInsets.symmetric(
+                                                  vertical: cardMarginVertical),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(25),
                                               ),
                                               child: Padding(
-                                                padding: const EdgeInsets.all(16.0),
+                                                padding: EdgeInsets.all(cardPadding),
                                                 child: Row(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     Container(
                                                       padding:
-                                                          const EdgeInsets.all(12),
+                                                          EdgeInsets.all(iconCircleSize * 0.35),
                                                       decoration: BoxDecoration(
                                                         boxShadow: [
                                                           BoxShadow(
@@ -149,12 +168,12 @@ class _RequestScreenState extends State<RequestScreen> {
                                                         color: Colors.white,
                                                         shape: BoxShape.circle,
                                                       ),
-                                                      child: const Icon(
+                                                      child: Icon(
                                                         Icons.assignment,
-                                                        size: 28,
+                                                        size: iconCircleSize,
                                                       ),
                                                     ),
-                                                    const SizedBox(width: 16),
+                                                    SizedBox(width: width * 0.04),
                                                     Expanded(
                                                       child: Column(
                                                         crossAxisAlignment:
@@ -181,7 +200,7 @@ class _RequestScreenState extends State<RequestScreen> {
                                                               ],
                                                             ),
                                                           ),
-                                                          const SizedBox(height: 4),
+                                                          SizedBox(height: height * 0.005),
                                                           RichText(
                                                             text: TextSpan(
                                                               text: "Dirección: ",
@@ -203,7 +222,7 @@ class _RequestScreenState extends State<RequestScreen> {
                                                               ],
                                                             ),
                                                           ),
-                                                          const SizedBox(height: 4),
+                                                          SizedBox(height: height * 0.005),
                                                           RichText(
                                                             text: TextSpan(
                                                               text: "Fecha solicitud: ",
@@ -244,12 +263,14 @@ class _RequestScreenState extends State<RequestScreen> {
                               ),
                             ),
 
-                            // Paginación
+                            // Paginación: se usa Wrap para permitir salto a nueva línea
                             if (state.requests.isNotEmpty)
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                padding: EdgeInsets.symmetric(vertical: height * 0.015),
+                                child: Wrap(
+                                  alignment: WrapAlignment.center,
+                                  spacing: width * 0.02,
+                                  runSpacing: height * 0.01,
                                   children: [
                                     if (safePage > 1)
                                       _buildArrowButton("<", () {
@@ -297,12 +318,14 @@ class _RequestScreenState extends State<RequestScreen> {
   }
 
   Widget _buildPageButton(String text, bool selected, VoidCallback onPressed) {
+    final size = MediaQuery.of(context).size;
+    final w = size.width;
     return Container(
-      padding: const EdgeInsets.all(2),
+      padding: EdgeInsets.all(w * 0.005),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           shape: const CircleBorder(),
-          padding: const EdgeInsets.all(3),
+          padding: EdgeInsets.all(w * 0.007),
           backgroundColor:
               selected ? const Color.fromARGB(255, 156, 204, 243) : Colors.white,
           foregroundColor: selected ? Colors.white : Colors.blue,
@@ -314,12 +337,14 @@ class _RequestScreenState extends State<RequestScreen> {
   }
 
   Widget _buildArrowButton(String text, VoidCallback onPressed) {
+    final size = MediaQuery.of(context).size;
+    final w = size.width;
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 4),
+      margin: EdgeInsets.symmetric(horizontal: w * 0.01),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           shape: const CircleBorder(),
-          padding: const EdgeInsets.all(12),
+          padding: EdgeInsets.all(w * 0.03),
           backgroundColor: Colors.blue,
           foregroundColor: Colors.white,
         ),

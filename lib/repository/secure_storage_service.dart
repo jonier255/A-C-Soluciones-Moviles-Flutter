@@ -55,6 +55,20 @@ class SecureStorageService {
   }
 
   Future<String?> getAdminId() async {
-    return await _storage.read(key: 'id_administrador');
+    // Try the current key first, but fall back to the old key name if present
+    String? id = await _storage.read(key: 'admin_id');
+    // Treat explicit string 'null' or empty as not present
+    if (id != null) {
+      final normalized = id.trim().toLowerCase();
+      if (normalized == 'null' || normalized.isEmpty) id = null;
+    }
+    if (id != null && id.isNotEmpty) return id;
+    // Backwards compatibility: some places previously used 'id_administrador'
+    String? legacy = await _storage.read(key: 'id_administrador');
+    if (legacy != null) {
+      final normalized = legacy.trim().toLowerCase();
+      if (normalized == 'null' || normalized.isEmpty) legacy = null;
+    }
+    return legacy;
   }
 }
