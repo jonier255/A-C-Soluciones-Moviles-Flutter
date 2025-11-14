@@ -20,12 +20,44 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
   String numeroCedula = '';
   String especialidad = '';
 
+  Map<String, String> _fieldErrors = {};
+  Map<String, String> _originalValues = {};
+  bool _hasChanges = false;
+
   @override
   void initState() {
     super.initState();
-    // The BLoC is provided by the previous screen, so we can access it directly.
     context.read<EditProfileTechnicalBloc>().add(LoadTechnicalProfile());
+
+    void addListener(TextEditingController controller, String key) {
+      controller.addListener(() {
+        if (_fieldErrors.containsKey(key)) {
+          setState(() {
+            _fieldErrors.remove(key);
+          });
+        }
+        _checkForChanges();
+      });
+    }
+
+    addListener(nombreController, 'nombre');
+    addListener(apellidoController, 'apellido');
+    addListener(correoController, 'correo_electronico');
+    addListener(telefonoController, 'telefono');
   }
+
+  void _checkForChanges() {
+    final hasChanged = nombreController.text != _originalValues['nombre'] ||
+        apellidoController.text != _originalValues['apellido'] ||
+        correoController.text != _originalValues['correo_electronico'] ||
+        telefonoController.text != _originalValues['telefono'];
+    if (hasChanged != _hasChanges) {
+      setState(() {
+        _hasChanges = hasChanged;
+      });
+    }
+  }
+
 
   @override
   void dispose() {
@@ -38,8 +70,8 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Color(0xFF0D47A1); // Dark Blue
-    final backgroundColor = Color(0xFFF5F5F5); // Light Gray
+    final primaryColor = Color(0xFF0D47A1);
+    final backgroundColor = Color(0xFFF5F5F5);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -60,6 +92,15 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
             telefonoController.text = state.technical.telefono;
             numeroCedula = state.technical.numeroCedula;
             especialidad = state.technical.especialidad;
+
+            _originalValues = {
+              'nombre': state.technical.nombre,
+              'apellido': state.technical.apellido,
+              'correo_electronico': state.technical.correoElectronico,
+              'telefono': state.technical.telefono,
+            };
+            _checkForChanges();
+
           } else if (state is EditProfileTechnicalSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -67,59 +108,69 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
                 backgroundColor: Colors.green,
               ),
             );
-            Future.delayed(const Duration(seconds: 2), () {
-              if (Navigator.of(context).canPop()) {
-                Navigator.of(context).pop();
-              }
-            });
+            // Pop screen and return true to signal success
+            Navigator.of(context).pop(true);
           } else if (state is EditProfileTechnicalFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Error: ${state.error}'),
-                backgroundColor: Colors.red,
-              ),
-            );
+            if (state.fieldErrors != null) {
+              setState(() {
+                _fieldErrors = state.fieldErrors!;
+              });
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Error: ${state.error}'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
           }
         },
         builder: (context, state) {
-          if (state is EditProfileTechnicalLoading) {
-            return const Center(child: CircularProgressIndicator());
+          final isSubmitting = state is EditProfileTechnicalLoading;
+          if (state is EditProfileTechnicalInitial || (state is EditProfileTechnicalLoaded && nombreController.text.isEmpty)) {
+             return const Center(child: CircularProgressIndicator());
           }
+
           return Form(
             key: _formKey,
             child: ListView(
               padding: EdgeInsets.all(screenWidth * 0.05),
               children: [
-                _buildTextField(nombreController, "Nombre", Icons.person, primaryColor),
-                SizedBox(height: screenHeight * 0.025),
-                _buildTextField(apellidoController, "Apellido", Icons.person_outline, primaryColor),
-                SizedBox(height: screenHeight * 0.025),
+                _buildTextField(nombreController, "Nombre", Icons.person, primaryColor, errorText: _fieldErrors['nombre']),
+                SizedBox(height: screenHeight * 0.02),
+                _buildTextField(apellidoController, "Apellido", Icons.person_outline, primaryColor, errorText: _fieldErrors['apellido']),
+                SizedBox(height: screenHeight * 0.02),
                 _buildTextField(
                   correoController,
                   "Correo electrónico",
                   Icons.email,
                   primaryColor,
                   keyboardType: TextInputType.emailAddress,
+                  errorText: _fieldErrors['correo_electronico'],
                 ),
-                SizedBox(height: screenHeight * 0.025),
+                SizedBox(height: screenHeight * 0.02),
                 _buildTextField(
                   telefonoController,
                   "Teléfono",
                   Icons.phone,
                   primaryColor,
                   keyboardType: TextInputType.phone,
+                  errorText: _fieldErrors['telefono'],
                 ),
-                SizedBox(height: screenHeight * 0.025),
+                SizedBox(height: screenHeight * 0.03),
                 ElevatedButton.icon(
                   icon: Icon(Icons.save, color: Colors.white),
-                  label: const Text('Guardar Cambios'),
-                  onPressed: () {
+                  label: Text(isSubmitting ? 'Guardando...' : 'Guardar Cambios'),
+                  onPressed: (isSubmitting || !_hasChanges) ? null : () {
+                    setState(() {
+                      _fieldErrors = {};
+                    });
                     if (_formKey.currentState!.validate()) {
                       final updatedTechnical = UpdateTechnicalRequest(
-                        id: 0, // The ID is not editable, but required by the model
+                        id: 0,
                         nombre: nombreController.text,
                         apellido: apellidoController.text,
-                        numeroCedula: numeroCedula, // Not editable, passed from initial state
+                        numeroCedula: numeroCedula,
                         correoElectronico: correoController.text,
                         telefono: telefonoController.text,
                         especialidad: especialidad,
@@ -133,6 +184,7 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryColor,
                     foregroundColor: Colors.white,
+                    disabledBackgroundColor: Colors.grey,
                     minimumSize: Size(double.infinity, screenHeight * 0.06),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                     elevation: 5,
@@ -160,7 +212,7 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
   }
 
   Widget _buildTextField(TextEditingController controller, String label, IconData icon, Color primaryColor,
-      {TextInputType keyboardType = TextInputType.text}) {
+      {TextInputType keyboardType = TextInputType.text, String? errorText}) {
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
@@ -170,6 +222,7 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
         prefixIcon: Icon(icon, color: primaryColor),
         filled: true,
         fillColor: Colors.white,
+        errorText: errorText,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
           borderSide: BorderSide.none,
@@ -177,6 +230,14 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
           borderSide: BorderSide(color: primaryColor, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: Colors.red, width: 1),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: Colors.red, width: 2),
         ),
       ),
       validator: (value) {

@@ -132,8 +132,8 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
           ElevatedButton.icon(
             icon: Icon(Icons.edit, color: Colors.white),
             label: const Text('Editar Información', style: TextStyle(color: Colors.white)),
-            onPressed: () {
-              Navigator.push(
+            onPressed: () async {
+              final result = await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => BlocProvider.value(
@@ -142,6 +142,11 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
                   ),
                 ),
               );
+
+              if (result == true && context.mounted) {
+                // Reload the profile data if the update was successful
+                editProfileBloc.add(LoadTechnicalProfile());
+              }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: primaryColor,
