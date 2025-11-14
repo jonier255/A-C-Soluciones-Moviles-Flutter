@@ -29,7 +29,6 @@ class _EditarInformacionScreenState extends State<EditarInformacionScreen> {
       final token = await storage.getToken();
       final adminId = await storage.getAdminId();
       if (token == null || adminId == null) {
-        // show a snackbar informing the user to login again
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(

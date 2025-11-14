@@ -15,9 +15,7 @@ class AdminUpdateProfileRepository {
       throw Exception('Token o ID de administrador no encontrados');
     }
 
-    // Use the configured baseUrl and the stored adminId in the endpoint
     final url = '$_baseUrl/admin/$adminId';
-    // production: no debug prints
 
     final response = await http.get(
       Uri.parse(url),
@@ -29,7 +27,6 @@ class AdminUpdateProfileRepository {
 
     if (response.statusCode == 200) {
       final decoded = jsonDecode(response.body);
-      // Backend may return the admin inside a wrapper, try common keys
       Map<String, dynamic> adminMap;
       if (decoded is Map<String, dynamic>) {
         if (decoded.containsKey('administrador')) {
@@ -74,7 +71,6 @@ class AdminUpdateProfileRepository {
     if (response.statusCode == 200 || response.statusCode == 204) {
       return;
     } else {
-      // include response body for easier debugging
       throw Exception('Error al actualizar el perfil: HTTP ${response.statusCode} - ${response.body}');
     }
   }
