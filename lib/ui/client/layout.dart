@@ -6,9 +6,12 @@ import 'package:flutter_a_c_soluciones/ui/client/Home/homeClient.dart';
 import 'package:flutter_a_c_soluciones/ui/client/services/services_page.dart';
 import 'package:flutter_a_c_soluciones/ui/client/Requests/requests_page.dart';
 import 'package:flutter_a_c_soluciones/ui/client/Chat/chat_page.dart';
+import 'package:flutter_a_c_soluciones/ui/client/profile/edit_profile_client.dart';
 import '../../../../repository/secure_storage_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/login/login_bloc.dart';
+import 'package:flutter_a_c_soluciones/bloc/client/edit_profile_client_bloc.dart';
+import 'package:flutter_a_c_soluciones/repository/client/client_profile_repository.dart';
 
 class ClientLayout extends StatefulWidget {
   const ClientLayout({super.key});
@@ -50,6 +53,36 @@ class _ClientLayoutState extends State<ClientLayout> {
   }
 
   void _navigateTo(String route) {
+    // Si es la ruta de perfil, navegar a la página de editar perfil
+    if (route == '/client_profile') {
+      // Cerrar el drawer primero
+      if (_scaffoldKey.currentState!.isDrawerOpen) {
+        _scaffoldKey.currentState!.closeDrawer();
+      }
+      // Esperar un momento para que el drawer se cierre antes de navegar
+      Future.delayed(const Duration(milliseconds: 250), () {
+        if (mounted) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BlocProvider(
+                create: (context) => EditProfileClientBloc(
+                  clientProfileRepository: ClientProfileRepository(),
+                ),
+                child: const EditProfileClientScreen(),
+              ),
+            ),
+          ).then((result) {
+            // Si se actualizó el perfil, recargar los datos del usuario
+            if (result == true) {
+              _loadUserData();
+            }
+          });
+        }
+      });
+      return;
+    }
+    
     setState(() {
       _currentRoute = route;
     });

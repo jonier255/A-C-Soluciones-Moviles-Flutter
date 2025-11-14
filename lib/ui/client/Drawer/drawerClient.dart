@@ -88,6 +88,13 @@ class DrawerClient extends StatelessWidget {
               children: [
                 _buildDrawerItem(
                   context: context,
+                  icon: Icons.person_rounded,
+                  title: 'Mi Perfil',
+                  route: '/client_profile',
+                  isTablet: isTablet,
+                ),
+                _buildDrawerItem(
+                  context: context,
                   icon: Icons.home_rounded,
                   title: 'Inicio',
                   route: '/client_home',
@@ -282,11 +289,16 @@ class DrawerClient extends StatelessWidget {
               }
             }
           } else if (route.isNotEmpty) {
-            onItemSelected(route);
-            if (Navigator.canPop(context)) {
-              Navigator.pop(context);
+            // Para la ruta de perfil, no cerrar el drawer aquí, se maneja en _navigateTo
+            if (route == '/client_profile') {
+              onItemSelected(route);
             } else {
-              Scaffold.of(context).closeDrawer();
+              onItemSelected(route);
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context);
+              } else {
+                Scaffold.of(context).closeDrawer();
+              }
             }
           }
         },
