@@ -24,23 +24,47 @@ class APIService {
       final responseBody = jsonDecode(response.body);
 
       final storage = SecureStorageService();
-      final token = responseBody['token'] as String?;
-      if (token != null) {
-        await storage.saveToken(token);
-      }
-      final administrador = responseBody['administrador'];
-      if (administrador != null) {
-        await storage.saveAdminId(administrador.toString());
+      await storage.saveToken(responseBody['token']);
+
+      String? adminId;
+      String? tryExtractId(dynamic data) {
+        if (data == null) return null;
+        if (data is int) return data.toString();
+        if (data is String) {
+          final s = data.trim();
+          if (s.isNotEmpty && s.toLowerCase() != 'null') return s;
+          return null;
+        }
+        if (data is Map) {
+          final candidate = data['id'] ?? data['admin_id'] ?? data['id_administrador'] ?? data['usuario_id'] ?? data['user_id'];
+          if (candidate != null) return candidate.toString();
+        }
+        return null;
       }
 
-      // Guardar datos del usuario
-      final user = responseBody['user'] as Map<String, dynamic>?;
-      if (user != null) {
-        await storage.saveUserData({
-          'cliente_id': (user['id'] ?? 0).toString(),
-          'user_name': (user['nombre'] ?? user['user_name'] ?? '').toString(),
-          'user_email': (user['correo_electronico'] ?? user['email'] ?? user['user_email'] ?? '').toString(),
-        });
+      final candidates = [
+        responseBody['administrador'],
+        responseBody['admin'],
+        responseBody['user'],
+        responseBody['usuario'],
+        responseBody['data'],
+      ];
+
+      for (var c in candidates) {
+        final found = tryExtractId(c);
+        if (found != null) {
+          adminId = found;
+          break;
+        }
+      }
+
+      if (adminId == null) {
+        final fallback = responseBody['id'] ?? responseBody['admin_id'] ?? responseBody['id_administrador'];
+        adminId = tryExtractId(fallback);
+      }
+
+      if (adminId != null && adminId.isNotEmpty) {
+        await storage.saveAdminId(adminId);
       }
 
       // Retornar el modelo de respuesta

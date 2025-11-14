@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_a_c_soluciones/bloc/listAdmins/admins_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/request/request_bloc.dart';
 import 'package:flutter_a_c_soluciones/repository/services_admin/request_repository.dart';
-import 'package:flutter_a_c_soluciones/repository/services_admin/service_api_visits.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/ListAdmins/list_admin_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_a_c_soluciones/repository/services_admin/visits_repository.dart';
-import 'package:flutter_a_c_soluciones/ui/admin/Visits/assign_visits_screen.dart';
-import 'package:flutter_a_c_soluciones/bloc/visits/assign_visits/assign_visits_bloc.dart';
-import '../../../bloc/visits/visits_bloc.dart';
-import 'visits_screen.dart';
 
-class VisitasMenuScreen extends StatelessWidget {
-  const VisitasMenuScreen({super.key});
+import '../../../repository/services_admin/service_ListAdmin.dart';
+
+class AdminMenuScreen extends StatelessWidget {
+  const AdminMenuScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +46,7 @@ class VisitasMenuScreen extends StatelessWidget {
                           ),
                           Center(
                             child: const Text(
-                              'Visitas',
+                              'Seccion de Administradores',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 24,
@@ -89,37 +87,26 @@ class VisitasMenuScreen extends StatelessWidget {
                                     const SizedBox(height: 20),
                                     _buildOptionCard(
                                       context,
-                                      title: "Asignar visitas",
-                                      icon: Icons.mouse,
-                                      color: const Color.fromARGB(255, 156, 109, 218),
+                                      title: "Crear Administrador",
+                                      icon: Icons.person_add,
+                                      color: const Color.fromARGB(255, 2, 247, 153),
                                       onTap: () {
-                                        // Navega a la pantalla para asignar una nueva visita.
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => BlocProvider(
-                                              create: (context) =>
-                                                  AssignVisitsBloc(visitsRepository: VisitsRepository()),
-                                              child: AssignVisitsScreen(),
-                                            ),
-                                          ),
-                                        );
                                       },
                                     ),
                                     const SizedBox(height: 30),
                                     _buildOptionCard(
                                       context,
-                                      title: "Lista de Visitas",
+                                      title: "Lista de Administradores",
                                       icon: Icons.list_alt,
-                                      color: const Color.fromARGB(255, 61, 197, 221),
+                                      color: const Color.fromARGB(255, 175, 61, 166),
                                       onTap: () {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) => BlocProvider(
                                               create: (context) =>
-                                                  VisitsBloc(ListVisitsRepository()),
-                                              child: VisitsScreen(),
+                                                  AdminsBloc(AdminRepository()),
+                                              child: AdminsScreen(),
                                             ),
                                           ),
                                         );

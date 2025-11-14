@@ -25,6 +25,23 @@ class _VisitsScreenState extends State<VisitsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+    final height = size.height;
+    // responsive values
+    final topCurveHeight = height * 0.225; // ~180
+    final titleTop = height * 0.05; // ~40
+    final titleSidePadding = width * 0.025; // ~10
+    final titleFontSize = width * 0.06; // ~24
+    final smallGap = height * 0.02; // ~16
+    final containerMarginHorizontal = width * 0.09; // ~35
+    final containerMarginVertical = height * 0.025; // ~20
+    final containerInnerPadding = width * 0.02; // ~8
+    final listPadding = width * 0.03; // ~12
+    final cardPadding = width * 0.04; // ~16
+    final cardMarginVertical = height * 0.012; // ~10
+    final iconCircleSize = width * 0.07; // ~28
+
     return Scaffold(
       bottomNavigationBar: const _BottomNavBar(),
       body: Stack(
@@ -33,32 +50,31 @@ class _VisitsScreenState extends State<VisitsScreen> {
           ClipPath(
             clipper: WaveClipper(),
             child: Container(
-              height: 180,
+              height: topCurveHeight,
               color: Color.fromARGB(255, 46, 145, 216),
             ),
           ),
           // Botón de retroceso y título
           Positioned(
-            top: 40,
-            left: 10,
-            right: 10,
+            top: titleTop,
+            left: titleSidePadding,
+            right: titleSidePadding,
             child: Stack(
               alignment: Alignment.center,
               children: [
                 Align(
                   alignment: Alignment.centerLeft,
                   child: IconButton(
-                    icon: const Icon(Icons.arrow_back,
-                        color: Colors.white, size: 30),
+                    icon: Icon(Icons.arrow_back, color: Colors.white, size: width * 0.075),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ),
                 Center(
-                  child: const Text(
+                  child: Text(
                     'Lista de Visitas',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 24,
+                      fontSize: titleFontSize,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -68,11 +84,11 @@ class _VisitsScreenState extends State<VisitsScreen> {
           ),
           // Contenido principal
           Padding(
-            padding: const EdgeInsets.only(top: 180.0),
+            padding: EdgeInsets.only(top: topCurveHeight),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 16),
+                SizedBox(height: smallGap),
                 // Contenido principal
                 Expanded(
                   child: BlocBuilder<VisitsBloc, VisitsState>(
@@ -100,10 +116,12 @@ class _VisitsScreenState extends State<VisitsScreen> {
                             // ontainer visitas
                             Flexible(
                               child: Container(
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 35.0, vertical: 20),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 8),
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: containerMarginHorizontal,
+                                    vertical: containerMarginVertical),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: containerInnerPadding,
+                                    vertical: containerInnerPadding),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30),
                                   boxShadow: [
@@ -118,7 +136,7 @@ class _VisitsScreenState extends State<VisitsScreen> {
                                 ),
                                 child: currentVisits.isNotEmpty
                                     ? ListView.builder(
-                                        padding: const EdgeInsets.all(12),
+                                        padding: EdgeInsets.all(listPadding),
                                         itemCount: currentVisits.length,
                                         itemBuilder: (context, index) {
                                           final visit = currentVisits[index];
@@ -126,24 +144,21 @@ class _VisitsScreenState extends State<VisitsScreen> {
                                             child: Card(
                                               color: Colors.white,
                                               elevation: 4,
-                                              margin:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 10),
+                                              margin: EdgeInsets.symmetric(
+                                                  vertical: cardMarginVertical),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(25),
                                               ),
                                               child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(16.0),
+                                                padding: EdgeInsets.all(cardPadding),
                                                 child: Row(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     Container(
                                                       padding:
-                                                          const EdgeInsets.all(
-                                                              12),
+                                                          EdgeInsets.all(iconCircleSize * 0.35),
                                                       decoration: BoxDecoration(
                                                         boxShadow: [
                                                           BoxShadow(
@@ -160,11 +175,11 @@ class _VisitsScreenState extends State<VisitsScreen> {
                                                         color: Colors.white,
                                                         shape: BoxShape.circle,
                                                       ),
-                                                      child: const Icon(
+                                                      child: Icon(
                                                           Icons.article,
-                                                          size: 28),
+                                                          size: iconCircleSize),
                                                     ),
-                                                    const SizedBox(width: 16),
+                                                    SizedBox(width: width * 0.04),
                                                     Expanded(
                                                       child: Column(
                                                         crossAxisAlignment:
@@ -198,8 +213,8 @@ class _VisitsScreenState extends State<VisitsScreen> {
                                                               ],
                                                             ),
                                                           ),
-                                                          const SizedBox(
-                                                              height: 4),
+                                                          SizedBox(
+                                                              height: height * 0.005),
                                                           RichText(
                                                             text: TextSpan(
                                                               text:
@@ -227,8 +242,8 @@ class _VisitsScreenState extends State<VisitsScreen> {
                                                               ],
                                                             ),
                                                           ),
-                                                          const SizedBox(
-                                                              height: 4),
+                                                          SizedBox(
+                                                              height: height * 0.005),
                                                           RichText(
                                                             text: TextSpan(
                                                               text: "Fecha: ",
@@ -277,13 +292,14 @@ class _VisitsScreenState extends State<VisitsScreen> {
                               ),
                             ),
 
-                            // Paginacion afuera del container
+                            // Paginacion afuera del container — usar Wrap para evitar overflow
                             if (state.visits.isNotEmpty)
                               Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 12),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                child: Wrap(
+                                  alignment: WrapAlignment.center,
+                                  spacing: 8,
+                                  runSpacing: 8,
                                   children: [
                                     if (safePage > 1)
                                       _buildArrowButton("<", () {
@@ -332,12 +348,14 @@ class _VisitsScreenState extends State<VisitsScreen> {
 
   // Boton de paginacion 
   Widget _buildPageButton(String text, bool selected, VoidCallback onPressed) {
+    final size = MediaQuery.of(context).size;
+    final w = size.width;
     return Container(
-      padding: const EdgeInsets.all(2),
+      padding: EdgeInsets.all(w * 0.005),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           shape: const CircleBorder(),
-          padding: const EdgeInsets.all(3),
+          padding: EdgeInsets.all(w * 0.007),
           backgroundColor: selected
               ? const Color.fromARGB(255, 156, 204, 243)
               : Colors.white,
@@ -351,12 +369,14 @@ class _VisitsScreenState extends State<VisitsScreen> {
 
   // Boton de paginacion (flechas)
   Widget _buildArrowButton(String text, VoidCallback onPressed) {
+    final size = MediaQuery.of(context).size;
+    final w = size.width;
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 4),
+      margin: EdgeInsets.symmetric(horizontal: w * 0.01),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           shape: const CircleBorder(),
-          padding: const EdgeInsets.all(12),
+          padding: EdgeInsets.all(w * 0.03),
           backgroundColor: Colors.blue,
           foregroundColor: Colors.white,
         ),
