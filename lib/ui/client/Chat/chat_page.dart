@@ -20,13 +20,15 @@ class _ChatContentState extends State<ChatContent> {
       _messages.add({"text": text, "isUser": true});
       // Simula respuesta automática del soporte
       Future.delayed(const Duration(milliseconds: 600), () {
-        setState(() {
-          _messages.add({
-            "text": "Soporte: Gracias por tu mensaje. ¿En qué puedo ayudarte?",
-            "isUser": false,
+        if (mounted) {
+          setState(() {
+            _messages.add({
+              "text": "Soporte: Gracias por tu mensaje. ¿En qué puedo ayudarte?",
+              "isUser": false,
+            });
+            _scrollToBottom();
           });
-          _scrollToBottom();
-        });
+        }
       });
     });
 
@@ -47,183 +49,295 @@ class _ChatContentState extends State<ChatContent> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final screenWidth = mediaQuery.size.width;
+    final screenHeight = mediaQuery.size.height;
+    final isTablet = screenWidth > 600;
+    final isDesktop = screenWidth > 1024;
+
     return Container(
-      color: Colors.blue.shade50,
+      color: const Color(0xFFF5F7FA),
       child: Column(
         children: [
-          // 🔹 Encabezado del chat
+          // Encabezado del chat
           Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+            padding: EdgeInsets.symmetric(
+              horizontal: isTablet ? 24 : 16,
+              vertical: isTablet ? 20 : 16,
             ),
-            child: const Row(
-              children: [
-                CircleAvatar(
-                  backgroundColor: Color.fromARGB(255, 46, 145, 216),
-                  child: Icon(Icons.support_agent, color: Colors.white),
-                ),
-                SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Soporte Técnico",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      "En línea",
-                      style: TextStyle(
-                        color: Colors.green,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-          // 🔹 Mensajes
-          Expanded(
-            child: _messages.isEmpty
-                ? const Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.chat_bubble_outline,
-                          size: 64,
-                          color: Colors.grey,
-                        ),
-                        SizedBox(height: 16),
-                        Text(
-                          "Inicia una conversación",
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                : ListView.builder(
-                    controller: _scrollController,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 12),
-                    itemCount: _messages.length,
-                    itemBuilder: (context, index) {
-                      final message = _messages[index];
-                      final isUser = message["isUser"] as bool;
-                      return Align(
-                        alignment: isUser
-                            ? Alignment.centerRight
-                            : Alignment.centerLeft,
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(vertical: 5),
-                          padding: const EdgeInsets.all(12),
-                          constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width * 0.75,
-                          ),
-                          decoration: BoxDecoration(
-                            color: isUser
-                                ? const Color.fromARGB(255, 46, 145, 216)
-                                : Colors.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: const Radius.circular(16),
-                              topRight: const Radius.circular(16),
-                              bottomLeft: isUser
-                                  ? const Radius.circular(16)
-                                  : const Radius.circular(0),
-                              bottomRight: isUser
-                                  ? const Radius.circular(0)
-                                  : const Radius.circular(16),
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
-                                blurRadius: 4,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: Text(
-                            message["text"],
-                            style: TextStyle(
-                              color: isUser ? Colors.white : Colors.black87,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-          ),
-
-          // 🔹 Caja de entrada
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.08),
-                  blurRadius: 6,
-                  offset: const Offset(0, -2),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
                 ),
               ],
             ),
             child: Row(
               children: [
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    decoration: InputDecoration(
-                      hintText: "Escribe un mensaje...",
-                      filled: true,
-                      fillColor: Colors.blue.shade50,
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 10),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25),
-                        borderSide: BorderSide.none,
-                      ),
+                Container(
+                  padding: EdgeInsets.all(isTablet ? 12 : 10),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color(0xFF2E91D8),
+                        Color(0xFF56AFEC),
+                      ],
                     ),
-                    onSubmitted: (_) => _sendMessage(),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Icon(
+                    Icons.support_agent_rounded,
+                    color: Colors.white,
+                    size: isTablet ? 32 : 28,
                   ),
                 ),
-                const SizedBox(width: 8),
-                GestureDetector(
-                  onTap: _sendMessage,
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: const LinearGradient(
-                        colors: [
-                          Color.fromARGB(255, 46, 145, 216),
-                          Color.fromARGB(255, 86, 175, 236),
+                SizedBox(width: isTablet ? 16 : 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Soporte Técnico",
+                        style: TextStyle(
+                          fontSize: isTablet ? 20 : 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Container(
+                            width: isTablet ? 10 : 8,
+                            height: isTablet ? 10 : 8,
+                            decoration: const BoxDecoration(
+                              color: Colors.green,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          SizedBox(width: isTablet ? 8 : 6),
+                          Text(
+                            "En línea",
+                            style: TextStyle(
+                              color: Colors.green[700],
+                              fontSize: isTablet ? 14 : 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ],
                       ),
-                    ),
-                    child: const Icon(
-                      Icons.send_rounded,
-                      color: Colors.white,
-                    ),
+                    ],
                   ),
                 ),
               ],
+            ),
+          ),
+
+          // Mensajes
+          Expanded(
+            child: _messages.isEmpty
+                ? Center(
+                    child: Container(
+                      margin: EdgeInsets.all(isTablet ? 32 : 20),
+                      padding: EdgeInsets.all(isTablet ? 32 : 24),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.08),
+                            blurRadius: 20,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.chat_bubble_outline_rounded,
+                            size: isTablet ? 64 : 48,
+                            color: Colors.grey[400],
+                          ),
+                          SizedBox(height: isTablet ? 16 : 12),
+                          Text(
+                            "Inicia una conversación",
+                            style: TextStyle(
+                              fontSize: isTablet ? 20 : 18,
+                              color: Colors.grey[600],
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          SizedBox(height: isTablet ? 8 : 6),
+                          Text(
+                            "Escribe un mensaje para comenzar",
+                            style: TextStyle(
+                              fontSize: isTablet ? 14 : 12,
+                              color: Colors.grey[500],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : Container(
+                    color: const Color(0xFFF5F7FA),
+                    child: ListView.builder(
+                      controller: _scrollController,
+                      padding: EdgeInsets.symmetric(
+                        vertical: isTablet ? 20 : 16,
+                        horizontal: isTablet ? 20 : 16,
+                      ),
+                      itemCount: _messages.length,
+                      itemBuilder: (context, index) {
+                        final message = _messages[index];
+                        final isUser = message["isUser"] as bool;
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            bottom: isTablet ? 16 : 12,
+                          ),
+                          child: Align(
+                            alignment: isUser
+                                ? Alignment.centerRight
+                                : Alignment.centerLeft,
+                            child: Container(
+                              constraints: BoxConstraints(
+                                maxWidth: isTablet
+                                    ? screenWidth * 0.6
+                                    : screenWidth * 0.75,
+                              ),
+                              padding: EdgeInsets.all(isTablet ? 16 : 12),
+                              decoration: BoxDecoration(
+                                color: isUser
+                                    ? const Color(0xFF2E91D8)
+                                    : Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: const Radius.circular(20),
+                                  topRight: const Radius.circular(20),
+                                  bottomLeft: isUser
+                                      ? const Radius.circular(20)
+                                      : const Radius.circular(4),
+                                  bottomRight: isUser
+                                      ? const Radius.circular(4)
+                                      : const Radius.circular(20),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.08),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Text(
+                                message["text"],
+                                style: TextStyle(
+                                  color: isUser ? Colors.white : Colors.black87,
+                                  fontSize: isTablet ? 16 : 14,
+                                  height: 1.4,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+          ),
+
+          // Caja de entrada
+          Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: isTablet ? 20 : 16,
+              vertical: isTablet ? 16 : 12,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 10,
+                  offset: const Offset(0, -2),
+                ),
+              ],
+            ),
+            child: SafeArea(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF5F7FA),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: TextField(
+                        controller: _controller,
+                        decoration: InputDecoration(
+                          hintText: "Escribe un mensaje...",
+                          hintStyle: TextStyle(
+                            color: Colors.grey[500],
+                            fontSize: isTablet ? 16 : 14,
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: isTablet ? 24 : 20,
+                            vertical: isTablet ? 16 : 12,
+                          ),
+                          border: InputBorder.none,
+                        ),
+                        style: TextStyle(
+                          fontSize: isTablet ? 16 : 14,
+                        ),
+                        maxLines: null,
+                        textInputAction: TextInputAction.send,
+                        onSubmitted: (_) => _sendMessage(),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: isTablet ? 12 : 8),
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: _sendMessage,
+                      borderRadius: BorderRadius.circular(30),
+                      child: Container(
+                        padding: EdgeInsets.all(isTablet ? 16 : 14),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color(0xFF2E91D8),
+                              Color(0xFF56AFEC),
+                            ],
+                          ),
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF2E91D8).withOpacity(0.3),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Icon(
+                          Icons.send_rounded,
+                          color: Colors.white,
+                          size: isTablet ? 28 : 24,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

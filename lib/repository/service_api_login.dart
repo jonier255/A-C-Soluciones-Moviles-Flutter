@@ -24,16 +24,24 @@ class APIService {
       final responseBody = jsonDecode(response.body);
 
       final storage = SecureStorageService();
-      await storage.saveToken(responseBody['token']);
-      await storage.saveAdminId(responseBody['administrador'].toString());
+      final token = responseBody['token'] as String?;
+      if (token != null) {
+        await storage.saveToken(token);
+      }
+      final administrador = responseBody['administrador'];
+      if (administrador != null) {
+        await storage.saveAdminId(administrador.toString());
+      }
 
       // Guardar datos del usuario
-      final user = responseBody['user'];
-      await storage.saveUserData({
-        'cliente_id': user['id'].toString(),
-        'user_name': user['nombre'],
-        'user_email': user['email'],
-      });
+      final user = responseBody['user'] as Map<String, dynamic>?;
+      if (user != null) {
+        await storage.saveUserData({
+          'cliente_id': (user['id'] ?? 0).toString(),
+          'user_name': (user['nombre'] ?? user['user_name'] ?? '').toString(),
+          'user_email': (user['correo_electronico'] ?? user['email'] ?? user['user_email'] ?? '').toString(),
+        });
+      }
 
       // Retornar el modelo de respuesta
       return loginResponseJson(response.body);
