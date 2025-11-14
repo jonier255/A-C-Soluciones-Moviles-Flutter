@@ -1,4 +1,4 @@
-import '../../model/request_model.dart';
+import '../../model/administrador/request_model.dart';
 
 abstract class RequestState {}
 
@@ -6,10 +6,12 @@ class RequestInitial extends RequestState {}
 
 class RequestLoading extends RequestState {}
 
-class RequestSuccess extends RequestState {
+class RequestLoaded extends RequestState {
   final List<Request> requests;
 
-  RequestSuccess(this.requests);
+  RequestLoaded(this.requests);
+
+  List<Object> get props => [requests];
 }
 
 class RequestError extends RequestState {
@@ -17,4 +19,3 @@ class RequestError extends RequestState {
 
   RequestError(this.message);
 }
-

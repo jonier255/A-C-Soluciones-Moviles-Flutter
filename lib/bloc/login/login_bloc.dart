@@ -22,16 +22,28 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         final response = await APIService.login(loginRequest);
 
         if (response.token != null) {
-          // Guardar el token en el almacenamiento seguro
           await _storageService.saveToken(response.token!);
 
           Map<String, dynamic> decodedToken =
               JwtDecoder.decode(response.token!);
-          // Asegúrate de que la clave del rol sea la correcta. Aquí asumimos 'rol'.
           final String role = decodedToken['rol'] ?? 'user';
 
           final String userName = decodedToken['nombre'] ?? 'Usuario';
           final String userEmail = decodedToken['email'] ?? '';
+
+          
+          try {
+            final existingAdminId = await _storageService.getAdminId();
+            if (existingAdminId == null) {
+              final possibleId = decodedToken['id'] ?? decodedToken['sub'] ?? decodedToken['user_id'] ?? decodedToken['admin_id'];
+              if (possibleId != null) {
+                final idStr = possibleId.toString();
+                if (idStr.isNotEmpty && idStr.toLowerCase() != 'null') {
+                  await _storageService.saveAdminId(idStr);
+                }
+              }
+            }
+          } catch (_) {}
 
           emit(LoginSuccess(
             token: response.token!,

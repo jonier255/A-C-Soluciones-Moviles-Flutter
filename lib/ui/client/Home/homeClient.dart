@@ -5,88 +5,276 @@ class ClientHomeContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(32),
-      child: Column(
-        children: [
-          Center(
-            child: Image.asset(
-              "assets/bannercompany-removebg-preview.png",
-              height: 200,
-              fit: BoxFit.contain,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'A & C Soluciones',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
+    final mediaQuery = MediaQuery.of(context);
+    final screenWidth = mediaQuery.size.width;
+    final screenHeight = mediaQuery.size.height;
+    final isTablet = screenWidth > 600;
+    final isDesktop = screenWidth > 1024;
+
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Container(
+        color: const Color(0xFFF5F7FA),
+        padding: EdgeInsets.symmetric(
+          horizontal: isTablet ? (isDesktop ? 48 : 32) : 20,
+          vertical: isTablet ? 32 : 24,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Banner de la empresa
+            Center(
+              child: Container(
+                padding: EdgeInsets.all(isTablet ? 24 : 16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.08),
+                      blurRadius: 20,
+                      offset: const Offset(0, 4),
                     ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.asset(
+                    "assets/bannercompany-removebg-preview.png",
+                    height: isTablet ? 250 : 180,
+                    fit: BoxFit.contain,
                   ),
-                  Text(
-                    'Reparaciones y Mantenimientos',
-                    style: TextStyle(
-                        color: const Color.fromARGB(255, 145, 103, 103)),
+                ),
+              ),
+            ),
+            SizedBox(height: isTablet ? 24 : 20),
+
+            // Información de la empresa
+            Container(
+              padding: EdgeInsets.all(isTablet ? 24 : 20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.08),
+                    blurRadius: 20,
+                    offset: const Offset(0, 4),
                   ),
                 ],
               ),
-              Row(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(Icons.star, color: Colors.red[500]),
-                  const SizedBox(width: 4),
-                  const Text('41'),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'A & C Soluciones',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: isTablet ? 24 : 20,
+                            color: const Color(0xFF2E91D8),
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          'Reparaciones y Mantenimientos',
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: isTablet ? 16 : 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.orange.shade50,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.star_rounded,
+                          color: Colors.orange[700],
+                          size: isTablet ? 24 : 20,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          '4.8',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: isTablet ? 18 : 16,
+                            color: Colors.orange[700],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
+              ),
+            ),
+
+            SizedBox(height: isTablet ? 24 : 20),
+
+            // Acciones rápidas
+            Container(
+              padding: EdgeInsets.all(isTablet ? 24 : 20),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    const Color(0xFF2E91D8).withOpacity(0.1),
+                    const Color(0xFF56AFEC).withOpacity(0.1),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: const Color(0xFF2E91D8).withOpacity(0.2),
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildActionButton(
+                    context: context,
+                    icon: Icons.call_rounded,
+                    label: 'Llamar',
+                    color: Colors.green,
+                    isTablet: isTablet,
+                  ),
+                  _buildActionButton(
+                    context: context,
+                    icon: Icons.shopping_cart_rounded,
+                    label: 'Servicios',
+                    color: const Color(0xFF2E91D8),
+                    isTablet: isTablet,
+                  ),
+                  _buildActionButton(
+                    context: context,
+                    icon: Icons.message_rounded,
+                    label: 'Chat',
+                    color: Colors.orange,
+                    isTablet: isTablet,
+                  ),
+                  _buildActionButton(
+                    context: context,
+                    icon: Icons.share_rounded,
+                    label: 'Compartir',
+                    color: Colors.purple,
+                    isTablet: isTablet,
+                  ),
+                ],
+              ),
+            ),
+
+            SizedBox(height: isTablet ? 24 : 20),
+
+            // Descripción
+            Container(
+              padding: EdgeInsets.all(isTablet ? 24 : 20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.08),
+                    blurRadius: 20,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.info_outline_rounded,
+                        color: const Color(0xFF2E91D8),
+                        size: isTablet ? 24 : 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Sobre Nosotros',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: isTablet ? 20 : 18,
+                          color: const Color(0xFF2E91D8),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: isTablet ? 16 : 12),
+                  Text(
+                    "Somos una empresa especializada en reparaciones y mantenimientos de alta calidad. Con años de experiencia en el sector, ofrecemos soluciones integrales para todas tus necesidades técnicas. Nuestro equipo de profesionales está comprometido con la excelencia y la satisfacción del cliente.",
+                    style: TextStyle(
+                      color: Colors.grey[700],
+                      height: 1.6,
+                      fontSize: isTablet ? 16 : 14,
+                    ),
+                    textAlign: TextAlign.justify,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionButton({
+    required BuildContext context,
+    required IconData icon,
+    required String label,
+    required Color color,
+    required bool isTablet,
+  }) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {},
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: EdgeInsets.all(isTablet ? 16 : 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: EdgeInsets.all(isTablet ? 14 : 12),
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Icon(
+                  icon,
+                  color: color,
+                  size: isTablet ? 28 : 24,
+                ),
+              ),
+              SizedBox(height: isTablet ? 8 : 6),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: isTablet ? 12 : 10,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey[700],
+                ),
               ),
             ],
           ),
-
-          // iconos de acciones
-          const SizedBox(height: 16),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.lightGreen[50],
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey,
-                  blurRadius: 2,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Icon(Icons.call, color: Colors.blue[400]),
-                Icon(Icons.shopping_cart, color: Colors.blue[400]),
-                Icon(Icons.message, color: Colors.blue[400]),
-                Icon(Icons.share, color: Colors.blue[400]),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 16),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 2),
-            child: Text(
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem",
-              style: TextStyle(
-                color: Colors.grey[600],
-                height: 1.5, // espaciado entre líneas (opcional)
-              ),
-              textAlign: TextAlign.justify, // para justificar el texto
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
