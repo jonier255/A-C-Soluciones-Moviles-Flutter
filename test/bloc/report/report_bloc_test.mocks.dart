@@ -7,6 +7,7 @@ import 'dart:async' as _i3;
 
 import 'package:flutter_a_c_soluciones/repository/report_repository.dart'
     as _i2;
+import 'package:image_picker/image_picker.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -30,6 +31,48 @@ class MockReportRepository extends _i1.Mock implements _i2.ReportRepository {
   MockReportRepository() {
     _i1.throwOnMissingStub(this);
   }
+
+  @override
+  _i3.Future<void> createMaintenanceSheet({
+    required int? visitId,
+    required String? introduccion,
+    required String? detallesServicio,
+    required String? observaciones,
+    required String? estadoAntes,
+    required String? descripcionTrabajo,
+    required String? materialesUtilizados,
+    required String? estadoFinal,
+    required String? tiempoDeTrabajo,
+    required String? recomendaciones,
+    required String? fechaDeMantenimiento,
+    _i4.XFile? fotoEstadoAntes,
+    _i4.XFile? fotoEstadoFinal,
+    _i4.XFile? fotoDescripcionTrabajo,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #createMaintenanceSheet,
+          [],
+          {
+            #visitId: visitId,
+            #introduccion: introduccion,
+            #detallesServicio: detallesServicio,
+            #observaciones: observaciones,
+            #estadoAntes: estadoAntes,
+            #descripcionTrabajo: descripcionTrabajo,
+            #materialesUtilizados: materialesUtilizados,
+            #estadoFinal: estadoFinal,
+            #tiempoDeTrabajo: tiempoDeTrabajo,
+            #recomendaciones: recomendaciones,
+            #fechaDeMantenimiento: fechaDeMantenimiento,
+            #fotoEstadoAntes: fotoEstadoAntes,
+            #fotoEstadoFinal: fotoEstadoFinal,
+            #fotoDescripcionTrabajo: fotoDescripcionTrabajo,
+          },
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
 
   @override
   _i3.Future<String?> getPdfPathForVisit(int? visitId) => (super.noSuchMethod(

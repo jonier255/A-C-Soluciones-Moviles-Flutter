@@ -1,4 +1,3 @@
-
 part of 'report_bloc.dart';
 
 abstract class ReportState extends Equatable {
@@ -10,20 +9,16 @@ abstract class ReportState extends Equatable {
 
 class ReportInitial extends ReportState {}
 
-class ReportLoading extends ReportState {}
+class ReportCreationLoading extends ReportState {}
 
-class ReportSuccess extends ReportState {
-  final List<VisitWithReport> reports;
-  const ReportSuccess(this.reports);
+class ReportCreationSuccess extends ReportState {}
 
-  @override
-  List<Object> get props => [reports];
-}
-
-class ReportFailure extends ReportState {
+class ReportCreationFailure extends ReportState {
   final String error;
-  const ReportFailure({required this.error});
+  final Map<String, String>? fieldErrors;
+
+  const ReportCreationFailure(this.error, {this.fieldErrors});
 
   @override
-  List<Object> get props => [error];
+  List<Object> get props => [error, fieldErrors ?? {}];
 }

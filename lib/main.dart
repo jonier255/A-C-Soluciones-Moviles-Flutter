@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          initialRoute: "/technical_home",
+          initialRoute: "/splash",
           routes: {
             "/splash": (context) => const SplashScreen(),
             "/login": (context) => const LoginScreen(),

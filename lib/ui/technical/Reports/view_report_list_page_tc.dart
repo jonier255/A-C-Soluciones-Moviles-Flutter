@@ -7,9 +7,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_file/open_file.dart';
 
-import '../../../../bloc/report/report_bloc.dart';
-import '../../../../repository/report_repository.dart';
-import '../../../../repository/secure_storage_service.dart';
+import 'package:flutter_a_c_soluciones/bloc/view_reports/view_reports_bloc.dart';
+import 'package:flutter_a_c_soluciones/repository/report_repository.dart';
+import 'package:flutter_a_c_soluciones/repository/secure_storage_service.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/widgets/bottom_nav_bar.dart';
 
 class ViewReportListPageTc extends StatelessWidget {
@@ -18,7 +18,7 @@ class ViewReportListPageTc extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ReportBloc(reportRepository: ReportRepository())..add(LoadReports()),
+      create: (context) => ViewReportsBloc(reportRepository: ReportRepository())..add(LoadViewReports()),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Mis Reportes', style: TextStyle(color: Colors.black)),
@@ -55,65 +55,50 @@ class _ReportListState extends State<_ReportList> {
     );
 
     try {
-      // 1. Check and request permission
       var storageStatus = await Permission.storage.request();
-
-      var mediaStatus = await Permission.accessMediaLocation.request();
-
-      if (!storageStatus.isGranted && !mediaStatus.isGranted) {
-        if (storageStatus.isPermanentlyDenied || mediaStatus.isPermanentlyDenied) {
-          // Show a dialog to open app settings
-          if (!mounted) return;
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Permiso Requerido'),
-              content: const Text(
-                  'El permiso de almacenamiento es necesario para descargar y guardar reportes. Por favor, habilite el permiso en la configuración de la aplicación.'),
-              actions: [
-                TextButton(
-                  child: const Text('Cancelar'),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-                TextButton(
-                  child: const Text('Abrir Configuración'),
-                  onPressed: () {
-                    openAppSettings();
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
-          );
-          return; // Stop further execution
-        }
-
-        // Show a snackbar explaining why the permission is needed
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-                'El permiso de almacenamiento es necesario para descargar reportes.'),
-          ),
-        );
-        return; // Stop further execution
+      if (!storageStatus.isGranted) {
+         if (storageStatus.isPermanentlyDenied) {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text('Permiso Requerido'),
+                content: const Text(
+                    'El permiso de almacenamiento es necesario para descargar y guardar reportes. Por favor, habilite el permiso en la configuración de la aplicación.'),
+                actions: [
+                  TextButton(
+                    child: const Text('Cancelar'),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                  TextButton(
+                    child: const Text('Abrir Configuración'),
+                    onPressed: () {
+                      openAppSettings();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            );
+         } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                    'El permiso de almacenamiento es necesario para descargar reportes.'),
+              ),
+            );
+         }
+         return;
       }
 
       final Directory appDir = await getApplicationDocumentsDirectory();
-
-      // Crear subcarpeta 'reportes' dentro del directorio interno
       final Directory safeDir = Directory('${appDir.path}/reportes');
       if (!(await safeDir.exists())) {
         await safeDir.create(recursive: true);
       }
 
-      // Extraer el nombre del archivo desde la ruta original
-      final String fileName = fullPdfPath.split(RegExp(r'[\\/]+')).last;
-
-      // Definir la ruta final donde se guardará
+      final String fileName = fullPdfPath.split(RegExp(r'[\/]+')).last;
       final String savePath = '${safeDir.path}/$fileName';
 
-      // 3. Download the file
       final _storageService = SecureStorageService();
       final token = await _storageService.getToken();
       if (token == null) {
@@ -127,7 +112,6 @@ class _ReportListState extends State<_ReportList> {
       );
 
       if (response.statusCode == 200) {
-        // 4. Save the file
         final File file = File(savePath);
         await file.writeAsBytes(response.bodyBytes);
 
@@ -143,8 +127,6 @@ class _ReportListState extends State<_ReportList> {
             ),
           ),
         );
-
-        // 5. Open the file
         await OpenFile.open(savePath);
       } else {
         throw Exception('Error al descargar el archivo: ${response.statusCode}');
@@ -166,13 +148,13 @@ class _ReportListState extends State<_ReportList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ReportBloc, ReportState>(
+    return BlocBuilder<ViewReportsBloc, ViewReportsState>(
       builder: (context, state) {
-        if (state is ReportLoading) {
+        if (state is ViewReportsLoading) {
           return const Center(child: CircularProgressIndicator());
-        } else if (state is ReportFailure) {
+        } else if (state is ViewReportsFailure) {
           return Center(child: Text('Error: ${state.error}'));
-        } else if (state is ReportSuccess) {
+        } else if (state is ViewReportsLoaded) {
           if (state.reports.isEmpty) {
             return const Center(child: Text('No hay reportes disponibles.'));
           }
@@ -188,7 +170,7 @@ class _ReportListState extends State<_ReportList> {
                 isLoading: isLoading,
                 onDownload: () {
                   const String apiKey = 'https://flutter-58c3.onrender.com';
-                  String relativePath = report.pdfPath.replaceFirst(RegExp(r'uploads[\\/]'), '');
+                  String relativePath = report.pdfPath.replaceFirst(RegExp(r'uploads[\/]'), '');
                   relativePath = relativePath.replaceAll(r'\', '/');
                   final String downloadUrl = '$apiKey/$relativePath';
                   _downloadAndOpenFile(downloadUrl, report.pdfPath, visit.id);
