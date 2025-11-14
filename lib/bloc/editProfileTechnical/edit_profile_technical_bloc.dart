@@ -39,9 +39,7 @@ class EditProfileTechnicalBloc extends Bloc<EditProfileTechnicalEvent, EditProfi
       emit(EditProfileTechnicalSuccess());
     } catch (e) {
       try {
-        // The repository throws Exception("...: ${response.body}")
         final message = e.toString();
-        // Find the first '{' which marks the beginning of the JSON object
         final jsonStartIndex = message.indexOf('{');
         if (jsonStartIndex != -1) {
           final jsonString = message.substring(jsonStartIndex);
@@ -58,7 +56,6 @@ class EditProfileTechnicalBloc extends Bloc<EditProfileTechnicalEvent, EditProfi
           emit(EditProfileTechnicalFailure(e.toString()));
         }
       } catch (_) {
-        // Fallback for any parsing errors or unexpected exception formats
         emit(EditProfileTechnicalFailure(e.toString()));
       }
     }
