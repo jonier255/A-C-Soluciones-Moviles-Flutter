@@ -33,7 +33,9 @@ class VisitsModel {
       notasPosteriores: json['notas_posteriores'] ?? '',
       fechaCreacion: DateTime.parse(json['fecha_creacion']),
       solicitudId: int.tryParse(json['solicitud_id_fk']?.toString() ?? '0') ?? 0,
-      tecnicoId: int.tryParse(json['tecnico_id_fk']?.toString() ?? '0') ?? 0,
+      tecnicoId: json['tecnico'] != null && json['tecnico']['id'] != null
+          ? int.tryParse(json['tecnico']['id'].toString()) ?? 0
+          : int.tryParse(json['tecnico_id_fk']?.toString() ?? '0') ?? 0,
       servicioId: int.tryParse(json['servicio_id_fk']?.toString() ?? '0') ?? 0,
     );
   }

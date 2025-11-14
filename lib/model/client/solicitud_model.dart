@@ -30,7 +30,7 @@ class Solicitud {
       descripcion: json['descripcion'] ?? '',
       comentarios: json['comentarios'] ?? '',
       tecnicoId: json['tecnico_id'],
-      clienteId: json['cliente_id'],
+      clienteId: json['cliente_id_fk'],
       servicioId: json['servicio_id'],
     );
   }
