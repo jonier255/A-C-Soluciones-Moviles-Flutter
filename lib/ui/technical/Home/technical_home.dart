@@ -13,24 +13,21 @@ class TechnicalHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => TaskBloc(TaskRepository())..add(FetchTasks()),
+      create: (context) => TaskBloc(taskRepository: TaskRepository())..add(LoadTasks()),
       child: Scaffold(
         backgroundColor: Colors.white,
         bottomNavigationBar: const BottomNavBar(),
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                _HeaderSection(),
-                SizedBox(height: 20),
-                _MainButtonsSection(),
-                SizedBox(height: 20),
-                _QuickAccessSection(),
-                SizedBox(height: 20),
-                _RecentTasksSection(), // Reemplaza solicitudes por tareas o mantenimientos
-              ],
-            ),
+          child: ListView(
+            children: const [
+              _HeaderSection(),
+              SizedBox(height: 20),
+              _MainButtonsSection(),
+              SizedBox(height: 20),
+              _QuickAccessSection(),
+              SizedBox(height: 20),
+              _RecentTasksSection(), // Reemplaza solicitudes por tareas o mantenimientos
+            ],
           ),
         ),
       ),
@@ -44,17 +41,20 @@ class _HeaderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04), // Responsive horizontal padding
       child: Column(
         children: [
           Center(
             child: Image.asset(
               "assets/soluciones.png",
-              height: 120,
+              height: screenHeight * 0.15, // Responsive height
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: screenHeight * 0.01), // Responsive height
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
@@ -77,7 +77,7 @@ class _HeaderSection extends StatelessWidget {
                 ),
                 filled: true,
                 fillColor: const Color(0xFFF0F2F5),
-                contentPadding: const EdgeInsets.symmetric(vertical: 8.0),
+                contentPadding: EdgeInsets.symmetric(vertical: screenHeight * 0.01), // Responsive vertical padding
               ),
             ),
           ),
@@ -93,8 +93,9 @@ class _MainButtonsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.005), // Responsive horizontal padding
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -124,9 +125,11 @@ class _MainButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Container(
-      width: 120,
-      height: 90,
+      width: screenWidth * 0.35, // Responsive width
+      height: screenHeight * 0.12, // Responsive height
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 17, 115, 196),
         borderRadius: BorderRadius.circular(22),
@@ -142,8 +145,8 @@ class _MainButton extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 50, color: Colors.white),
-          const SizedBox(height: 5),
+          Icon(icon, size: screenWidth * 0.12, color: Colors.white), // Responsive icon size
+          SizedBox(height: screenHeight * 0.005), // Responsive height
           Text(label,
               style: const TextStyle(
                   color: Colors.white, fontWeight: FontWeight.bold)),
@@ -159,19 +162,12 @@ class _QuickAccessSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04), // Responsive horizontal padding
       child: Row(
         children: [
-          Expanded(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, '/technical_assigned_visits');
-              },
-              child: const _QuickButton(icon: Icons.assignment, label: "Tareas"),
-            ),
-          ),
-          const SizedBox(width: 12),
+          SizedBox(width: screenWidth * 0.03), // Responsive width
           Expanded(
             child: GestureDetector(
               onTap: () {
@@ -181,7 +177,7 @@ class _QuickAccessSection extends StatelessWidget {
                   const _QuickButton(icon: Icons.miscellaneous_services, label: "Servicios"),
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: screenWidth * 0.03), // Responsive width
           Expanded(
             child: GestureDetector(
               onTap: () {
@@ -205,8 +201,10 @@ class _QuickButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 9),
+      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.015, horizontal: screenWidth * 0.02), // Responsive padding
       decoration: BoxDecoration(
         color: const Color(0xFFF0F2F5),
         borderRadius: BorderRadius.circular(12),
@@ -222,12 +220,12 @@ class _QuickButton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, color: Colors.black, size: 20),
-          const SizedBox(width: 8),
+          Icon(icon, color: Colors.black, size: screenWidth * 0.05), // Responsive icon size
+          SizedBox(width: screenWidth * 0.02), // Responsive width
           Flexible(
             child: Text(
               label,
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: screenWidth * 0.035, fontWeight: FontWeight.bold), // Responsive font size
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -242,15 +240,17 @@ class _RecentTasksSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(screenWidth * 0.04), // Responsive padding
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             "Tareas recientes",
             style: TextStyle(
-              fontSize: 20,
+              fontSize: screenWidth * 0.05, // Responsive font size
               fontWeight: FontWeight.bold,
               shadows: [
                 Shadow(
@@ -261,7 +261,7 @@ class _RecentTasksSection extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: screenHeight * 0.02), // Responsive height
           BlocBuilder<TaskBloc, TaskState>(
             builder: (context, state) {
               if (state is TaskLoading) {
@@ -275,7 +275,7 @@ class _RecentTasksSection extends StatelessWidget {
                 return Column(
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(10),
+                      padding: EdgeInsets.all(screenWidth * 0.025), // Responsive padding
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(30),
@@ -300,7 +300,7 @@ class _RecentTasksSection extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: screenHeight * 0.01), // Responsive height
                     Center(
                       child: TextButton(
                         onPressed: () {
@@ -309,7 +309,7 @@ class _RecentTasksSection extends StatelessWidget {
                         child: Text(
                           "Ver más...",
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: screenWidth * 0.04, // Responsive font size
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                             shadows: [
@@ -325,8 +325,8 @@ class _RecentTasksSection extends StatelessWidget {
                     ),
                   ],
                 );
-              } else if (state is TaskError) {
-                return Center(child: Text(state.message));
+              } else if (state is TaskFailure) {
+                return Center(child: Text(state.error));
               }
               return const Center(child: Text("Cargando tareas..."));
             },
@@ -345,39 +345,41 @@ class _TaskCard extends StatelessWidget {
   const _TaskCard({required this.task});
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Card(
       elevation: 6,
       color: Colors.white,
-      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      margin: EdgeInsets.symmetric(vertical: screenHeight * 0.01, horizontal: screenWidth * 0.04), // Responsive margin
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Padding(
-        padding: const EdgeInsets.all(14.0),
+        padding: EdgeInsets.all(screenWidth * 0.035), // Responsive padding
         child: Row(
           children: [
-            const Icon(Icons.handyman, size: 35, color: Colors.black),
-            const SizedBox(width: 16),
+            Icon(Icons.handyman, size: screenWidth * 0.09, color: Colors.black), // Responsive icon size
+            SizedBox(width: screenWidth * 0.04), // Responsive width
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(task.servicio.nombre,
-                      style: const TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 4),
+                      style: TextStyle(
+                          fontSize: screenWidth * 0.035, fontWeight: FontWeight.bold)), // Responsive font size
+                  SizedBox(height: screenHeight * 0.005), // Responsive height
                   Text(
                     task.servicio.descripcion.length > 50
                         ? '${task.servicio.descripcion.substring(0, 50)}...'
                         : task.servicio.descripcion,
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    style: TextStyle(fontSize: screenWidth * 0.03, color: Colors.grey), // Responsive font size
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: screenHeight * 0.005), // Responsive height
                   Text("Fecha: ${task.fechaProgramada.toString().substring(0, 10)}",
                       style:
-                          const TextStyle(fontSize: 12, color: Colors.grey)),
+                          TextStyle(fontSize: screenWidth * 0.03, color: Colors.grey)), // Responsive font size
                 ],
               ),
             ),
-            Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            Container(padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025, vertical: screenHeight * 0.008), // Responsive padding
               decoration: BoxDecoration(
                 color: task.estado == "completada"
                     ? Colors.green[100]
@@ -391,7 +393,7 @@ class _TaskCard extends StatelessWidget {
                       ? Colors.green[800]
                       : Colors.orange[800],
                   fontWeight: FontWeight.bold,
-                  fontSize: 12,
+                  fontSize: screenWidth * 0.03, // Responsive font size
                 ),
               ),
             )

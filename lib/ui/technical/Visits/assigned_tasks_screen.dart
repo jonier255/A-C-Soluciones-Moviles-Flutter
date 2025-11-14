@@ -8,8 +8,8 @@ import 'package:flutter_a_c_soluciones/repository/task_repository.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/Visits/visits_details_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/widgets/bottom_nav_bar.dart';
 
-class AssignedVisitsScreen extends StatelessWidget {
-  const AssignedVisitsScreen({super.key});
+class AssignedTasksScreen extends StatelessWidget {
+  const AssignedTasksScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class AssignedVisitsScreen extends StatelessWidget {
       create: (context) => TaskBloc(taskRepository: TaskRepository())..add(LoadTasks()),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Visitas Asignadas'),
+          title: const Text('Tareas Asignadas'),
         ),
         bottomNavigationBar: const BottomNavBar(),
         body: BlocBuilder<TaskBloc, TaskState>(
@@ -27,7 +27,7 @@ class AssignedVisitsScreen extends StatelessWidget {
             }
             if (state is TaskSuccess) {
               if (state.tasks.isEmpty) {
-                return const Center(child: Text("No hay visitas asignadas."));
+                return const Center(child: Text("No hay tareas asignadas."));
               }
               return ListView.builder(
                 itemCount: state.tasks.length,

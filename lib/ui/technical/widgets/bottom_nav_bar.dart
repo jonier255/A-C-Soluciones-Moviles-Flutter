@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/Profile/accountTechnical.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     final currentRoute = ModalRoute.of(context)!.settings.name;
 
     int currentIndex = 0;
@@ -12,7 +14,7 @@ class BottomNavBar extends StatelessWidget {
       currentIndex = 1;
     } else if (currentRoute == '/technical_services') {
       currentIndex = 2;
-    } else if (currentRoute == '/technical_reports') {
+    } else if (currentRoute == '/technical_profile') {
       currentIndex = 3;
     }
 
@@ -30,19 +32,26 @@ class BottomNavBar extends StatelessWidget {
             Navigator.pushReplacementNamed(context, '/technical_services');
             break;
           case 3:
-            Navigator.pushReplacementNamed(context, '/technical_reports');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AccountTechnicalScreen(),
+              ),
+            );
             break;
         }
       },
       selectedItemColor: const Color.fromARGB(255, 46, 145, 216),
       unselectedItemColor: Colors.black,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
+      selectedLabelStyle: TextStyle(fontSize: screenWidth * 0.03),
+      unselectedLabelStyle: TextStyle(fontSize: screenWidth * 0.028),
+      items: [
+        BottomNavigationBarItem(icon: Icon(Icons.home, size: screenWidth * 0.06), label: 'Inicio'),
         BottomNavigationBarItem(
-            icon: Icon(Icons.work_outline), label: 'Asignadas'),
+            icon: Icon(Icons.work_outline, size: screenWidth * 0.06), label: 'Asignadas'),
         BottomNavigationBarItem(
-            icon: Icon(Icons.miscellaneous_services), label: 'Servicios'),
-        BottomNavigationBarItem(icon: Icon(Icons.description), label: 'Reportes'),
+            icon: Icon(Icons.miscellaneous_services, size: screenWidth * 0.06), label: 'Servicios'),
+        BottomNavigationBarItem(icon: Icon(Icons.person, size: screenWidth * 0.06), label: 'Cuenta'),
       ],
     );
   }

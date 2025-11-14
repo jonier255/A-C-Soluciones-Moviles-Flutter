@@ -7,6 +7,8 @@ class ServiceDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     // Determine the main theme color for the shadow/accents
     const Color cardShadowColor = Color.fromRGBO(0, 123, 255, 0.4); // Semi-transparent blue
     const Color accentBlue = Color(0xFF007BFF); // For button/text
@@ -18,10 +20,10 @@ class ServiceDetailScreen extends StatelessWidget {
          
           Padding(
             padding: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top + 10,
-              left: 10,
-              right: 15,
-              bottom: 10,
+              top: MediaQuery.of(context).padding.top + screenHeight * 0.012,
+              left: screenWidth * 0.025,
+              right: screenWidth * 0.037,
+              bottom: screenHeight * 0.012,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -34,18 +36,18 @@ class ServiceDetailScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: accentBlue,
                     foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.037, vertical: screenHeight * 0.01),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
+                      borderRadius: BorderRadius.circular(screenWidth * 0.012),
                     ),
                   ),
-                  child: const Text('Volver'),
+                  child: Text('Volver', style: TextStyle(fontSize: screenWidth * 0.035)),
                 ),
                 // Company Logo
                /** */
-                const Text(
+                Text(
                   'A&C LOGO', // Placeholder for the actual image
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
+                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue, fontSize: screenWidth * 0.04),
                 ),
                 // Image.asset('assets/logo.png', height: 30), // Actual logo line
               ],
@@ -53,12 +55,12 @@ class ServiceDetailScreen extends StatelessWidget {
           ),
 
           
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 20),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: screenHeight * 0.025),
             child: Text(
               'Informacion del servicio',
               style: TextStyle(
-                fontSize: 22,
+                fontSize: screenWidth * 0.055,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -67,11 +69,11 @@ class ServiceDetailScreen extends StatelessWidget {
           
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(screenWidth * 0.037),
                   boxShadow: [
                     BoxShadow(
                       color: cardShadowColor,
@@ -81,7 +83,7 @@ class ServiceDetailScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                padding: const EdgeInsets.all(25.0),
+                padding: EdgeInsets.all(screenWidth * 0.06),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -89,64 +91,70 @@ class ServiceDetailScreen extends StatelessWidget {
                       // Service Icon
                       Center(
                         child: Container(
-                          padding: const EdgeInsets.all(15),
+                          padding: EdgeInsets.all(screenWidth * 0.037),
                           decoration: BoxDecoration(
                             color: const Color(0xFFB3E5FC), // Light blue background for the icon
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(screenWidth * 0.025),
                           ),
                           // **Replace with your custom icon image**
-                          child: const Icon(
+                          child: Icon(
                             Icons.handyman,
-                            size: 50,
+                            size: screenWidth * 0.12,
                             color: accentBlue,
                           ),
                           
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: screenHeight * 0.025),
 
                       // Main Service Summary
-                      const Text(
+                      Text(
                         'Suministro, instalacion y mantenimiento a brazos hidraulicos',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: screenWidth * 0.045,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const SizedBox(height: 15),
-                      const Divider(height: 1, thickness: 1, color: Colors.grey),
-                      const SizedBox(height: 25),
+                      SizedBox(height: screenHeight * 0.018),
+                      Divider(height: screenHeight * 0.001, thickness: 1, color: Colors.grey),
+                      SizedBox(height: screenHeight * 0.03),
 
                       
-                      const Text(
+                      Text(
                         'Informacion',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: screenWidth * 0.04,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 15),
+                      SizedBox(height: screenHeight * 0.018),
 
                       
                       _buildDetailRow(
                         label: 'Nombre servicio:',
                         value: 'Suministro, instalacion y mantenimiento a brazos hidraulicos',
+                        screenWidth: screenWidth,
+                        screenHeight: screenHeight,
                       ),
-                      const SizedBox(height: 25),
+                      SizedBox(height: screenHeight * 0.03),
 
                       
                       _buildDetailRow(
                         label: 'Descripcion:',
                         value: 'Mantenimiento e instalacion',
+                        screenWidth: screenWidth,
+                        screenHeight: screenHeight,
                       ),
-                      const SizedBox(height: 25),
+                      SizedBox(height: screenHeight * 0.03),
 
                       
                       _buildDetailRow(
                         label: 'Fecha de creacion:',
                         value: '30 de junio de 2025, 21:22',
                         isLast: true, // Apply bottom line
+                        screenWidth: screenWidth,
+                        screenHeight: screenHeight,
                       ),
                     ],
                   ),
@@ -154,7 +162,7 @@ class ServiceDetailScreen extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 20), // Spacer before bottom nav
+          SizedBox(height: screenHeight * 0.025), // Spacer before bottom nav
         ],
       ),
 
@@ -192,28 +200,30 @@ class ServiceDetailScreen extends StatelessWidget {
     required String label,
     required String value,
     bool isLast = false,
+    required double screenWidth,
+    required double screenHeight,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 14,
+            fontSize: screenWidth * 0.038,
           ),
         ),
-        const SizedBox(height: 5),
+        SizedBox(height: screenHeight * 0.006),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 14,
+          style: TextStyle(
+            fontSize: screenWidth * 0.038,
           ),
         ),
-        const SizedBox(height: 5),
+        SizedBox(height: screenHeight * 0.006),
        
         Container(
-          height: 1,
+          height: screenHeight * 0.0012,
           color: Colors.grey[300],
         ),
       ],
