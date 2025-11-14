@@ -244,8 +244,7 @@ class _AssignVisitsViewState extends State<AssignVisitsView> {
       prefixIcon: icon != null ? Icon(icon, color: accentBlue) : null,
       labelText: label,
       labelStyle: const TextStyle(color: Colors.black),
-      // Decoration inside a white, elevated container. Remove internal borders
-      // so the outer container provides the visual "relief" (white) and shadow (black).
+      
       border: InputBorder.none,
       focusedBorder: InputBorder.none,
       enabledBorder: InputBorder.none,

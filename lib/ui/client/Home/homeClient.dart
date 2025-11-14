@@ -49,7 +49,7 @@ class ClientHomeContent extends StatelessWidget {
             ),
             SizedBox(height: isTablet ? 24 : 20),
 
-            // Información de la empresa
+            // Informacion de la empresa
             Container(
               padding: EdgeInsets.all(isTablet ? 24 : 20),
               decoration: BoxDecoration(
@@ -125,7 +125,6 @@ class ClientHomeContent extends StatelessWidget {
 
             SizedBox(height: isTablet ? 24 : 20),
 
-            // Acciones rápidas
             Container(
               padding: EdgeInsets.all(isTablet ? 24 : 20),
               decoration: BoxDecoration(
@@ -180,7 +179,7 @@ class ClientHomeContent extends StatelessWidget {
 
             SizedBox(height: isTablet ? 24 : 20),
 
-            // Descripción
+            // Descripcion
             Container(
               padding: EdgeInsets.all(isTablet ? 24 : 20),
               decoration: BoxDecoration(

@@ -195,7 +195,6 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
                   icon: Icon(Icons.cancel, color: Colors.grey[600]),
                   label: Text('Cancelar', style: TextStyle(color: Colors.grey[600])),
                   onPressed: () {
-                    // Reset the BLoC state by reloading the profile before popping.
                     context.read<EditProfileTechnicalBloc>().add(LoadTechnicalProfile());
                     Navigator.pop(context);
                   },
