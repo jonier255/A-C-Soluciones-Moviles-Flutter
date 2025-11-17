@@ -16,40 +16,107 @@ class RequestScreenHeader extends StatelessWidget {
 
     return Stack(
       children: [
-        ClipPath(
-          clipper: WaveClipper(),
-          child: Container(
-            height: topCurveHeight,
-            color: RequestScreenTheme.primaryBlue,
+        // Gradient background with decorative circles
+        Container(
+          height: topCurveHeight,
+          decoration: const BoxDecoration(
+            gradient: RequestScreenTheme.primaryGradient,
           ),
-        ),
-        Positioned(
-          top: titleTop,
-          left: titleSidePadding,
-          right: titleSidePadding,
           child: Stack(
-            alignment: Alignment.center,
             children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                    size: backButtonSize,
+              Positioned(
+                top: -50,
+                right: -30,
+                child: Container(
+                  width: 150,
+                  height: 150,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withOpacity(0.1),
                   ),
-                  onPressed: () => Navigator.pop(context),
                 ),
               ),
-              Center(
-                child: Text(
-                  'Lista de Solicitudes',
-                  style: RequestScreenTheme.headerTitleStyle.copyWith(
-                    fontSize: titleFontSize,
+              Positioned(
+                bottom: 20,
+                left: -40,
+                child: Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withOpacity(0.08),
                   ),
                 ),
               ),
             ],
+          ),
+        ),
+        // Wave clip path
+        ClipPath(
+          clipper: WaveClipper(),
+          child: Container(
+            height: topCurveHeight,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  RequestScreenTheme.primaryGradientStart.withOpacity(0.9),
+                  RequestScreenTheme.primaryGradientEnd.withOpacity(0.9),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+          ),
+        ),
+        // Title and back button
+        Positioned(
+          top: titleTop,
+          left: titleSidePadding,
+          right: titleSidePadding,
+          child: SafeArea(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        color: Colors.white,
+                        size: backButtonSize,
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Column(
+                    children: [
+                      Text(
+                        'Lista de Solicitudes',
+                        style: RequestScreenTheme.headerTitleStyle.copyWith(
+                          fontSize: titleFontSize,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        width: 40,
+                        height: 3,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.6),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],

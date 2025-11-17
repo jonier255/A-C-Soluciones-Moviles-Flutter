@@ -5,6 +5,7 @@ import '../../../bloc/request/request_event.dart';
 import 'widgets/request_header.dart';
 import 'widgets/request_list_content.dart';
 import 'widgets/request_bottom_nav.dart';
+import 'widgets/request_screen_constants.dart';
 
 /// Request screen - displays list of service requests with pagination
 class RequestScreen extends StatefulWidget {
@@ -24,6 +25,7 @@ class _RequestScreenState extends State<RequestScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: RequestScreenTheme.backgroundColor,
       bottomNavigationBar: const RequestBottomNavBar(),
       body: Stack(
         children: const [

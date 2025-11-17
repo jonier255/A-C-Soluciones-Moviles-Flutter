@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../Home/admin_home.dart';
-import 'request_screen_constants.dart';
+import '../../request/request_screen.dart';
+import '../../../../bloc/request/request_bloc.dart';
+import '../../../../repository/services_admin/request_repository.dart';
 
-/// Bottom navigation bar for request screen
-class RequestBottomNavBar extends StatelessWidget {
-  const RequestBottomNavBar({super.key});
+/// Barra de navegación inferior para la pantalla de lista de administradores
+class AdminListBottomNavBar extends StatelessWidget {
+  const AdminListBottomNavBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -21,14 +23,13 @@ class RequestBottomNavBar extends StatelessWidget {
       ),
       child: BottomNavigationBar(
         onTap: (index) => _handleNavigation(context, index),
-        selectedItemColor: RequestScreenTheme.primaryGradientEnd,
-        unselectedItemColor: const Color(0xFF95A5A6),
-        currentIndex: 2,
         type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.white,
+        selectedItemColor: const Color(0xFF00D2A0),
+        unselectedItemColor: const Color(0xFF95A5A6),
+        selectedFontSize: 12,
+        unselectedFontSize: 11,
         elevation: 0,
-        backgroundColor: Colors.transparent,
-        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
-        unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_rounded),
@@ -56,6 +57,16 @@ class RequestBottomNavBar extends StatelessWidget {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const AdminHomeScreen()),
+      );
+    } else if (index == 2) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => RequestBloc(RequestRepository()),
+            child: const RequestScreen(),
+          ),
+        ),
       );
     }
   }

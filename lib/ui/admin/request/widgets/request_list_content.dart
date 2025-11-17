@@ -82,10 +82,12 @@ class _RequestListContentState extends State<RequestListContent> {
   }
 
   Widget _buildRequestsContainer(List requests, Size size) {
-    final containerMarginHorizontal = RequestScreenTheme.containerMarginHorizontal(size.width);
-    final containerMarginVertical = RequestScreenTheme.containerMarginVertical(size.height);
-    final containerInnerPadding = RequestScreenTheme.containerInnerPadding(size.width);
-    final listPadding = RequestScreenTheme.listPadding(size.width);
+    final sw = size.width;
+    final sh = size.height;
+    final containerMarginHorizontal = sw * 0.04;
+    final containerMarginVertical = sh * 0.015;
+    final containerInnerPadding = sw * 0.03;
+    final listPadding = sw * 0.02;
 
     return Container(
       margin: EdgeInsets.symmetric(
@@ -99,20 +101,53 @@ class _RequestListContentState extends State<RequestListContent> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(RequestScreenTheme.containerRadius),
         boxShadow: RequestScreenTheme.containerShadow(),
-        color: RequestScreenTheme.backgroundColor,
+        color: RequestScreenTheme.cardBackground,
       ),
       child: requests.isNotEmpty
           ? ListView.builder(
               padding: EdgeInsets.all(listPadding),
               itemCount: requests.length,
               itemBuilder: (context, index) {
-                return RequestCard(request: requests[index]);
+                return TweenAnimationBuilder(
+                  duration: Duration(milliseconds: 300 + (index * 100)),
+                  tween: Tween<double>(begin: 0, end: 1),
+                  curve: Curves.easeOutCubic,
+                  builder: (context, double value, child) {
+                    return Transform.translate(
+                      offset: Offset(0, 20 * (1 - value)),
+                      child: Opacity(
+                        opacity: value,
+                        child: child,
+                      ),
+                    );
+                  },
+                  child: RequestCard(request: requests[index]),
+                );
               },
             )
           : Center(
-              child: Text(
-                "No hay solicitudes registradas",
-                style: RequestScreenTheme.emptyMessageStyle,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(sw * 0.08),
+                    decoration: BoxDecoration(
+                      gradient: RequestScreenTheme.accentGradient,
+                      shape: BoxShape.circle,
+                      boxShadow: RequestScreenTheme.iconShadow(),
+                    ),
+                    child: Icon(
+                      Icons.inbox_rounded,
+                      size: sw * 0.15,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: sh * 0.025),
+                  Text(
+                    "No hay solicitudes registradas",
+                    style: RequestScreenTheme.emptyMessageStyle,
+                  ),
+                ],
               ),
             ),
     );

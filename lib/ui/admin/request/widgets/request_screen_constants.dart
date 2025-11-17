@@ -2,11 +2,35 @@ import 'package:flutter/material.dart';
 
 /// Constants and theme configuration for Request Screen
 class RequestScreenTheme {
-  // Colors
-  static const Color primaryBlue = Color.fromARGB(255, 46, 145, 216);
-  static const Color purpleAccent = Color.fromARGB(255, 179, 46, 241);
-  static const Color lightBlue = Color.fromARGB(255, 156, 204, 243);
-  static const Color backgroundColor = Colors.white;
+  // Modern color palette
+  static const Color primaryGradientStart = Color(0xFF667eea);
+  static const Color primaryGradientEnd = Color(0xFF764ba2);
+  static const Color accentGradientStart = Color(0xFFf093fb);
+  static const Color accentGradientEnd = Color(0xFF4facfe);
+  static const Color cardGradientStart = Color(0xFFffecd2);
+  static const Color cardGradientEnd = Color(0xFFfcb69f);
+  static const Color successColor = Color(0xFF00d2a0);
+  static const Color backgroundColor = Color(0xFFF8F9FA);
+  static const Color cardBackground = Colors.white;
+  
+  // Gradients
+  static const LinearGradient primaryGradient = LinearGradient(
+    colors: [primaryGradientStart, primaryGradientEnd],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+  
+  static const LinearGradient accentGradient = LinearGradient(
+    colors: [accentGradientStart, accentGradientEnd],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+  
+  static const LinearGradient cardIconGradient = LinearGradient(
+    colors: [cardGradientStart, cardGradientEnd],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
 
   // Responsive sizing functions
   static double topCurveHeight(double height) => height * 0.225;
@@ -52,10 +76,21 @@ class RequestScreenTheme {
   static List<BoxShadow> containerShadow() {
     return [
       BoxShadow(
-        color: purpleAccent.withOpacity(0.9),
-        spreadRadius: 4,
-        blurRadius: 8,
-        offset: const Offset(0, 3),
+        color: primaryGradientEnd.withOpacity(0.3),
+        spreadRadius: 0,
+        blurRadius: 20,
+        offset: const Offset(0, 8),
+      ),
+    ];
+  }
+
+  static List<BoxShadow> cardShadow() {
+    return [
+      BoxShadow(
+        color: Colors.black.withOpacity(0.08),
+        spreadRadius: 0,
+        blurRadius: 15,
+        offset: const Offset(0, 4),
       ),
     ];
   }
@@ -63,10 +98,21 @@ class RequestScreenTheme {
   static List<BoxShadow> iconShadow() {
     return [
       BoxShadow(
-        color: Colors.black.withOpacity(0.3),
-        spreadRadius: 2,
-        blurRadius: 5,
-        offset: const Offset(0, 3),
+        color: accentGradientEnd.withOpacity(0.3),
+        spreadRadius: 0,
+        blurRadius: 12,
+        offset: const Offset(0, 4),
+      ),
+    ];
+  }
+  
+  static List<BoxShadow> buttonShadow() {
+    return [
+      BoxShadow(
+        color: primaryGradientStart.withOpacity(0.4),
+        spreadRadius: 0,
+        blurRadius: 10,
+        offset: const Offset(0, 5),
       ),
     ];
   }
@@ -75,20 +121,30 @@ class RequestScreenTheme {
   static const TextStyle headerTitleStyle = TextStyle(
     color: Colors.white,
     fontWeight: FontWeight.bold,
+    letterSpacing: 0.5,
   );
 
   static const TextStyle labelStyle = TextStyle(
-    fontWeight: FontWeight.bold,
-    color: Colors.black,
+    fontWeight: FontWeight.w600,
+    color: Color(0xFF6C757D),
+    fontSize: 13,
   );
 
   static const TextStyle valueStyle = TextStyle(
-    fontWeight: FontWeight.normal,
-    color: Colors.black,
+    fontWeight: FontWeight.w500,
+    color: Color(0xFF2D3436),
+    fontSize: 14,
   );
 
   static const TextStyle emptyMessageStyle = TextStyle(
     fontSize: 16,
-    color: Colors.grey,
+    color: Color(0xFF95A5A6),
+    fontWeight: FontWeight.w500,
+  );
+  
+  static const TextStyle cardTitleStyle = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+    color: Color(0xFF2D3436),
   );
 }
