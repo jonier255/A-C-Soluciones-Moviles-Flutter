@@ -14,13 +14,13 @@ class AdminListHeader extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF00D2A0), Color(0xFF00B894)],
+          colors: [Color.fromARGB(255, 18, 39, 230), Color.fromARGB(255, 18, 39, 230)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF00D2A0).withOpacity(0.3),
+            color: const Color.fromARGB(255, 18, 39, 230).withOpacity(0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -86,7 +86,7 @@ class AdminListHeader extends StatelessWidget {
         height: 30,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF00D2A0), Color(0xFF00B894)],
+            colors: [Color.fromARGB(255, 18, 39, 230), Color.fromARGB(255, 18, 39, 230)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),

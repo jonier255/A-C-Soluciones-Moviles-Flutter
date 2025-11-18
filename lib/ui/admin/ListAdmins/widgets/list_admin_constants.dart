@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 class AdminListTheme {
   // Colors
   static const Color primaryBlue = Color.fromARGB(255, 46, 145, 216);
-  static const Color greenAccent = Color.fromARGB(255, 55, 214, 23);
-  static const Color lightBlue = Color.fromARGB(255, 156, 204, 243);
+  static const Color greenAccent = Color.fromARGB(255, 34, 47, 233);
+  static const Color lightBlue = Color.fromARGB(255, 89, 171, 238);
   static const Color backgroundColor = Colors.white;
 
   // Header

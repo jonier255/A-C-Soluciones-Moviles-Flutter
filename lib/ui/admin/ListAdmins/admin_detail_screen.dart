@@ -35,7 +35,7 @@ class AdminDetailScreen extends StatelessWidget {
       width: double.infinity,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xFF00D2A0), Color(0xFF00B894)],
+          colors: [Color.fromARGB(255, 17, 28, 182), Color.fromARGB(255, 17, 28, 182)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -120,9 +120,9 @@ class AdminDetailScreen extends StatelessWidget {
               height: avatarSize,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: const LinearGradient(colors: [Color(0xFF00D2A0), Color(0xFF00B894)]),
+                gradient: const LinearGradient(colors: [Color.fromARGB(255, 20, 39, 212), Color.fromARGB(255, 17, 28, 182)]),
                 boxShadow: [
-                  BoxShadow(color: const Color(0xFF00D2A0).withOpacity(0.4), blurRadius: 25, offset: const Offset(0, 12), spreadRadius: 2),
+                  BoxShadow(color: const Color.fromARGB(255, 20, 39, 212).withOpacity(0.4), blurRadius: 25, offset: const Offset(0, 12), spreadRadius: 2),
                   BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 15, offset: const Offset(0, 8)),
                 ],
                 border: Border.all(color: Colors.white, width: 5),
@@ -239,7 +239,7 @@ class AdminDetailScreen extends StatelessWidget {
         child: Container(
           height: buttonHeight,
           decoration: BoxDecoration(
-            gradient: isOutlined ? null : const LinearGradient(colors: [Color(0xFF00D2A0), Color(0xFF00B894)]),
+            gradient: isOutlined ? null : const LinearGradient(colors: [Color.fromARGB(255, 39, 77, 202), Color.fromARGB(255, 39, 77, 202)]),
             color: isOutlined ? Colors.white : null,
             border: isOutlined ? Border.all(color: const Color(0xFFE74C3C), width: 2) : null,
             borderRadius: BorderRadius.circular(16),

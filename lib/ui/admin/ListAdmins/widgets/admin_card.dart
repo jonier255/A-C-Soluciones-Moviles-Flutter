@@ -78,14 +78,14 @@ class AdminCard extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF00D2A0), Color(0xFF00B894)],
+          colors: [Color.fromARGB(255, 24, 48, 189), Color(0xFF00B894)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF00D2A0).withOpacity(0.3),
+            color: const Color.fromARGB(255, 22, 25, 192).withOpacity(0.3),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -157,7 +157,7 @@ class AdminCard extends StatelessWidget {
       child: const Icon(
         Icons.arrow_forward_ios_rounded,
         size: 16,
-        color: Color(0xFF00D2A0),
+        color: Color.fromARGB(255, 27, 44, 201),
       ),
     );
   }

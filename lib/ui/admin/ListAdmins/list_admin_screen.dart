@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../bloc/listAdmins/admins_event.dart';
 import '../../../../bloc/listAdmins/admins_bloc.dart';
 import 'widgets/admin_list_header.dart';
-import 'widgets/admin_list_content.dart';
+import 'widgets/widgets_seleccion_admin/admin_list_content.dart';
 import 'widgets/admin_list_bottom_nav.dart';
 
 /// Pantalla de administradores - muestra lista de administradores con paginación

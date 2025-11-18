@@ -1,32 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../Home/admin_home.dart';
-import '../../request/request_screen.dart';
-import '../../../../bloc/request/request_bloc.dart';
-import '../../../../repository/services_admin/request_repository.dart';
+import 'package:flutter_a_c_soluciones/bloc/request/request_bloc.dart';
+import 'package:flutter_a_c_soluciones/repository/services_admin/request_repository.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
+import 'admin_menu_constants.dart';
 
-/// Barra de navegación inferior para la pantalla de lista de administradores
-class AdminListBottomNavBar extends StatelessWidget {
-  const AdminListBottomNavBar({super.key});
+/// Barra de navegación inferior del menú de administradores
+class AdminMenuBottomNav extends StatelessWidget {
+  const AdminMenuBottomNav({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 20,
-            offset: const Offset(0, -5),
-          ),
-        ],
+        boxShadow: AdminMenuTheme.navBarShadow(),
       ),
       child: BottomNavigationBar(
         onTap: (index) => _handleNavigation(context, index),
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
-        selectedItemColor: const Color.fromARGB(255, 23, 27, 221),
-        unselectedItemColor: const Color(0xFF95A5A6),
+        selectedItemColor: AdminMenuTheme.selectedNavColor,
+        unselectedItemColor: AdminMenuTheme.unselectedNavColor,
         selectedFontSize: 12,
         unselectedFontSize: 11,
         elevation: 0,
@@ -52,19 +46,15 @@ class AdminListBottomNavBar extends StatelessWidget {
     );
   }
 
+  /// Maneja la navegación según el índice seleccionado
   void _handleNavigation(BuildContext context, int index) {
-    if (index == 0) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const AdminHomeScreen()),
-      );
-    } else if (index == 2) {
+    if (index == 2) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => RequestBloc(RequestRepository()),
-            child: const RequestScreen(),
+            child: RequestScreen(),
           ),
         ),
       );

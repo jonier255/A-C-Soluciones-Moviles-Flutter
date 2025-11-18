@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 class VisitsMenuTheme {
   // Paleta de colores moderna
   static const Color primaryGradientStart = Color(0xFF667eea);
-  static const Color primaryGradientEnd = Color(0xFF764ba2);
-  static const Color accentGradientStart = Color(0xFFf093fb);
+  static const Color primaryGradientEnd = Color.fromARGB(255, 60, 50, 202);
+  static const Color accentGradientStart = Color.fromARGB(255, 7, 76, 224);
   static const Color accentGradientEnd = Color(0xFF4facfe);
   static const Color backgroundColor = Color(0xFFF8F9FA);
-  static const Color selectedNavColor = Color(0xFF764ba2);
+  static const Color selectedNavColor = Color.fromARGB(255, 42, 70, 231);
   static const Color unselectedNavColor = Color(0xFF95A5A6);
   
   // Gradientes predefinidos
   static const LinearGradient primaryGradient = LinearGradient(
-    colors: [primaryGradientStart, primaryGradientEnd],
+    colors: [primaryGradientStart, Color.fromARGB(255, 42, 54, 235)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -84,13 +84,13 @@ class VisitsMenuOptions {
     title: "Asignar Visitas",
     subtitle: "Crear y programar nuevas visitas",
     icon: Icons.add_task_rounded,
-    gradientColors: [Color(0xFFf093fb), Color(0xFF4facfe)],
+    gradientColors: [Color.fromARGB(255, 98, 69, 179), Color(0xFF4facfe)],
   );
   
   static const MenuOption listVisits = MenuOption(
     title: "Lista de Visitas",
     subtitle: "Ver y gestionar todas las visitas",
     icon: Icons.event_note_rounded,
-    gradientColors: [Color(0xFF667eea), Color(0xFF764ba2)],
+    gradientColors: [Color.fromARGB(255, 57, 85, 209), Color.fromARGB(255, 13, 57, 199)],
   );
 }

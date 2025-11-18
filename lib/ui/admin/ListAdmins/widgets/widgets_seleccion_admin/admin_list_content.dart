@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../bloc/listAdmins/admins_bloc.dart';
-import '../../../../bloc/listAdmins/admins_state.dart';
-import 'admin_card.dart';
-import 'admin_pagination.dart';
-import 'list_admin_constants.dart';
+import '../../../../../bloc/listAdmins/admins_bloc.dart';
+import '../../../../../bloc/listAdmins/admins_state.dart';
+import '../admin_card.dart';
+import '../admin_pagination.dart';
+import '../list_admin_constants.dart';
 
 /// Área de contenido principal con la lista de administradores y paginación
 class AdminListContent extends StatefulWidget {
@@ -30,7 +30,7 @@ class _AdminListContentState extends State<AdminListContent> {
                 if (state is AdminsLoading) {
                   return const Center(
                     child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF00D2A0)),
+                      valueColor: AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 18, 57, 230)),
                     ),
                   );
                 } else if (state is AdminsSuccess) {

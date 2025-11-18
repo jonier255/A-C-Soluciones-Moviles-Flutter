@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 /// Constants and theme configuration for Request Screen
 class RequestScreenTheme {
   // Modern color palette
-  static const Color primaryGradientStart = Color(0xFF667eea);
-  static const Color primaryGradientEnd = Color(0xFF764ba2);
-  static const Color accentGradientStart = Color(0xFFf093fb);
-  static const Color accentGradientEnd = Color(0xFF4facfe);
-  static const Color cardGradientStart = Color(0xFFffecd2);
-  static const Color cardGradientEnd = Color(0xFFfcb69f);
-  static const Color successColor = Color(0xFF00d2a0);
+  static const Color primaryGradientStart = Color.fromARGB(255, 37, 71, 223);
+  static const Color primaryGradientEnd = Color.fromARGB(255, 32, 42, 185);
+  static const Color accentGradientStart = Color.fromARGB(255, 7, 155, 240);
+  static const Color accentGradientEnd = Color.fromARGB(255, 44, 121, 189);
+  static const Color cardGradientStart = Color.fromARGB(255, 53, 223, 186);
+  static const Color cardGradientEnd = Color.fromARGB(255, 48, 75, 230);
+  static const Color successColor = Color.fromARGB(255, 49, 145, 209);
   static const Color backgroundColor = Color(0xFFF8F9FA);
   static const Color cardBackground = Colors.white;
   
@@ -27,7 +27,7 @@ class RequestScreenTheme {
   );
   
   static const LinearGradient cardIconGradient = LinearGradient(
-    colors: [cardGradientStart, cardGradientEnd],
+    colors: [Color.fromARGB(255, 53, 175, 223), cardGradientEnd],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -98,7 +98,7 @@ class RequestScreenTheme {
   static List<BoxShadow> iconShadow() {
     return [
       BoxShadow(
-        color: accentGradientEnd.withOpacity(0.3),
+        color: const Color.fromARGB(255, 104, 171, 230).withOpacity(0.3),
         spreadRadius: 0,
         blurRadius: 12,
         offset: const Offset(0, 4),
