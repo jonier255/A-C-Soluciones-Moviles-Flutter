@@ -5,6 +5,7 @@ import 'package:flutter_a_c_soluciones/bloc/login/login_state.dart';
 import 'package:flutter_a_c_soluciones/model/login_request_model.dart';
 import 'package:flutter_a_c_soluciones/repository/service_api_login.dart';
 import 'package:flutter_a_c_soluciones/repository/secure_storage_service.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final emailController = TextEditingController();
@@ -20,24 +21,29 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
         final response = await APIService.login(loginRequest);
 
-        if (response.token != null && response.user != null) {
-          // Guardar el token en el almacenamiento seguro
+        if (response.token != null) {
           await _storageService.saveToken(response.token!);
 
-          final user = response.user!;
-          final String role = user['rol'] ?? 'user';
-          final String userId = user['id'].toString();
+          Map<String, dynamic> decodedToken =
+              JwtDecoder.decode(response.token!);
+          final String role = decodedToken['rol'] ?? 'user';
 
-          if (role.toLowerCase() == 'admin' || role.toLowerCase() == 'administrador') {
-            await _storageService.saveAdminId(userId);
-          } else if (role.toLowerCase() == 'cliente') {
-            await _storageService.saveClienteId(userId);
-          } else if (role.toLowerCase() == 'tecnico') {
-            await _storageService.saveTechnicalId(userId);
-          }
+          final String userName = decodedToken['nombre'] ?? 'Usuario';
+          final String userEmail = decodedToken['email'] ?? '';
 
-          final String userName = user['nombre'] ?? 'Usuario';
-          final String userEmail = user['email'] ?? '';
+          
+          try {
+            final existingAdminId = await _storageService.getAdminId();
+            if (existingAdminId == null) {
+              final possibleId = decodedToken['id'] ?? decodedToken['sub'] ?? decodedToken['user_id'] ?? decodedToken['admin_id'];
+              if (possibleId != null) {
+                final idStr = possibleId.toString();
+                if (idStr.isNotEmpty && idStr.toLowerCase() != 'null') {
+                  await _storageService.saveAdminId(idStr);
+                }
+              }
+            }
+          } catch (_) {}
 
           emit(LoginSuccess(
             token: response.token!,
@@ -46,7 +52,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             correoElectronico: userEmail,
           ));
         } else {
-          emit(LoginFailure(error: 'Login Failed: Token or user data is null'));
+          emit(LoginFailure(error: 'Login Failed'));
         }
       } catch (e) {
         emit(LoginFailure(error: e.toString()));

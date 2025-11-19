@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import '../../model/administrador/visits_model.dart';
 import '../secure_storage_service.dart';
 
-class VisitsRepository {
+class ListVisitsRepository {
   final _storageService = SecureStorageService();
 
   Future<List<VisitsModel>> getVisits() async {
