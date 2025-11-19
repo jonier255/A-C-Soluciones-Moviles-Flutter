@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_a_c_soluciones/repository/secure_storage_service.dart';
 
 class TechnicalUpdateProfileRepository {
-  final String _baseUrl = "https://flutter-58c3.onrender.com/api"; 
+  final String _baseUrl = "http://10.0.2.2:8000/api"; 
 
   Future<UpdateTechnicalRequest> getTechnicalProfile() async {
     final storage = SecureStorageService();

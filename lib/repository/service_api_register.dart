@@ -16,7 +16,7 @@ class APIServiceRegister {
     };
 
     final url = Uri.parse(
-      'https://flutter-58c3.onrender.com/api/cliente',
+      'http://10.0.2.2:8000/api/cliente',
     );
 
     var response = await client.post(

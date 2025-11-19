@@ -169,7 +169,7 @@ class _ReportListState extends State<_ReportList> {
                 report: report,
                 isLoading: isLoading,
                 onDownload: () {
-                  const String apiKey = 'https://flutter-58c3.onrender.com';
+                  const String apiKey = 'http://10.0.2.2:8000';
                   String relativePath = report.pdfPath.replaceFirst(RegExp(r'uploads[\/]'), '');
                   relativePath = relativePath.replaceAll(r'\', '/');
                   final String downloadUrl = '$apiKey/$relativePath';

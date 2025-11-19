@@ -14,7 +14,7 @@ class SolicitudApiRepository {
     }
 
     final response = await http.get(
-      Uri.parse('https://flutter-58c3.onrender.com/api/solicitudes'),
+      Uri.parse('http://10.0.2.2:8000/api/solicitudes'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -43,7 +43,7 @@ class SolicitudApiRepository {
     }
 
     final response = await http.get(
-      Uri.parse('https://flutter-58c3.onrender.com/api/solicitudes/$solicitudId'),
+      Uri.parse('http://10.0.2.2:8000/api/solicitudes/$solicitudId'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -81,7 +81,7 @@ class SolicitudApiRepository {
     };
 
     final response = await http.post(
-      Uri.parse('https://flutter-58c3.onrender.com/api/solicitudes'),
+      Uri.parse('http://10.0.2.2:8000/api/solicitudes'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
