@@ -6,74 +6,117 @@ import '../../../../model/administrador/request_model.dart';
 import 'admin_home_constants.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
 
-/// Recent requests section with BLoC integration
+/// Sección de solicitudes recientes con integración BLoC
 class RecentRequestsSection extends StatelessWidget {
   const RecentRequestsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final sw = MediaQuery.of(context).size.width;
+    final sh = MediaQuery.of(context).size.height;
+    
     return Padding(
-      padding: const EdgeInsets.all(AdminHomeTheme.cardPadding),
+      padding: EdgeInsets.symmetric(horizontal: AdminHomeTheme.horizontalPadding(sw)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 1),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+            padding: EdgeInsets.only(left: sw * 0.02, bottom: sh * 0.015),
             child: Text(
               "Solicitudes recientes",
-              style: AdminHomeTheme.sectionTitleStyle.copyWith(
-                shadows: AdminHomeTheme.textShadow(
-                  color: const Color.fromARGB(255, 25, 106, 172),
-                ),
-              ),
+              style: AdminHomeTheme.sectionTitleStyle(sw),
             ),
           ),
-          const SizedBox(height: 10),
           BlocBuilder<RequestBloc, RequestState>(
             builder: (context, state) {
               if (state is RequestLoading) {
-                return const Center(child: CircularProgressIndicator());
+                return Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(sh * 0.05),
+                    child: const CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Color(0xFF667eea),
+                      ),
+                    ),
+                  ),
+                );
               }
               if (state is RequestLoaded) {
                 final recentRequests = state.requests.take(3).toList();
                 if (recentRequests.isEmpty) {
-                  return const Center(
-                    child: Text("No hay solicitudes recientes."),
+                  return Container(
+                    padding: EdgeInsets.all(sh * 0.04),
+                    decoration: BoxDecoration(
+                      color: AdminHomeTheme.cardBackground,
+                      borderRadius: BorderRadius.circular(AdminHomeTheme.cardRadius),
+                      boxShadow: AdminHomeTheme.cardShadow(),
+                    ),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.inbox_rounded,
+                            size: sw * 0.15,
+                            color: AdminHomeTheme.textSecondary,
+                          ),
+                          SizedBox(height: sh * 0.01),
+                          Text(
+                            "No hay solicitudes recientes",
+                            style: TextStyle(
+                              fontSize: sw * 0.04,
+                              color: AdminHomeTheme.textSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   );
                 }
 
                 return Column(
                   children: [
                     Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 18.0),
-                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: AdminHomeTheme.backgroundColor,
+                        color: AdminHomeTheme.cardBackground,
                         borderRadius: BorderRadius.circular(AdminHomeTheme.cardRadius),
-                        boxShadow: [AdminHomeTheme.blueShadow()],
+                        boxShadow: AdminHomeTheme.cardShadow(),
                       ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: AdminHomeTheme.backgroundColor,
-                          borderRadius: BorderRadius.circular(AdminHomeTheme.cardRadius),
-                        ),
-                        child: Column(
-                          children: recentRequests
-                              .map((req) => RequestCard(request: req))
-                              .toList(),
-                        ),
+                      child: Column(
+                        children: recentRequests
+                            .asMap()
+                            .entries
+                            .map((entry) => RequestCard(
+                                  request: entry.value,
+                                  isLast: entry.key == recentRequests.length - 1,
+                                ))
+                            .toList(),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: sh * 0.015),
                     const ViewMoreButton(),
                   ],
                 );
               }
               if (state is RequestError) {
-                return Center(child: Text(state.message));
+                return Container(
+                  padding: EdgeInsets.all(sh * 0.03),
+                  decoration: BoxDecoration(
+                    color: AdminHomeTheme.cardBackground,
+                    borderRadius: BorderRadius.circular(AdminHomeTheme.cardRadius),
+                    boxShadow: AdminHomeTheme.cardShadow(),
+                  ),
+                  child: Center(
+                    child: Text(
+                      state.message,
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: sw * 0.035,
+                      ),
+                    ),
+                  ),
+                );
               }
-              return const Center(child: Text("Cargando solicitudes..."));
+              return const SizedBox.shrink();
             },
           ),
         ],
@@ -82,108 +125,142 @@ class RecentRequestsSection extends StatelessWidget {
   }
 }
 
-/// Request card widget
+/// Tarjeta de solicitud con diseño moderno
 class RequestCard extends StatelessWidget {
   final Request request;
+  final bool isLast;
 
-  const RequestCard({super.key, required this.request});
+  const RequestCard({
+    super.key,
+    required this.request,
+    this.isLast = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 8,
-      color: AdminHomeTheme.backgroundColor,
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AdminHomeTheme.smallCardRadius),
+    final sw = MediaQuery.of(context).size.width;
+    final sh = MediaQuery.of(context).size.height;
+    
+    return Container(
+      margin: EdgeInsets.all(sw * 0.025),
+      padding: EdgeInsets.all(sw * 0.04),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.white,
+            const Color(0xFFF8F9FA),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 16.0),
-        child: Row(
-          children: [
-            Card(
-              margin: const EdgeInsets.all(0),
-              elevation: 4,
-              color: AdminHomeTheme.lightGray,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Icon(
-                  Icons.build,
-                  color: Colors.black,
-                  size: AdminHomeTheme.quickButtonIconSize,
-                ),
-              ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.all(sw * 0.03),
+            decoration: BoxDecoration(
+              gradient: AdminHomeTheme.cardGradient,
+              borderRadius: BorderRadius.circular(12),
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(18.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            child: Icon(
+              Icons.build_rounded,
+              color: Colors.white,
+              size: AdminHomeTheme.requestCardIconSize(sw),
+            ),
+          ),
+          SizedBox(width: sw * 0.03),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  request.descripcion,
+                  style: AdminHomeTheme.requestDescriptionStyle(sw),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: sh * 0.006),
+                Text(
+                  request.direccionServicio
+                      .replaceAll('\n', ' ')
+                      .replaceAll(RegExp(r'\s+'), ' '),
+                  style: AdminHomeTheme.requestMetaStyle(sw),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: sh * 0.006),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            request.descripcion,
-                            style: AdminHomeTheme.requestDescriptionStyle,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            request.direccionServicio
-                                .replaceAll('\n', ' ')
-                                .replaceAll(RegExp(r'\s+'), ' '),
-                            style: AdminHomeTheme.requestMetaStyle,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            "Fecha de solicitud: ${request.fechaSolicitud}",
-                            style: AdminHomeTheme.requestMetaStyle,
-                          ),
-                        ],
+                      child: Text(
+                        request.fechaSolicitud.toString().split(' ')[0],
+                        style: AdminHomeTheme.requestMetaStyle(sw),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    Card(
-                      elevation: 8,
-                      color: AdminHomeTheme.lightGray,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(AdminHomeTheme.smallCardRadius),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: sw * 0.025,
+                        vertical: sh * 0.005,
                       ),
-                      margin: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 0.5),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          request.estado,
-                          style: AdminHomeTheme.statusStyle,
+                      decoration: BoxDecoration(
+                        color: _getStatusColor(request.estado).withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(AdminHomeTheme.statusBadgeRadius),
+                        border: Border.all(
+                          color: _getStatusColor(request.estado),
+                          width: 1.5,
                         ),
+                      ),
+                      child: Text(
+                        request.estado,
+                        style: AdminHomeTheme.statusStyle(sw, _getStatusColor(request.estado)),
                       ),
                     ),
                   ],
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
+  
+  Color _getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'aceptada':
+      case 'completado':
+      case 'finalizado':
+        return AdminHomeTheme.statusCompleted;
+      case 'pendiente':
+      case 'en proceso':
+        return AdminHomeTheme.statusPending;
+      default:
+        return AdminHomeTheme.textSecondary;
+    }
+  }
 }
 
-/// View more button
+/// Botón para ver más solicitudes
 class ViewMoreButton extends StatelessWidget {
   const ViewMoreButton({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final sw = MediaQuery.of(context).size.width;
+    
     return Center(
-      child: TextButton(
+      child: TextButton.icon(
         onPressed: () {
           Navigator.push(
             context,
@@ -195,15 +272,14 @@ class ViewMoreButton extends StatelessWidget {
             ),
           );
         },
-        child: Text(
-          "Ver más...",
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ).copyWith(
-            shadows: AdminHomeTheme.textShadow(color: Colors.black),
-          ),
+        icon: Icon(
+          Icons.arrow_forward_rounded,
+          size: sw * 0.05,
+          color: AdminHomeTheme.primaryGradientEnd,
+        ),
+        label: Text(
+          "Ver todas las solicitudes",
+          style: AdminHomeTheme.viewMoreStyle(sw),
         ),
       ),
     );

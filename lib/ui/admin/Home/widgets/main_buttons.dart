@@ -1,66 +1,89 @@
 import 'package:flutter/material.dart';
 import 'admin_home_constants.dart';
 
-/// Section with main action buttons (Técnico, Cliente)
+/// Sección con botones principales de acción (Técnico, Cliente)
 class MainButtonsSection extends StatelessWidget {
   const MainButtonsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final sw = MediaQuery.of(context).size.width;
+    
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: EdgeInsets.symmetric(horizontal: AdminHomeTheme.horizontalPadding(sw)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: const [
-          MainButton(icon: Icons.badge, label: "Técnico"),
-          MainButton(icon: Icons.person, label: "Cliente"),
+          Expanded(
+            child: MainButton(
+              icon: Icons.engineering_rounded,
+              label: "Técnico",
+              gradient: AdminHomeTheme.technicoGradient,
+            ),
+          ),
+          SizedBox(width: 16),
+          Expanded(
+            child: MainButton(
+              icon: Icons.person_rounded,
+              label: "Cliente",
+              gradient: AdminHomeTheme.clienteGradient,
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
-/// Main button with hover effect
-class MainButton extends StatefulWidget {
+/// Botón principal con gradiente y efecto de elevación
+class MainButton extends StatelessWidget {
   final IconData icon;
   final String label;
+  final LinearGradient gradient;
 
   const MainButton({
     super.key,
     required this.icon,
     required this.label,
+    required this.gradient,
   });
 
   @override
-  State<MainButton> createState() => _MainButtonState();
-}
-
-class _MainButtonState extends State<MainButton> {
-  bool _isHovered = false;
-
-  @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: Container(
-        width: 120,
-        height: 90,
-        decoration: BoxDecoration(
-          color: _isHovered ? AdminHomeTheme.lightBlue : AdminHomeTheme.darkBlue,
-          borderRadius: BorderRadius.circular(AdminHomeTheme.mainButtonRadius),
-          boxShadow: [AdminHomeTheme.defaultShadow()],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(widget.icon, size: AdminHomeTheme.iconSize, color: Colors.white),
-            const SizedBox(height: 5),
-            Text(
-              widget.label,
-              style: AdminHomeTheme.buttonLabelStyle,
+    final size = MediaQuery.of(context).size;
+    final sw = size.width;
+    final sh = size.height;
+    
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {},
+        borderRadius: BorderRadius.circular(AdminHomeTheme.mainButtonRadius),
+        child: Container(
+          height: AdminHomeTheme.mainButtonHeight(sh),
+          decoration: BoxDecoration(
+            gradient: gradient,
+            borderRadius: BorderRadius.circular(AdminHomeTheme.mainButtonRadius),
+            boxShadow: AdminHomeTheme.buttonShadow(gradient.colors.first),
+          ),
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  icon,
+                  size: AdminHomeTheme.mainButtonIconSize(sw) * 0.7,
+                  color: Colors.white,
+                ),
+                SizedBox(height: sh * 0.005),
+                Text(
+                  label,
+                  style: AdminHomeTheme.buttonLabelStyle(sw),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

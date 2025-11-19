@@ -7,28 +7,30 @@ import '../../../../bloc/request/request_bloc.dart';
 import '../../../../repository/services_admin/request_repository.dart';
 import 'admin_home_constants.dart';
 
-/// Quick access buttons section (Servicios, Visitas, Admin, Solicitudes)
+/// Sección de botones de acceso rápido (Servicios, Visitas, Admin, Solicitudes)
 class QuickAccessSection extends StatelessWidget {
   const QuickAccessSection({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final sw = MediaQuery.of(context).size.width;
+    
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: EdgeInsets.symmetric(horizontal: AdminHomeTheme.horizontalPadding(sw)),
       child: Row(
         children: [
           Expanded(
-            child: GestureDetector(
+            child: QuickButton(
+              icon: Icons.build_rounded,
+              label: "Servicios",
               onTap: () {},
-              child: const QuickButton(
-                icon: Icons.build,
-                label: "Servicios",
-              ),
             ),
           ),
-          const SizedBox(width: AdminHomeTheme.buttonSpacing),
+          SizedBox(width: AdminHomeTheme.buttonSpacing(sw)),
           Expanded(
-            child: GestureDetector(
+            child: QuickButton(
+              icon: Icons.visibility_rounded,
+              label: "Visitas",
               onTap: () {
                 Navigator.push(
                   context,
@@ -37,15 +39,13 @@ class QuickAccessSection extends StatelessWidget {
                   ),
                 );
               },
-              child: const QuickButton(
-                icon: Icons.visibility,
-                label: "Visitas",
-              ),
             ),
           ),
-          const SizedBox(width: AdminHomeTheme.buttonSpacing),
+          SizedBox(width: AdminHomeTheme.buttonSpacing(sw)),
           Expanded(
-            child: GestureDetector(
+            child: QuickButton(
+              icon: Icons.admin_panel_settings_rounded,
+              label: "Admin",
               onTap: () {
                 Navigator.push(
                   context,
@@ -54,15 +54,13 @@ class QuickAccessSection extends StatelessWidget {
                   ),
                 );
               },
-              child: const QuickButton(
-                icon: Icons.security,
-                label: "Admin",
-              ),
             ),
           ),
-          const SizedBox(width: AdminHomeTheme.buttonSpacing),
+          SizedBox(width: AdminHomeTheme.buttonSpacing(sw)),
           Expanded(
-            child: GestureDetector(
+            child: QuickButton(
+              icon: Icons.assignment_rounded,
+              label: "Solicitudes",
               onTap: () {
                 Navigator.push(
                   context,
@@ -74,10 +72,6 @@ class QuickAccessSection extends StatelessWidget {
                   ),
                 );
               },
-              child: const QuickButton(
-                icon: Icons.mail,
-                label: "Solicitudes",
-              ),
             ),
           ),
         ],
@@ -86,57 +80,71 @@ class QuickAccessSection extends StatelessWidget {
   }
 }
 
-/// Quick access button with hover effect
-class QuickButton extends StatefulWidget {
+/// Botón de acceso rápido con diseño moderno
+class QuickButton extends StatelessWidget {
   final IconData icon;
   final String label;
+  final VoidCallback onTap;
 
   const QuickButton({
     super.key,
     required this.icon,
     required this.label,
+    required this.onTap,
   });
 
   @override
-  State<QuickButton> createState() => _QuickButtonState();
-}
-
-class _QuickButtonState extends State<QuickButton> {
-  bool _isHovered = false;
-
-  @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 9),
-        decoration: BoxDecoration(
-          color: _isHovered ? AdminHomeTheme.accentBlue : AdminHomeTheme.lightGray,
-          borderRadius: BorderRadius.circular(AdminHomeTheme.quickButtonRadius),
-          boxShadow: [AdminHomeTheme.lightShadow()],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              widget.icon,
-              color: _isHovered ? Colors.white : Colors.black,
-              size: AdminHomeTheme.smallIconSize,
-            ),
-            const SizedBox(width: 8),
-            Flexible(
-              child: Text(
-                widget.label,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                  color: _isHovered ? Colors.white : Colors.black,
+    final size = MediaQuery.of(context).size;
+    final sw = size.width;
+    final sh = size.height;
+    
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AdminHomeTheme.quickButtonRadius),
+        child: Container(
+          height: AdminHomeTheme.quickButtonHeight(sh),
+          decoration: BoxDecoration(
+            color: AdminHomeTheme.cardBackground,
+            borderRadius: BorderRadius.circular(AdminHomeTheme.quickButtonRadius),
+            boxShadow: AdminHomeTheme.quickButtonShadow(),
+          ),
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(sw * 0.015),
+                  decoration: BoxDecoration(
+                    gradient: AdminHomeTheme.accentGradient,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    icon,
+                    color: Colors.white,
+                    size: AdminHomeTheme.quickButtonIconSize(sw),
+                  ),
                 ),
-                overflow: TextOverflow.ellipsis,
-              ),
+                SizedBox(height: sh * 0.004),
+                Flexible(
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: AdminHomeTheme.quickButtonTextSize(sw),
+                      fontWeight: FontWeight.w600,
+                      color: AdminHomeTheme.textPrimary,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
