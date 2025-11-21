@@ -13,8 +13,8 @@ class ServiciosBloc extends Bloc<ServiciosEvent, ServiciosState> {
     on<LoadServicios>((event, emit) async {
       emit(ServiciosLoading());
       try {
-        final servicios = await serviceRepository.getServices();
-        emit(ServiciosLoaded(servicios: servicios));
+        final response = await serviceRepository.getServices();
+        emit(ServiciosLoaded(servicios: response.services));
       } catch (e) {
         emit(ServiciosError(message: e.toString()));
       }

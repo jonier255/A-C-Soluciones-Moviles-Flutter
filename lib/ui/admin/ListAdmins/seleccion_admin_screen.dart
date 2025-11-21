@@ -1,235 +1,142 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_a_c_soluciones/bloc/listAdmins/admins_bloc.dart';
-import 'package:flutter_a_c_soluciones/bloc/request/request_bloc.dart';
-import 'package:flutter_a_c_soluciones/repository/services_admin/request_repository.dart';
-import 'package:flutter_a_c_soluciones/ui/admin/ListAdmins/list_admin_screen.dart';
-import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_a_c_soluciones/bloc/listAdmins/admins_bloc.dart';
+import 'package:flutter_a_c_soluciones/repository/services_admin/service_ListAdmin.dart';
+import 'list_admin_screen.dart';
+import 'widgets/widgets_seleccion_admin/admin_menu_constants.dart';
+import 'widgets/widgets_seleccion_admin/admin_menu_header.dart';
+import 'widgets/widgets_seleccion_admin/admin_option_card.dart';
+import 'widgets/widgets_seleccion_admin/admin_menu_bottom_nav.dart';
 
-import '../../../repository/services_admin/service_ListAdmin.dart';
-
+/// Pantalla principal del menú de administradores con diseño moderno y elegante
 class AdminMenuScreen extends StatelessWidget {
   const AdminMenuScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final sw = size.width;
+    final sh = size.height;
+    
     return Scaffold(
-      backgroundColor: Colors.white,
-      bottomNavigationBar: _BottomNavBar(),
-            body: Column(
-              children: [
-                Stack(
-                  children: [
-                    // Curva azul superior
-                    ClipPath(
-                      clipper: WaveClipper(),
-                      child: Container(
-                        height: 180,
-                        color: Color.fromARGB(255, 46, 145, 216),
-                      ),
-                    ),
-                    // Botón de retroceso y título
-                    Positioned(
-                      top: 40,
-                      left: 10,
-                      right: 10,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: IconButton(
-                              icon: const Icon(Icons.arrow_back,
-                                  color: Colors.white, size: 30),
-                              onPressed: () => Navigator.pop(context),
-                            ),
-                          ),
-                          Center(
-                            child: const Text(
-                              'Seccion de Administradores',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                    child: ListView(
-                      padding: EdgeInsets.zero, 
-                      children: [
-                        Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                "assets/soluciones.png",
-                                height: 130,
-                              ),
-                              const SizedBox(height: 20),
-                              // Se ha envuelto las tarjetas de opciones en un Card con sombra azul.
-                              Card(
-                                elevation: 10.0,
-                                shadowColor: const Color.fromARGB(255, 7, 110, 194),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const SizedBox(height: 20),
-                                    _buildOptionCard(
-                                      context,
-                                      title: "Crear Administrador",
-                                      icon: Icons.person_add,
-                                      color: const Color.fromARGB(255, 2, 247, 153),
-                                      onTap: () {
-                                      },
-                                    ),
-                                    const SizedBox(height: 30),
-                                    _buildOptionCard(
-                                      context,
-                                      title: "Lista de Administradores",
-                                      icon: Icons.list_alt,
-                                      color: const Color.fromARGB(255, 175, 61, 166),
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => BlocProvider(
-                                              create: (context) =>
-                                                  AdminsBloc(AdminRepository()),
-                                              child: AdminsScreen(),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    const SizedBox(height: 20),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),    );
-  }
-
-  Widget _buildOptionCard(
-    BuildContext context, {
-    required String title,
-    required IconData icon,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        margin: const EdgeInsets.symmetric(horizontal: 40),
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black26,
-              blurRadius: 6,
-              offset: Offset(2, 4),
-            ),
-          ],
-        ),
+      backgroundColor: AdminMenuTheme.backgroundColor,
+      bottomNavigationBar: const AdminMenuBottomNav(),
+      body: SafeArea(
         child: Column(
           children: [
-            Icon(icon, size: 60, color: Colors.black),
-            const SizedBox(height: 10),
-            Text(
-              title,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-                color: Colors.black,
-                shadows: [
-                  Shadow(
-                    blurRadius: 4.0,
-                    color: Colors.black.withOpacity(0.5),
-                    offset: Offset(1.0, 1.0),
-                  ),
-                ],
-              ),
+            const AdminMenuHeader(),
+            Expanded(
+              child: _buildContent(sw, sh),
             ),
           ],
         ),
       ),
     );
   }
-}
 
-class WaveClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    path.lineTo(0, size.height - 40);
-
-    var firstControlPoint = Offset(size.width / 4, size.height);
-    var firstEndPoint = Offset(size.width / 2, size.height - 40);
-    path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
-        firstEndPoint.dx, firstEndPoint.dy);
-
-    var secondControlPoint = Offset(size.width * 3 / 4, size.height - 80);
-    var secondEndPoint = Offset(size.width, size.height - 40);
-    path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy,
-        secondEndPoint.dx, secondEndPoint.dy);
-
-    path.lineTo(size.width, 0);
-    path.close();
-    return path;
+  /// Construye el contenido principal con logo, texto de bienvenida y opciones
+  Widget _buildContent(double sw, double sh) {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: AdminMenuTheme.horizontalPadding(sw),
+        ),
+        child: Column(
+          children: [
+            SizedBox(height: AdminMenuTheme.topSpacing(sh)),
+            _buildLogo(sw),
+            SizedBox(height: AdminMenuTheme.logoSpacing(sh)),
+            _buildWelcomeText(sw),
+            SizedBox(height: AdminMenuTheme.welcomeSpacing(sh)),
+            _buildCreateAdminOption(),
+            SizedBox(height: AdminMenuTheme.optionSpacing(sh)),
+            _buildListAdminsOption(),
+            SizedBox(height: AdminMenuTheme.bottomSpacing(sh)),
+          ],
+        ),
+      ),
+    );
   }
 
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
-}
+  /// Logo de la aplicación con Hero animation
+  Widget _buildLogo(double sw) {
+    return Hero(
+      tag: 'logo',
+      child: Image.asset(
+        "assets/soluciones.png",
+        height: AdminMenuTheme.logoSize(sw),
+      ),
+    );
+  }
 
-//la seccion del menu de abajo
-class _BottomNavBar extends StatelessWidget {
-  const _BottomNavBar();
+  /// Texto de bienvenida
+  Widget _buildWelcomeText(double sw) {
+    return Column(
+      children: [
+        Text(
+          '¿Qué deseas hacer?',
+          style: TextStyle(
+            fontSize: AdminMenuTheme.welcomeTitleSize(sw),
+            fontWeight: FontWeight.bold,
+            color: AdminMenuTheme.textPrimary,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Selecciona una opción para continuar',
+          style: TextStyle(
+            fontSize: AdminMenuTheme.welcomeSubtitleSize(sw),
+            color: AdminMenuTheme.textSecondary,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      ],
+    );
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      onTap: (index) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => BlocProvider(
-              create: (context) => RequestBloc(RequestRepository()),
-              child: RequestScreen(),
-            ),
+  /// Opción para crear administrador
+  Widget _buildCreateAdminOption() {
+    return AdminOptionCard(
+      option: AdminMenuOption(
+        title: "Crear Administrador",
+        subtitle: "Registra un nuevo administrador",
+        icon: Icons.person_add_rounded,
+        gradient: AdminMenuTheme.createAdminGradient,
+        onTap: () {
+          // TODO: Implementar navegación a pantalla de crear administrador
+        },
+      ),
+    );
+  }
+
+  /// Opción para ver lista de administradores
+  Widget _buildListAdminsOption() {
+    return Builder(
+      builder: (context) {
+        return AdminOptionCard(
+          option: AdminMenuOption(
+            title: "Lista de Administradores",
+            subtitle: "Visualiza todos los administradores",
+            icon: Icons.group_rounded,
+            gradient: AdminMenuTheme.listAdminGradient,
+            onTap: () => _navigateToListAdmins(context),
           ),
         );
       },
-      selectedItemColor: const Color.fromARGB(255, 46, 145, 216),
-      unselectedItemColor: Colors.black,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.notifications), label: 'Notificaciones'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.assignment), label: 'Solicitudes'),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Cuenta'),
-      ],
+    );
+  }
+
+  /// Navega a la pantalla de lista de administradores
+  void _navigateToListAdmins(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (context) => AdminsBloc(AdminRepository()),
+          child: const AdminsScreen(),
+        ),
+      ),
     );
   }
 }

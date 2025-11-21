@@ -36,6 +36,20 @@ class MockSolicitudApiRepositorySuccess implements SolicitudApiRepository {
   }
 
   @override
+  Future<Solicitud> getSolicitudById(int solicitudId) async {
+    return Solicitud(
+      id: solicitudId,
+      fechaSolicitud: '2024-01-01T00:00:00',
+      estado: 'pendiente',
+      direccionServicio: 'Calle Test 123',
+      descripcion: 'Descripción de la solicitud',
+      comentarios: 'Comentarios',
+      clienteId: 1,
+      servicioId: 1,
+    );
+  }
+
+  @override
   Future<Solicitud> crearSolicitud({
     required int clienteId,
     required int servicioId,
@@ -62,6 +76,11 @@ class MockSolicitudApiRepositoryFailure implements SolicitudApiRepository {
   @override
   Future<List<Solicitud>> getSolicitudes() async {
     throw Exception('Error al cargar las solicitudes');
+  }
+
+  @override
+  Future<Solicitud> getSolicitudById(int solicitudId) async {
+    throw Exception('Error al cargar la solicitud');
   }
 
   @override
@@ -139,6 +158,11 @@ class _MockSolicitudApiRepositoryEmpty implements SolicitudApiRepository {
   @override
   Future<List<Solicitud>> getSolicitudes() async {
     return [];
+  }
+
+  @override
+  Future<Solicitud> getSolicitudById(int solicitudId) async {
+    throw UnimplementedError();
   }
 
   @override
