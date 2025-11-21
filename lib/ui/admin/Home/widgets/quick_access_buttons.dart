@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/ListAdmins/seleccion_admin_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/Visits/admin_menu_visits.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/Services/service_menu_screen.dart';
 import '../../../../bloc/request/request_bloc.dart';
 import '../../../../repository/services_admin/request_repository.dart';
 import 'admin_home_constants.dart';
@@ -23,7 +24,14 @@ class QuickAccessSection extends StatelessWidget {
             child: QuickButton(
               icon: Icons.build_rounded,
               label: "Servicios",
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ServiceMenuScreen(),
+                  ),
+                );
+              },
             ),
           ),
           SizedBox(width: AdminHomeTheme.buttonSpacing(sw)),

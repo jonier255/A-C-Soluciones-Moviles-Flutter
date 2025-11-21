@@ -6,7 +6,6 @@ import '../../../../model/administrador/request_model.dart';
 import 'admin_home_constants.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
 
-/// Sección de solicitudes recientes con integración BLoC
 class RecentRequestsSection extends StatelessWidget {
   const RecentRequestsSection({super.key});
 

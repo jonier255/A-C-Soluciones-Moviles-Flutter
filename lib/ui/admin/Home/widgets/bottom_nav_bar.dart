@@ -6,7 +6,6 @@ import '../../../../bloc/request/request_bloc.dart';
 import '../../../../repository/services_admin/request_repository.dart';
 import 'admin_home_constants.dart';
 
-/// Barra de navegación inferior moderna para admin home
 class AdminBottomNavBar extends StatelessWidget {
   const AdminBottomNavBar({super.key});
 
@@ -57,7 +56,6 @@ class AdminBottomNavBar extends StatelessWidget {
   void _handleNavigation(BuildContext context, int index) {
     switch (index) {
       case 0:
-        // Ya estamos en home
         break;
 
       case 1:

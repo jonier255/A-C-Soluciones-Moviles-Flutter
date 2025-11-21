@@ -7,7 +7,6 @@ import 'widgets/admin_detail/admin_info_card.dart';
 import 'widgets/admin_detail/admin_action_button.dart';
 import 'widgets/admin_detail/delete_admin_dialog.dart';
 
-/// Pantalla de detalle de administrador con diseño moderno y limpio
 class AdminDetailScreen extends StatelessWidget {
   final UpdateAdminRequest admin;
   
@@ -39,7 +38,6 @@ class AdminDetailScreen extends StatelessWidget {
     );
   }
 
-  /// Grid de información y botones de acción
   Widget _buildInfoGrid(BuildContext context) {
     final sw = MediaQuery.of(context).size.width;
     final sh = MediaQuery.of(context).size.height;
@@ -51,7 +49,6 @@ class AdminDetailScreen extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // Primera fila: Cédula y Correo
           Row(
             children: [
               Expanded(
