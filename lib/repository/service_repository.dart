@@ -29,7 +29,7 @@ class ServiceRepository {
     }
 
     // Agregar parámetros de paginación a la URL
-    final uri = Uri.parse('https://flutter-58c3.onrender.com/api/servicios')
+    final uri = Uri.parse('http://10.0.2.2:8000/api/servicios')
         .replace(queryParameters: {
       'page': page.toString(),
       'limit': pageSize.toString(),
