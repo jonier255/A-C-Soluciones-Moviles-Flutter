@@ -12,6 +12,9 @@ import 'package:flutter_a_c_soluciones/bloc/servicios/servicios_bloc.dart';
 import 'package:flutter_a_c_soluciones/repository/services_admin/tecnicos_repository.dart';
 import 'package:flutter_a_c_soluciones/repository/services_admin/request_repository.dart';
 import 'package:flutter_a_c_soluciones/repository/service_repository.dart';
+import 'widgets/assign_visits_constants.dart';
+import 'widgets/form_fields.dart';
+import 'widgets/assign_visits_widgets.dart';
 
 class AssignVisitsScreen extends StatelessWidget {
   const AssignVisitsScreen({super.key});
@@ -65,31 +68,9 @@ class _AssignVisitsViewState extends State<AssignVisitsView> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final width = size.width;
-    final height = size.height;
-    final pagePadding = width * 0.05; 
-    final smallGap = height * 0.015;
-    final mediumGap = height * 0.025;
-    final largeGap = height * 0.04; 
-    final accentBlue = const Color(0xFF3875F7);
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      appBar: AppBar(
-        backgroundColor: accentBlue,
-        elevation: 9,
-        title: const Text(
-          'Asignar Visita',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
+      backgroundColor: AssignVisitsTheme.backgroundColor,
+      appBar: _buildAppBar(context),
       body: BlocListener<AssignVisitsBloc, AssignVisitsState>(
         listener: (context, state) {
           if (state is AssignVisitsSuccess) {
@@ -104,239 +85,172 @@ class _AssignVisitsViewState extends State<AssignVisitsView> {
           }
         },
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(pagePadding),
-          child: Card(
-            color: Colors.white,
-            elevation: 6,
-            shadowColor: accentBlue.withOpacity(0.9),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            child: Padding(
-              padding: EdgeInsets.all(pagePadding),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      "Detalles de la visita",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: accentBlue,
-                      ),
-                    ),
-                    SizedBox(height: mediumGap),
-                    _buildFechaProgramadaField(),
-                    SizedBox(height: smallGap),
-                    _buildDuracionEstimadaField(),
-                    SizedBox(height: smallGap),
-                    _buildNotasPreviasField(),
-                    SizedBox(height: smallGap),
-                    _buildNotasPosterioresField(),
-                    SizedBox(height: mediumGap),
-                    const Divider(),
-                    Text(
-                      "Selección de datos",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: accentBlue,
-                      ),
-                    ),
-                    SizedBox(height: mediumGap),
-                    _buildTecnicosDropdown(),
-                    SizedBox(height: smallGap),
-                    _buildSolicitudesDropdown(),
-                    SizedBox(height: smallGap),
-                    _buildServiciosDropdown(),
-                    SizedBox(height: largeGap),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            icon: const Icon(Icons.check_circle_outline, color: Colors.white),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: accentBlue,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                              padding: EdgeInsets.symmetric(vertical: height * 0.018, horizontal: width * 0.04),
-                              elevation: 3,
-                            ),
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                final visit = VisitsModel(
-                                  id: 0,
-                                  fechaProgramada: DateFormat('yyyy-MM-dd HH:mm').parse(_fechaProgramadaController.text),
-                                  duracionEstimada: int.parse(_duracionEstimadaController.text),
-                                  estado: 'Programada',
-                                  notasPrevias: _notasPreviasController.text,
-                                  notasPosteriores: '',
-                                  fechaCreacion: DateTime.now(),
-                                  solicitudId: _selectedSolicitudId!,
-                                  tecnicoId: _selectedTecnicoId!,
-                                  servicioId: _selectedServicioId!,
-                                );
-                                context.read<AssignVisitsBloc>().add(AssignVisit(visit: visit));
-                              }
-                            },
-                            label: const Text(
-                              'Asignar Visita',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: width * 0.03),
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            icon: const Icon(Icons.clear, color: Colors.white),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                              padding: EdgeInsets.symmetric(vertical: height * 0.018),
-                              elevation: 8,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _fechaProgramadaController.clear();
-                                _duracionEstimadaController.clear();
-                                _notasPreviasController.clear();
-                                _notasPosterioresController.clear();
-                                _selectedTecnicoId = null;
-                                _selectedSolicitudId = null;
-                                _selectedServicioId = null;
-                                _formKey.currentState?.reset();
-                              });
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Campos limpiados')),
-                              );
-                            },
-                            label: const Text(
-                              'Limpiar Campos',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+          padding: EdgeInsets.all(AssignVisitsTheme.pagePadding(size.width)),
+          child: _buildFormCard(context, size),
+        ),
+      ),
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: AssignVisitsTheme.accentBlue,
+      elevation: 9,
+      title: const Text(
+        'Asignar Visita',
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+        ),
+      ),
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+        onPressed: () => Navigator.pop(context),
+      ),
+    );
+  }
+
+  Widget _buildFormCard(BuildContext context, Size size) {
+    final padding = AssignVisitsTheme.pagePadding(size.width);
+    return Card(
+      color: AssignVisitsTheme.cardColor,
+      elevation: 6,
+      shadowColor: AssignVisitsTheme.accentBlue.withOpacity(0.9),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: EdgeInsets.all(padding),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SectionTitle(title: "Detalles de la visita"),
+              SizedBox(height: AssignVisitsTheme.mediumGap(size.height)),
+              DateTimeField(
+                controller: _fechaProgramadaController,
+                label: 'Fecha Programada',
               ),
-            ),
+              SizedBox(height: AssignVisitsTheme.smallGap(size.height)),
+              NumericField(
+                controller: _duracionEstimadaController,
+                label: 'Duración Estimada (minutos)',
+                icon: Icons.timer,
+                errorMessage: 'Por favor ingrese la duración',
+              ),
+              SizedBox(height: AssignVisitsTheme.smallGap(size.height)),
+              NotesField(
+                controller: _notasPreviasController,
+                label: 'Notas Previas',
+                icon: Icons.edit_note,
+              ),
+              SizedBox(height: AssignVisitsTheme.smallGap(size.height)),
+              NotesField(
+                controller: _notasPosterioresController,
+                label: 'Notas Posteriores',
+              ),
+              SizedBox(height: AssignVisitsTheme.mediumGap(size.height)),
+              const Divider(),
+              const SectionTitle(title: "Selección de datos"),
+              SizedBox(height: AssignVisitsTheme.mediumGap(size.height)),
+              _buildTecnicosDropdown(),
+              SizedBox(height: AssignVisitsTheme.smallGap(size.height)),
+              _buildSolicitudesDropdown(),
+              SizedBox(height: AssignVisitsTheme.smallGap(size.height)),
+              _buildServiciosDropdown(),
+              SizedBox(height: AssignVisitsTheme.largeGap(size.height)),
+              _buildActionButtons(context, size),
+            ],
           ),
         ),
       ),
     );
   }
 
-  InputDecoration _inputDecoration(String label, {IconData? icon}) {
-    final size = MediaQuery.of(context).size;
-    final width = size.width;
-    final height = size.height;
-    final accentBlue = const Color(0xFF3875F7);
-    return InputDecoration(
-      prefixIcon: icon != null ? Icon(icon, color: accentBlue) : null,
-      labelText: label,
-      labelStyle: const TextStyle(color: Colors.black),
-      // Decoration inside a white, elevated container. Remove internal borders
-      // so the outer container provides the visual "relief" (white) and shadow (black).
-      border: InputBorder.none,
-      focusedBorder: InputBorder.none,
-      enabledBorder: InputBorder.none,
-      contentPadding: EdgeInsets.symmetric(vertical: height * 0.018, horizontal: width * 0.03),
-    );
-  }
-
-  Widget _fieldContainer(Widget child) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.25),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
+  Widget _buildActionButtons(BuildContext context, Size size) {
+    return Row(
+      children: [
+        Expanded(
+          child: ElevatedButton.icon(
+            icon: const Icon(Icons.check_circle_outline, color: Colors.white),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AssignVisitsTheme.accentBlue,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              padding: EdgeInsets.symmetric(
+                vertical: AssignVisitsTheme.buttonVerticalPadding(size.height),
+                horizontal: AssignVisitsTheme.buttonHorizontalPadding(size.width),
+              ),
+              elevation: 3,
+            ),
+            onPressed: () => _submitForm(context),
+            label: const Text(
+              'Asignar Visita',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
           ),
-        ],
-      ),
-      child: child,
+        ),
+        SizedBox(width: AssignVisitsTheme.buttonSpacing(size.width)),
+        Expanded(
+          child: ElevatedButton.icon(
+            icon: const Icon(Icons.clear, color: Colors.white),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              padding: EdgeInsets.symmetric(
+                vertical: AssignVisitsTheme.buttonVerticalPadding(size.height),
+              ),
+              elevation: 8,
+            ),
+            onPressed: () => _clearForm(context),
+            label: const Text(
+              'Limpiar Campos',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
-  Widget _buildFechaProgramadaField() {
-    return _fieldContainer(
-      TextFormField(
-        controller: _fechaProgramadaController,
-        readOnly: true,
-        decoration: _inputDecoration('Fecha Programada', icon: Icons.calendar_month),
-      onTap: () async {
-        FocusScope.of(context).unfocus();
-        final date = await showDatePicker(
-          context: context,
-          initialDate: DateTime.now(),
-          firstDate: DateTime.now(),
-          lastDate: DateTime(2101),
-        );
-        if (date != null) {
-          final time = await showTimePicker(
-            context: context,
-            initialTime: TimeOfDay.now(),
-          );
-          if (time != null) {
-            final dateTime = DateTime(
-              date.year,
-              date.month,
-              date.day,
-              time.hour,
-              time.minute,
-            );
-            _fechaProgramadaController.text =
-                DateFormat('yyyy-MM-dd HH:mm').format(dateTime);
-          }
-        }
-        },
-        validator: (value) =>
-            value == null || value.isEmpty ? 'Por favor ingrese la fecha' : null,
-      ),
-    );
+  void _submitForm(BuildContext context) {
+    if (_formKey.currentState!.validate()) {
+      final visit = VisitsModel(
+        id: 0,
+        fechaProgramada: DateFormat('yyyy-MM-dd HH:mm').parse(_fechaProgramadaController.text),
+        duracionEstimada: int.parse(_duracionEstimadaController.text),
+        estado: 'Programada',
+        notasPrevias: _notasPreviasController.text,
+        notasPosteriores: '',
+        fechaCreacion: DateTime.now(),
+        solicitudId: _selectedSolicitudId!,
+        tecnicoId: _selectedTecnicoId!,
+        servicioId: _selectedServicioId!,
+      );
+      context.read<AssignVisitsBloc>().add(AssignVisit(visit: visit));
+    }
   }
 
-  Widget _buildDuracionEstimadaField() {
-    return _fieldContainer(
-      TextFormField(
-        controller: _duracionEstimadaController,
-        keyboardType: TextInputType.number,
-        decoration: _inputDecoration('Duración Estimada (minutos)', icon: Icons.timer),
-        validator: (value) =>
-            value == null || value.isEmpty ? 'Por favor ingrese la duración' : null,
-      ),
-    );
-  }
-
-  Widget _buildNotasPreviasField() {
-    return _fieldContainer(
-      TextFormField(
-        controller: _notasPreviasController,
-        decoration: _inputDecoration('Notas Previas', icon: Icons.edit_note),
-        maxLines: 2,
-      ),
-    );
-  }
-
-  Widget _buildNotasPosterioresField() {
-    return _fieldContainer(
-      TextFormField(
-        controller: _notasPosterioresController,
-        decoration: _inputDecoration('Notas Posteriores', icon: Icons.notes),
-        maxLines: 2,
-      ),
+  void _clearForm(BuildContext context) {
+    setState(() {
+      _fechaProgramadaController.clear();
+      _duracionEstimadaController.clear();
+      _notasPreviasController.clear();
+      _notasPosterioresController.clear();
+      _selectedTecnicoId = null;
+      _selectedSolicitudId = null;
+      _selectedServicioId = null;
+      _formKey.currentState?.reset();
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Campos limpiados')),
     );
   }
 
@@ -347,29 +261,28 @@ class _AssignVisitsViewState extends State<AssignVisitsView> {
           return const Center(child: CircularProgressIndicator());
         }
         if (state is TecnicosLoaded) {
-          return _fieldContainer(
-            DropdownButtonFormField<int>(
-            isExpanded: true,
-            value: _selectedTecnicoId,
-            decoration: _inputDecoration('Seleccione un técnico', icon: Icons.engineering),
-            icon: const Icon(Icons.arrow_drop_down, color: Color(0xFF3875F7)),
-            items: state.tecnicos.map((tecnico) {
-              return DropdownMenuItem<int>(
-                value: tecnico.id,
-                child: Text(
-                  '${tecnico.nombre} ${tecnico.apellido}',
-                  overflow: TextOverflow.ellipsis,
-                ),
-              );
-            }).toList(),
-            onChanged: (value) => setState(() => _selectedTecnicoId = value),
-            validator: (value) =>
-                value == null ? 'Por favor seleccione un técnico' : null,
+          return FieldContainer(
+            child: DropdownButtonFormField<int>(
+              isExpanded: true,
+              value: _selectedTecnicoId,
+              decoration: buildInputDecoration(context, 'Seleccione un técnico', icon: Icons.engineering),
+              icon: const Icon(Icons.arrow_drop_down, color: AssignVisitsTheme.accentBlue),
+              items: state.tecnicos.map((tecnico) {
+                return DropdownMenuItem<int>(
+                  value: tecnico.id,
+                  child: Text(
+                    '${tecnico.nombre} ${tecnico.apellido}',
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                );
+              }).toList(),
+              onChanged: (value) => setState(() => _selectedTecnicoId = value),
+              validator: (value) => value == null ? 'Por favor seleccione un técnico' : null,
             ),
           );
         }
         if (state is TecnicosError) {
-          return Text('Error: ${state.message}');
+          return Text('Error: ${state.message}', style: const TextStyle(color: Colors.red));
         }
         return Container();
       },
@@ -383,29 +296,28 @@ class _AssignVisitsViewState extends State<AssignVisitsView> {
           return const Center(child: CircularProgressIndicator());
         }
         if (state is RequestLoaded) {
-          return _fieldContainer(
-            DropdownButtonFormField<int>(
-            isExpanded: true,
-            value: _selectedSolicitudId,
-            decoration: _inputDecoration('Seleccione una solicitud', icon: Icons.assignment),
-            icon: const Icon(Icons.arrow_drop_down, color: Color(0xFF3875F7)),
-            items: state.requests.map((solicitud) {
-              return DropdownMenuItem<int>(
-                value: solicitud.id,
-                child: Text(
-                  solicitud.descripcion,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              );
-            }).toList(),
-            onChanged: (value) => setState(() => _selectedSolicitudId = value),
-            validator: (value) =>
-                value == null ? 'Por favor seleccione una solicitud' : null,
+          return FieldContainer(
+            child: DropdownButtonFormField<int>(
+              isExpanded: true,
+              value: _selectedSolicitudId,
+              decoration: buildInputDecoration(context, 'Seleccione una solicitud', icon: Icons.assignment),
+              icon: const Icon(Icons.arrow_drop_down, color: AssignVisitsTheme.accentBlue),
+              items: state.requests.map((solicitud) {
+                return DropdownMenuItem<int>(
+                  value: solicitud.id,
+                  child: Text(
+                    solicitud.descripcion,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                );
+              }).toList(),
+              onChanged: (value) => setState(() => _selectedSolicitudId = value),
+              validator: (value) => value == null ? 'Por favor seleccione una solicitud' : null,
             ),
           );
         }
         if (state is RequestError) {
-          return Text('Error: ${state.message}');
+          return Text('Error: ${state.message}', style: const TextStyle(color: Colors.red));
         }
         return Container();
       },
@@ -419,34 +331,31 @@ class _AssignVisitsViewState extends State<AssignVisitsView> {
           return const Center(child: CircularProgressIndicator());
         }
         if (state is ServiciosLoaded) {
-          return _fieldContainer(
-            DropdownButtonFormField<int>(
-            isExpanded: true,
-            value: _selectedServicioId,
-            decoration: _inputDecoration('Seleccione un servicio', icon: Icons.home_repair_service),
-            icon: const Icon(Icons.arrow_drop_down, color: Color(0xFF3875F7)),
-            items: state.servicios.map((servicio) {
-              return DropdownMenuItem<int>(
-                value: servicio.id,
-                child: Text(
-                  servicio.nombre,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              );
-            }).toList(),
-            onChanged: (value) => setState(() => _selectedServicioId = value),
-            validator: (value) =>
-                value == null ? 'Por favor seleccione un servicio' : null,
+          return FieldContainer(
+            child: DropdownButtonFormField<int>(
+              isExpanded: true,
+              value: _selectedServicioId,
+              decoration: buildInputDecoration(context, 'Seleccione un servicio', icon: Icons.home_repair_service),
+              icon: const Icon(Icons.arrow_drop_down, color: AssignVisitsTheme.accentBlue),
+              items: state.servicios.map((servicio) {
+                return DropdownMenuItem<int>(
+                  value: servicio.id,
+                  child: Text(
+                    servicio.nombre,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                );
+              }).toList(),
+              onChanged: (value) => setState(() => _selectedServicioId = value),
+              validator: (value) => value == null ? 'Por favor seleccione un servicio' : null,
             ),
           );
         }
         if (state is ServiciosError) {
-          return Text('Error: ${state.message}');
+          return Text('Error: ${state.message}', style: const TextStyle(color: Colors.red));
         }
         return Container();
       },
     );
   }
-
-  
 }

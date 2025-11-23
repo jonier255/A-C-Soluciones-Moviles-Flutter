@@ -43,11 +43,12 @@ class APIService {
       }
 
       final candidates = [
-        responseBody['administrador'],
+        responseBody['administrador' ],
         responseBody['admin'],
         responseBody['user'],
         responseBody['usuario'],
         responseBody['data'],
+        responseBody['tecnico' ]
       ];
 
       for (var c in candidates) {
