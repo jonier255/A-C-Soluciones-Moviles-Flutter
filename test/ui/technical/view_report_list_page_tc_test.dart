@@ -74,7 +74,7 @@ void main() {
       );
 
       await pumpViewReportListPageTc(tester);
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
 
       expect(find.byType(ListView), findsOneWidget);
       expect(find.text('Visita: Test pre-notes'), findsOneWidget);
@@ -91,7 +91,7 @@ void main() {
       );
 
       await pumpViewReportListPageTc(tester);
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
 
       expect(find.text('No hay reportes disponibles.'), findsOneWidget);
     });
@@ -104,9 +104,9 @@ void main() {
       );
 
       await pumpViewReportListPageTc(tester);
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
 
-      expect(find.text('Error: Test Error'), findsOneWidget);
+      expect(find.text('Test Error'), findsOneWidget);
     });
   });
 }

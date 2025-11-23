@@ -144,12 +144,26 @@ class _MainButton extends StatelessWidget {
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: screenWidth * 0.12, color: Colors.white), // Responsive icon size
-          SizedBox(height: screenHeight * 0.005), // Responsive height
-          Text(label,
-              style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold)),
+          Icon(icon, size: screenWidth * 0.07, color: Colors.white), // Smaller icon size
+          const SizedBox(height: 2), // Minimal spacing
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2.0),
+              child: Text(
+                label,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 10,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

@@ -34,7 +34,7 @@ void main() {
       );
 
       // Wait for the loading to finish
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
 
       expect(find.text('Detalles de la Visita'), findsOneWidget);
       expect(find.text('Test Description'), findsOneWidget);

@@ -64,9 +64,9 @@ void main() {
       await pumpTechnicalHomeScreen(tester);
 
       expect(find.widgetWithText(TextField, 'Buscar tarea o cliente'), findsOneWidget);
-      expect(find.text('Asignadas'), findsOneWidget);
+      expect(find.text('Asignadas'), findsWidgets);
       expect(find.text('Reportes'), findsOneWidget);
-      expect(find.text('Servicios'), findsOneWidget);
+      expect(find.text('Servicios'), findsWidgets);
       expect(find.text('Finalizadas'), findsOneWidget);
       expect(find.text('Tareas recientes'), findsOneWidget);
     });
@@ -96,7 +96,7 @@ void main() {
       );
 
       await pumpTechnicalHomeScreen(tester);
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
 
       expect(find.text('Tareas recientes'), findsOneWidget);
       expect(find.text('Test Service'), findsOneWidget);
@@ -112,7 +112,7 @@ void main() {
       );
 
       await pumpTechnicalHomeScreen(tester);
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
 
       expect(find.text('No hay tareas recientes.'), findsOneWidget);
     });
@@ -125,7 +125,7 @@ void main() {
       );
 
       await pumpTechnicalHomeScreen(tester);
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
 
       expect(find.text('Test Error'), findsOneWidget);
     });

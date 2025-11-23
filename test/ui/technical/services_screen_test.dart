@@ -65,7 +65,7 @@ void main() {
       );
 
       await pumpServicesScreen(tester);
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
 
       expect(find.byType(ListView), findsOneWidget);
       expect(find.text('Test Service'), findsOneWidget);
@@ -82,7 +82,7 @@ void main() {
       );
 
       await pumpServicesScreen(tester);
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
 
       expect(find.text('No hay servicios disponibles.'), findsOneWidget);
     });
@@ -95,7 +95,7 @@ void main() {
       );
 
       await pumpServicesScreen(tester);
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
 
       expect(find.text('Test Error'), findsOneWidget);
     });

@@ -64,7 +64,7 @@ void main() {
       );
 
       await pumpAccountTechnicalScreen(tester);
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
 
       expect(find.text('John Doe'), findsOneWidget);
       expect(find.text('123456789'), findsOneWidget);
@@ -81,7 +81,7 @@ void main() {
       );
 
       await pumpAccountTechnicalScreen(tester);
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
 
       expect(find.text('Error: Test Error'), findsOneWidget);
     });

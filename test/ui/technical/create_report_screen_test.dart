@@ -38,6 +38,7 @@ void main() {
       );
 
       await pumpCreateReportScreen(tester);
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
 
       expect(find.text('Crear Reporte de Mantenimiento'), findsOneWidget);
       expect(find.byType(TextFormField), findsNWidgets(9));
@@ -52,6 +53,7 @@ void main() {
       );
 
       await pumpCreateReportScreen(tester);
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
 
       expect(find.text('Generando Reporte...'), findsOneWidget);
       expect(find.byType(CircularProgressIndicator), findsNothing); 
