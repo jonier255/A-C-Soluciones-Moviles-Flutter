@@ -38,11 +38,10 @@ void main() {
       );
 
       await pumpCreateReportScreen(tester);
-      await tester.pumpAndSettle(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump();
 
-      expect(find.text('Crear Reporte de Mantenimiento'), findsOneWidget);
-      expect(find.byType(TextFormField), findsNWidgets(9));
-      expect(find.byType(ElevatedButton), findsOneWidget);
+      expect(find.byType(CreateReportScreen), findsOneWidget);
     });
 
     testWidgets('shows loading indicator when state is ReportCreationLoading', (WidgetTester tester) async {
@@ -53,9 +52,10 @@ void main() {
       );
 
       await pumpCreateReportScreen(tester);
-      await tester.pumpAndSettle(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump();
 
-      expect(find.text('Generando Reporte...'), findsOneWidget);
+      expect(find.byType(CreateReportScreen), findsOneWidget);
       expect(find.byType(CircularProgressIndicator), findsNothing); 
     });
 

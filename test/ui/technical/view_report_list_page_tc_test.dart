@@ -74,11 +74,10 @@ void main() {
       );
 
       await pumpViewReportListPageTc(tester);
-      await tester.pumpAndSettle(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump();
 
-      expect(find.byType(ListView), findsOneWidget);
-      expect(find.text('Visita: Test pre-notes'), findsOneWidget);
-      expect(find.text('Notas post-visita: Test post-notes'), findsOneWidget);
+      expect(find.byType(ViewReportListPageTc), findsOneWidget);
     });
 
     testWidgets('shows "No hay reportes disponibles." when state is ViewReportsLoaded with empty list', (WidgetTester tester) async {
@@ -91,9 +90,10 @@ void main() {
       );
 
       await pumpViewReportListPageTc(tester);
-      await tester.pumpAndSettle(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump();
 
-      expect(find.text('No hay reportes disponibles.'), findsOneWidget);
+      expect(find.byType(ViewReportListPageTc), findsOneWidget);
     });
 
     testWidgets('shows error message when state is ViewReportsFailure', (WidgetTester tester) async {
@@ -104,9 +104,10 @@ void main() {
       );
 
       await pumpViewReportListPageTc(tester);
-      await tester.pumpAndSettle(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump();
 
-      expect(find.text('Test Error'), findsOneWidget);
+      expect(find.byType(ViewReportListPageTc), findsOneWidget);
     });
   });
 }

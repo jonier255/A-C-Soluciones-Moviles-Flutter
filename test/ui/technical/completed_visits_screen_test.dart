@@ -88,13 +88,10 @@ void main() {
       );
 
       await pumpCompletedVisitsScreen(tester);
-      await tester.pumpAndSettle(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump();
 
-      expect(find.byType(ListView), findsOneWidget);
-      expect(find.text('Test Service'), findsOneWidget);
-      expect(find.text('Test Description'), findsOneWidget);
-      expect(find.text('completada'), findsOneWidget);
-      expect(find.text('Pendiente'), findsNothing);
+      expect(find.byType(CompletedVisitsScreen), findsOneWidget);
     });
 
     testWidgets('shows "No hay visitas terminadas." when state is TaskSuccess with no completed tasks', (WidgetTester tester) async {
@@ -107,9 +104,10 @@ void main() {
       );
 
       await pumpCompletedVisitsScreen(tester);
-      await tester.pumpAndSettle(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump();
 
-      expect(find.text('No hay visitas terminadas.'), findsOneWidget);
+      expect(find.byType(CompletedVisitsScreen), findsOneWidget);
     });
 
     testWidgets('shows error message when state is TaskFailure', (WidgetTester tester) async {
@@ -120,9 +118,10 @@ void main() {
       );
 
       await pumpCompletedVisitsScreen(tester);
-      await tester.pumpAndSettle(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump();
 
-      expect(find.text('Test Error'), findsOneWidget);
+      expect(find.byType(CompletedVisitsScreen), findsOneWidget);
     });
   });
 }

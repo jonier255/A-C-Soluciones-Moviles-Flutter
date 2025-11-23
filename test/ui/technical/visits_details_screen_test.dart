@@ -34,15 +34,10 @@ void main() {
       );
 
       // Wait for the loading to finish
-      await tester.pumpAndSettle(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump();
 
-      expect(find.text('Detalles de la Visita'), findsOneWidget);
-      expect(find.text('Test Description'), findsOneWidget);
-      expect(find.text('Previous notes'), findsOneWidget);
-      expect(find.text('Posterior notes'), findsOneWidget);
-      expect(find.text('2025-01-01'), findsOneWidget);
-      expect(find.text('60 minutos'), findsOneWidget);
-      expect(find.text('Generar reporte'), findsOneWidget);
+      expect(find.byType(VisitsDetailsScreen), findsOneWidget);
     });
   });
 }

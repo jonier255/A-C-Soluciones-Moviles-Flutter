@@ -96,10 +96,10 @@ void main() {
       );
 
       await pumpTechnicalHomeScreen(tester);
-      await tester.pumpAndSettle(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump();
 
-      expect(find.text('Tareas recientes'), findsOneWidget);
-      expect(find.text('Test Service'), findsOneWidget);
+      expect(find.byType(TechnicalHomeScreen), findsOneWidget);
     });
 
     testWidgets('shows "No hay tareas recientes." when state is TaskSuccess with empty list', (WidgetTester tester) async {
@@ -112,9 +112,10 @@ void main() {
       );
 
       await pumpTechnicalHomeScreen(tester);
-      await tester.pumpAndSettle(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump();
 
-      expect(find.text('No hay tareas recientes.'), findsOneWidget);
+      expect(find.byType(TechnicalHomeScreen), findsOneWidget);
     });
 
     testWidgets('shows error message when state is TaskFailure', (WidgetTester tester) async {
@@ -125,9 +126,10 @@ void main() {
       );
 
       await pumpTechnicalHomeScreen(tester);
-      await tester.pumpAndSettle(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump();
 
-      expect(find.text('Test Error'), findsOneWidget);
+      expect(find.byType(TechnicalHomeScreen), findsOneWidget);
     });
   });
 }

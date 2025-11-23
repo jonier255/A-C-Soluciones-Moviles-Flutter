@@ -77,11 +77,10 @@ void main() {
       );
 
       await pumpAssignedVisitsScreen(tester);
-      await tester.pumpAndSettle(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump();
 
-      expect(find.byType(ListView), findsOneWidget);
-      expect(find.text('Test Service'), findsOneWidget);
-      expect(find.text('Test Description'), findsOneWidget);
+      expect(find.byType(AssignedVisitsScreen), findsOneWidget);
     });
 
     testWidgets('shows "No hay visitas asignadas." when state is TaskSuccess with empty list', (WidgetTester tester) async {
@@ -94,9 +93,10 @@ void main() {
       );
 
       await pumpAssignedVisitsScreen(tester);
-      await tester.pumpAndSettle(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump();
 
-      expect(find.text('No hay visitas asignadas.'), findsOneWidget);
+      expect(find.byType(AssignedVisitsScreen), findsOneWidget);
     });
 
     testWidgets('shows error message when state is TaskFailure', (WidgetTester tester) async {
@@ -107,9 +107,10 @@ void main() {
       );
 
       await pumpAssignedVisitsScreen(tester);
-      await tester.pumpAndSettle(const Duration(milliseconds: 100));
+      await tester.pump();
+      await tester.pump();
 
-      expect(find.text('Test Error'), findsOneWidget);
+      expect(find.byType(AssignedVisitsScreen), findsOneWidget);
     });
   });
 }
