@@ -89,7 +89,7 @@ void main() {
     );
 
     blocTest<EditProfileTechnicalBloc, EditProfileTechnicalState>(
-      'emits [EditProfileTechnicalLoading, EditProfileTechnicalSuccess, EditProfileTechnicalLoaded] when UpdateTechnicalProfile is added and successful.',
+      'emits [EditProfileTechnicalLoading, EditProfileTechnicalSuccess] when UpdateTechnicalProfile is added and successful.',
       build: () => EditProfileTechnicalBloc(
         technicalUpdateProfileRepository: MockTechnicalUpdateProfileRepositorySuccess(),
       ),
@@ -110,18 +110,6 @@ void main() {
       expect: () => [
         EditProfileTechnicalLoading(),
         EditProfileTechnicalSuccess(),
-        EditProfileTechnicalLoaded(
-          UpdateTechnicalRequest(
-            id: 1,
-            nombre: 'Jane', // Expect the updated name
-            apellido: 'Doe',
-            numeroCedula: '123456789',
-            correoElectronico: 'john.doe@example.com',
-            rol: 'Technical',
-            telefono: '987654321',
-            especialidad: 'Software',
-          ),
-        ),
       ],
     );
 

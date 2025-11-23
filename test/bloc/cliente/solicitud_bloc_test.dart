@@ -69,20 +69,6 @@ class MockSolicitudApiRepositorySuccess implements SolicitudApiRepository {
       servicioId: servicioId,
     );
   }
-
-  @override
-  Future<Solicitud> getSolicitudById(int solicitudId) async {
-    return Solicitud(
-      id: solicitudId,
-      fechaSolicitud: '2024-01-01T00:00:00',
-      estado: 'pendiente',
-      direccionServicio: 'Calle Test 123',
-      descripcion: 'Descripción de la solicitud 1',
-      comentarios: 'Comentarios de la solicitud 1',
-      clienteId: 1,
-      servicioId: 1,
-    );
-  }
 }
 
 // Mock para SolicitudApiRepository - caso error
@@ -107,11 +93,6 @@ class MockSolicitudApiRepositoryFailure implements SolicitudApiRepository {
     DateTime? fechaSolicitud,
   }) async {
     throw Exception('Error al crear solicitud');
-  }
-
-  @override
-  Future<Solicitud> getSolicitudById(int solicitudId) async {
-    throw Exception('Error al cargar la solicitud');
   }
 }
 
@@ -193,11 +174,6 @@ class _MockSolicitudApiRepositoryEmpty implements SolicitudApiRepository {
     String comentarios = '',
     DateTime? fechaSolicitud,
   }) async {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Solicitud> getSolicitudById(int solicitudId) async {
     throw UnimplementedError();
   }
 }
