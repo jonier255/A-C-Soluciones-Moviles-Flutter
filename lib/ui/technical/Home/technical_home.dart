@@ -19,16 +19,21 @@ class TechnicalHomeScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         bottomNavigationBar: const BottomNavBar(),
         body: SafeArea(
-          child: ListView(
-            padding: EdgeInsets.zero,
+          child: Column(
             children: [
               const _HeaderSection(),
-              const SizedBox(height: 12),
-              const _MainButtonsSection(),
-              const SizedBox(height: 12),
-              const _QuickAccessSection(),
-              const SizedBox(height: 12),
-              const _RecentTasksSection(), // Reemplaza solicitudes por tareas o mantenimientos
+              const Expanded(
+                child: Column(
+                  children: [
+                    SizedBox(height: 4),
+                    _MainButtonsSection(),
+                    SizedBox(height: 8),
+                    _QuickAccessSection(),
+                    SizedBox(height: 8),
+                    Expanded(child: _RecentTasksSection()),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -43,43 +48,111 @@ class _HeaderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.blue[700]!, Colors.blue[500]!],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.blue.withValues(alpha: 0.3),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
+    return ClipPath(
+      clipper: WaveClipper(),
+      child: Container(
+        height: screenHeight * 0.18,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color.fromARGB(255, 45, 78, 224),
+              Color.fromARGB(255, 29, 26, 190),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-        ],
-      ),
-      padding: EdgeInsets.symmetric(
-        horizontal: screenWidth * 0.04,
-        vertical: screenHeight * 0.015,
-      ),
-      child: Center(
-        child: Image.asset(
-          "assets/soluciones.png",
-          height: screenHeight * 0.14,
-          width: screenWidth * 0.75,
-          fit: BoxFit.contain,
-          filterQuality: FilterQuality.high,
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xFF667eea),
+              blurRadius: 15,
+              offset: Offset(0, 8),
+            ),
+          ],
+        ),
+        child: Stack(
+          children: [
+            // Círculos decorativos
+            Positioned(
+              top: -20,
+              right: -20,
+              child: Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white.withOpacity(0.08),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 20,
+              left: -15,
+              child: Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white.withOpacity(0.06),
+                ),
+              ),
+            ),
+            // Logo centrado
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 15),
+                child: ColorFiltered(
+                  colorFilter: const ColorFilter.mode(
+                    Colors.white,
+                    BlendMode.srcIn,
+                  ),
+                  child: Image.asset(
+                    "assets/soluciones.png",
+                    height: screenHeight * 0.095,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
+}
+
+// Wave Clipper para la curva superior
+class WaveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+    path.lineTo(0, size.height - 40);
+
+    var firstControlPoint = Offset(size.width / 4, size.height);
+    var firstEndPoint = Offset(size.width / 2, size.height - 40);
+    path.quadraticBezierTo(
+      firstControlPoint.dx,
+      firstControlPoint.dy,
+      firstEndPoint.dx,
+      firstEndPoint.dy,
+    );
+
+    var secondControlPoint = Offset(size.width * 3 / 4, size.height - 80);
+    var secondEndPoint = Offset(size.width, size.height - 40);
+    path.quadraticBezierTo(
+      secondControlPoint.dx,
+      secondControlPoint.dy,
+      secondEndPoint.dx,
+      secondEndPoint.dy,
+    );
+
+    path.lineTo(size.width, 0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }
 
 // Botones principales (por ejemplo: Asignadas y Finalizadas)
