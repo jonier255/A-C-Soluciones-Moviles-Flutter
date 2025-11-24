@@ -24,6 +24,17 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
+class _FakeReportResponse_0 extends _i1.SmartFake
+    implements _i2.ReportResponse {
+  _FakeReportResponse_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [ReportRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -84,13 +95,29 @@ class MockReportRepository extends _i1.Mock implements _i2.ReportRepository {
       ) as _i3.Future<String?>);
 
   @override
-  _i3.Future<List<_i2.VisitWithReport>> getVisitsWithReports() =>
+  _i3.Future<_i2.ReportResponse> getVisitsWithReports({
+    int? page = 1,
+    int? perPage = 10,
+  }) =>
       (super.noSuchMethod(
         Invocation.method(
           #getVisitsWithReports,
           [],
+          {
+            #page: page,
+            #perPage: perPage,
+          },
         ),
-        returnValue: _i3.Future<List<_i2.VisitWithReport>>.value(
-            <_i2.VisitWithReport>[]),
-      ) as _i3.Future<List<_i2.VisitWithReport>>);
+        returnValue: _i3.Future<_i2.ReportResponse>.value(_FakeReportResponse_0(
+          this,
+          Invocation.method(
+            #getVisitsWithReports,
+            [],
+            {
+              #page: page,
+              #perPage: perPage,
+            },
+          ),
+        )),
+      ) as _i3.Future<_i2.ReportResponse>);
 }

@@ -1,4 +1,3 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_a_c_soluciones/bloc/register/register_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/register/register_event.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_a_c_soluciones/bloc/register/register_state.dart';
 import 'package:flutter_a_c_soluciones/model/register_request_model.dart';
 import 'package:flutter_a_c_soluciones/model/register_response_model.dart';
 import 'package:flutter_a_c_soluciones/repository/service_api_register.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 
 // Manual mock for success case
@@ -40,20 +40,20 @@ void main() {
     });
 
     blocTest<RegisterBloc, RegisterState>(
-      'emits [RegisterLoading, RegisterSuccess] when RegisterButtonPressed is added and registration is successful.',
+      'emits [RegisterLoading, RegisterSuccess] when RegisterButtonPressed is added and registration succeeds.',
       build: () => RegisterBloc(apiServiceRegister: MockAPIServiceRegisterSuccess()),
       act: (bloc) => bloc.add(RegisterButtonPressed(
         nombre: 'test',
         apellido: 'test',
-        numero_de_cedula: '12345',
-        correo_electronico: 'test@test.com',
+        numeroDeCedula: '12345',
+        correoElectronico: 'test@test.com',
         telefono: '1234567890',
         direccion: 'test address',
         contrasenia: 'password',
       )),
       expect: () => [
         RegisterLoading(),
-        RegisterSuccess(message: "Registro exitoso"),
+        const RegisterSuccess(message: "Registro exitoso"),
       ],
     );
 
@@ -63,15 +63,15 @@ void main() {
       act: (bloc) => bloc.add(RegisterButtonPressed(
         nombre: 'test',
         apellido: 'test',
-        numero_de_cedula: '12345',
-        correo_electronico: 'test@test.com',
+        numeroDeCedula: '12345',
+        correoElectronico: 'test@test.com',
         telefono: '1234567890',
         direccion: 'test address',
         contrasenia: 'password',
       )),
       expect: () => [
         RegisterLoading(),
-        RegisterFailure(error: 'Exception: Registration failed'),
+        const RegisterFailure(error: 'Exception: Registration failed'),
       ],
     );
   });

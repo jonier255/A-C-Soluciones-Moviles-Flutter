@@ -1,6 +1,7 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter_a_c_soluciones/model/tecnico_model.dart';
+import 'package:http/http.dart' as http;
 
 class TecnicosRepository {
   Future<List<Tecnico>> getTecnicos() async {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter_a_c_soluciones/bloc/report/report_bloc.dart';
 import 'package:flutter_a_c_soluciones/repository/report_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreateReportScreen extends StatelessWidget {
   final int visitId;
@@ -28,6 +28,8 @@ class _CreateReportView extends StatefulWidget {
 class _CreateReportViewState extends State<_CreateReportView> {
   final _formKey = GlobalKey<FormState>();
   final _imagePicker = ImagePicker();
+  final _pageController = PageController();
+  int _currentPage = 0;
 
   // Text Controllers
   final _introduccionController = TextEditingController();
@@ -51,6 +53,7 @@ class _CreateReportViewState extends State<_CreateReportView> {
 
   @override
   void dispose() {
+    _pageController.dispose();
     _introduccionController.dispose();
     _detallesServicioController.dispose();
     _observacionesController.dispose();
@@ -67,6 +70,7 @@ class _CreateReportViewState extends State<_CreateReportView> {
   Future<void> _pickImage(Function(XFile) onImagePicked) async {
     final pickedFile = await _imagePicker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
+      if (!mounted) return;
       setState(() {
         onImagePicked(pickedFile);
       });
@@ -96,22 +100,81 @@ class _CreateReportViewState extends State<_CreateReportView> {
     }
   }
 
+  void _nextPage() {
+    if (_currentPage < 3) {
+      _pageController.nextPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  void _previousPage() {
+    if (_currentPage > 0) {
+      _pageController.previousPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Crear Reporte de Mantenimiento')),
+      appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue[700]!, Colors.blue[500]!],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        title: const Text(
+          'Crear Reporte',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+        elevation: 0,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(4.0),
+          child: LinearProgressIndicator(
+            value: (_currentPage + 1) / 4,
+            backgroundColor: Colors.white.withValues(alpha: 0.3),
+            valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+          ),
+        ),
+      ),
       body: BlocListener<ReportBloc, ReportState>(
         listener: (context, state) {
+          // ignore: avoid_print
+          print('🟣 [UI] BlocListener recibió estado: ${state.runtimeType}');
+          
           if (state is ReportCreationSuccess) {
+            // ignore: avoid_print
+            print('✅ [UI] Estado es ReportCreationSuccess - Mostrando SnackBar y navegando...');
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Reporte creado con éxito'), backgroundColor: Colors.green),
             );
-            Navigator.of(context).pop();
+            // Regresar a la pantalla anterior con resultado true para indicar éxito
+            Navigator.of(context).pop(true);
+            // ignore: avoid_print
+            print('✅ [UI] Navegación completada');
           } else if (state is ReportCreationFailure) {
+            // ignore: avoid_print
+            print('❌ [UI] Estado es ReportCreationFailure: ${state.error}');
             if (state.fieldErrors != null) {
               setState(() {
                 _fieldErrors = state.fieldErrors!;
               });
+              // Scroll a la página con errores si es necesario
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Por favor, corrija los errores en el formulario'),
+                  backgroundColor: Colors.orange,
+                ),
+              );
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Error: ${state.error}'), backgroundColor: Colors.red),
@@ -121,37 +184,26 @@ class _CreateReportViewState extends State<_CreateReportView> {
         },
         child: Form(
           key: _formKey,
-          child: ListView(
-            padding: const EdgeInsets.all(16.0),
+          child: Column(
             children: [
-              _buildTextField(_introduccionController, 'Introducción', error: _fieldErrors['introduccion'], maxLines: 3),
-              _buildDatePickerField(_fechaDeMantenimientoController, 'Fecha del Mantenimiento', error: _fieldErrors['fecha_de_mantenimiento']),
-              _buildTextField(_detallesServicioController, 'Detalles del Servicio', error: _fieldErrors['detalles_servicio'], maxLines: 3),
-              _buildTextField(_observacionesController, 'Observaciones', error: _fieldErrors['observaciones'], maxLines: 2),
-              _buildTextField(_estadoAntesController, 'Estado Antes', error: _fieldErrors['estado_antes'], maxLines: 2),
-              _buildImagePicker('Foto del Estado Antes', _fotoEstadoAntes, (file) => _fotoEstadoAntes = file),
-              _buildTextField(_descripcionTrabajoController, 'Descripción del Trabajo', error: _fieldErrors['descripcion_trabajo'], maxLines: 3),
-              _buildImagePicker('Foto de la Descripción del Trabajo', _fotoDescripcionTrabajo, (file) => _fotoDescripcionTrabajo = file),
-              _buildTextField(_materialesUtilizadosController, 'Materiales Utilizados', error: _fieldErrors['materiales_utilizados']),
-              _buildTextField(_estadoFinalController, 'Estado Final', error: _fieldErrors['estado_final']),
-              _buildImagePicker('Foto del Estado Final', _fotoEstadoFinal, (file) => _fotoEstadoFinal = file),
-              _buildTextField(_tiempoDeTrabajoController, 'Tiempo de Trabajo', error: _fieldErrors['tiempo_de_trabajo']),
-              _buildTextField(_recomendacionesController, 'Recomendaciones', error: _fieldErrors['recomendaciones'], maxLines: 2),
-              const SizedBox(height: 24),
-              BlocBuilder<ReportBloc, ReportState>(
-                builder: (context, state) {
-                  final isLoading = state is ReportCreationLoading;
-                  return ElevatedButton.icon(
-                    icon: isLoading ? const SizedBox.shrink() : const Icon(Icons.save),
-                    label: Text(isLoading ? 'Generando Reporte...' : 'Generar Reporte'),
-                    onPressed: isLoading ? null : _submitForm,
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
-                  );
-                },
+              Expanded(
+                child: PageView(
+                  controller: _pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  onPageChanged: (index) {
+                    setState(() {
+                      _currentPage = index;
+                    });
+                  },
+                  children: [
+                    _buildPage1(),
+                    _buildPage2(),
+                    _buildPage3(),
+                    _buildPage4(),
+                  ],
+                ),
               ),
+              _buildNavigationButtons(),
             ],
           ),
         ),
@@ -159,7 +211,240 @@ class _CreateReportViewState extends State<_CreateReportView> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label, {String? error, int maxLines = 1}) {
+  Widget _buildPage1() {
+    return ListView(
+      padding: const EdgeInsets.all(16.0),
+      children: [
+        const Text(
+          'Información General',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        const Text(
+          'Paso 1 de 4',
+          style: TextStyle(fontSize: 14, color: Colors.grey),
+        ),
+        const SizedBox(height: 24),
+        _buildTextField(
+          _introduccionController,
+          'Introducción',
+          error: _fieldErrors['introduccion'],
+          maxLines: 5,
+          hint: 'Proporcione una introducción detallada del reporte de mantenimiento',
+        ),
+        _buildDatePickerField(
+          _fechaDeMantenimientoController,
+          'Fecha del Mantenimiento',
+          error: _fieldErrors['fecha_de_mantenimiento'],
+        ),
+        _buildTextField(
+          _detallesServicioController,
+          'Detalles del Servicio',
+          error: _fieldErrors['detalles_servicio'],
+          maxLines: 5,
+          hint: 'Describa los detalles completos del servicio realizado',
+        ),
+        _buildTextField(
+          _observacionesController,
+          'Observaciones',
+          error: _fieldErrors['observaciones'],
+          maxLines: 4,
+          hint: 'Incluya cualquier observación relevante',
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPage2() {
+    return ListView(
+      padding: const EdgeInsets.all(16.0),
+      children: [
+        const Text(
+          'Estado Inicial',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        const Text(
+          'Paso 2 de 4',
+          style: TextStyle(fontSize: 14, color: Colors.grey),
+        ),
+        const SizedBox(height: 24),
+        _buildTextField(
+          _estadoAntesController,
+          'Estado Antes del Mantenimiento',
+          error: _fieldErrors['estado_antes'],
+          maxLines: 6,
+          hint: 'Describa el estado del equipo o sistema antes del mantenimiento',
+        ),
+        const SizedBox(height: 16),
+        _buildImagePicker(
+          'Foto del Estado Antes',
+          _fotoEstadoAntes,
+          (file) => _fotoEstadoAntes = file,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPage3() {
+    return ListView(
+      padding: const EdgeInsets.all(16.0),
+      children: [
+        const Text(
+          'Trabajo Realizado',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        const Text(
+          'Paso 3 de 4',
+          style: TextStyle(fontSize: 14, color: Colors.grey),
+        ),
+        const SizedBox(height: 24),
+        _buildTextField(
+          _descripcionTrabajoController,
+          'Descripción del Trabajo',
+          error: _fieldErrors['descripcion_trabajo'],
+          maxLines: 6,
+          hint: 'Detalle el trabajo realizado paso a paso',
+        ),
+        const SizedBox(height: 16),
+        _buildImagePicker(
+          'Foto de la Descripción del Trabajo',
+          _fotoDescripcionTrabajo,
+          (file) => _fotoDescripcionTrabajo = file,
+        ),
+        const SizedBox(height: 16),
+        _buildTextField(
+          _materialesUtilizadosController,
+          'Materiales Utilizados',
+          error: _fieldErrors['materiales_utilizados'],
+          maxLines: 4,
+          hint: 'Liste todos los materiales y herramientas utilizados',
+        ),
+        _buildTextField(
+          _tiempoDeTrabajoController,
+          'Tiempo de Trabajo',
+          error: _fieldErrors['tiempo_de_trabajo'],
+          maxLines: 1,
+          hint: 'Ej: 2 horas',
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPage4() {
+    return ListView(
+      padding: const EdgeInsets.all(16.0),
+      children: [
+        const Text(
+          'Estado Final y Recomendaciones',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        const Text(
+          'Paso 4 de 4',
+          style: TextStyle(fontSize: 14, color: Colors.grey),
+        ),
+        const SizedBox(height: 24),
+        _buildTextField(
+          _estadoFinalController,
+          'Estado Final',
+          error: _fieldErrors['estado_final'],
+          maxLines: 5,
+          hint: 'Describa el estado final después del mantenimiento',
+        ),
+        const SizedBox(height: 16),
+        _buildImagePicker(
+          'Foto del Estado Final',
+          _fotoEstadoFinal,
+          (file) => _fotoEstadoFinal = file,
+        ),
+        const SizedBox(height: 16),
+        _buildTextField(
+          _recomendacionesController,
+          'Recomendaciones',
+          error: _fieldErrors['recomendaciones'],
+          maxLines: 5,
+          hint: 'Proporcione recomendaciones para mantenimientos futuros',
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNavigationButtons() {
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withValues(alpha: 0.3),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: const Offset(0, -3),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          if (_currentPage > 0)
+            Expanded(
+              child: OutlinedButton.icon(
+                icon: const Icon(Icons.arrow_back),
+                label: const Text('Anterior'),
+                onPressed: _previousPage,
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ),
+          if (_currentPage > 0) const SizedBox(width: 16),
+          Expanded(
+            flex: _currentPage == 0 ? 1 : 1,
+            child: BlocBuilder<ReportBloc, ReportState>(
+              builder: (context, state) {
+                final isLoading = state is ReportCreationLoading;
+                final isLastPage = _currentPage == 3;
+                
+                return ElevatedButton.icon(
+                  icon: isLoading 
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                        )
+                      : Icon(isLastPage ? Icons.check : Icons.arrow_forward),
+                  label: Text(
+                    isLoading 
+                        ? 'Generando...' 
+                        : (isLastPage ? 'Generar Reporte' : 'Siguiente')
+                  ),
+                  onPressed: isLoading ? null : (isLastPage ? _submitForm : _nextPage),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTextField(
+    TextEditingController controller,
+    String label, {
+    String? error,
+    int maxLines = 1,
+    String? hint,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextFormField(
@@ -167,8 +452,11 @@ class _CreateReportViewState extends State<_CreateReportView> {
         maxLines: maxLines,
         decoration: InputDecoration(
           labelText: label,
+          hintText: hint,
           errorText: error,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          filled: true,
+          fillColor: Colors.grey[50],
         ),
         validator: (value) {
           if (value == null || value.isEmpty) {
@@ -191,6 +479,8 @@ class _CreateReportViewState extends State<_CreateReportView> {
           errorText: error,
           suffixIcon: const Icon(Icons.calendar_today),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          filled: true,
+          fillColor: Colors.grey[50],
         ),
         onTap: () async {
           DateTime? pickedDate = await showDatePicker(
@@ -199,7 +489,7 @@ class _CreateReportViewState extends State<_CreateReportView> {
             firstDate: DateTime(2000),
             lastDate: DateTime(2101),
           );
-          if (pickedDate != null) {
+          if (pickedDate != null && mounted) {
             controller.text = pickedDate.toLocal().toString().split(' ')[0];
           }
         },
@@ -216,39 +506,71 @@ class _CreateReportViewState extends State<_CreateReportView> {
   Widget _buildImagePicker(String label, XFile? file, Function(XFile) onImagePicked) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          OutlinedButton.icon(
-            icon: const Icon(Icons.upload_file),
-            label: Text(label),
-            onPressed: () => _pickImage(onImagePicked),
-            style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            ),
-          ),
-          if (file != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Row(
-                children: [
-                  const Icon(Icons.image, color: Colors.grey),
-                  const SizedBox(width: 8),
-                  Expanded(child: Text(file.name, overflow: TextOverflow.ellipsis)),
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () {
-                      setState(() {
-                        if (label.contains('Antes')) _fotoEstadoAntes = null;
-                        if (label.contains('Descripción')) _fotoDescripcionTrabajo = null;
-                        if (label.contains('Final')) _fotoEstadoFinal = null;
-                      });
-                    },
-                  ),
-                ],
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: Colors.grey[50],
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.grey[300]!),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
               ),
             ),
-        ],
+            const SizedBox(height: 12),
+            OutlinedButton.icon(
+              icon: const Icon(Icons.upload_file),
+              label: Text(file == null ? 'Seleccionar Imagen' : 'Cambiar Imagen'),
+              onPressed: () => _pickImage(onImagePicked),
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                minimumSize: const Size(double.infinity, 48),
+              ),
+            ),
+            if (file != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 12.0),
+                child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    color: Colors.green[50],
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.green[200]!),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.check_circle, color: Colors.green[700]),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          file.name,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: Colors.green[900]),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        color: Colors.red,
+                        onPressed: () {
+                          setState(() {
+                            if (label.contains('Antes')) _fotoEstadoAntes = null;
+                            if (label.contains('Descripción')) _fotoDescripcionTrabajo = null;
+                            if (label.contains('Final')) _fotoEstadoFinal = null;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

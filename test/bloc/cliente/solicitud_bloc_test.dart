@@ -1,10 +1,10 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_a_c_soluciones/bloc/client/solicitud_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/client/solicitud_event.dart';
 import 'package:flutter_a_c_soluciones/bloc/client/solicitud_state.dart';
 import 'package:flutter_a_c_soluciones/model/client/solicitud_model.dart';
 import 'package:flutter_a_c_soluciones/repository/client/solicitud_api_solicitud.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 // Mock para SolicitudApiRepository - caso éxito
 class MockSolicitudApiRepositorySuccess implements SolicitudApiRepository {
@@ -177,4 +177,3 @@ class _MockSolicitudApiRepositoryEmpty implements SolicitudApiRepository {
     throw UnimplementedError();
   }
 }
-

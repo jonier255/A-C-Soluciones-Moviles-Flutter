@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/administrador/editProfileAdmin/edit_profile_admin_bloc.dart';
-import 'widgets/profile_header.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'widgets/profile_avatar.dart';
-import 'widgets/profile_form.dart';
 import 'widgets/profile_constants.dart';
+import 'widgets/profile_form.dart';
+import 'widgets/profile_header.dart';
 
 /// Pantalla de edición de información personal del administrador
 class EditarInformacionScreen extends StatefulWidget {

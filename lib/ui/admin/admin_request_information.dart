@@ -166,7 +166,7 @@ class _RequestInformationState extends State<RequestInformation> {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.blue.withOpacity(0.3),
+                      color: Colors.blue.withValues(alpha: 0.3),
                       blurRadius: 10,
                       offset: const Offset(0, 5),
                     ),
@@ -227,7 +227,7 @@ class _RequestInformationState extends State<RequestInformation> {
                         Expanded(
                           flex: 1,
                           child: DropdownButtonFormField<String>(
-                            value: _estadoSeleccionado,
+                            initialValue: _estadoSeleccionado,
                             hint: const Text('Estado'),
                             decoration: InputDecoration(
                               border: OutlineInputBorder(

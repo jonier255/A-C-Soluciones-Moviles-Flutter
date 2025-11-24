@@ -38,7 +38,7 @@ class AdminMenuTheme {
   static List<BoxShadow> headerShadow() {
     return [
       BoxShadow(
-        color: primaryGradientStart.withOpacity(0.3),
+        color: primaryGradientStart.withValues(alpha: 0.3),
         blurRadius: 20,
         offset: const Offset(0, 10),
       ),
@@ -48,7 +48,7 @@ class AdminMenuTheme {
   static List<BoxShadow> logoShadow() {
     return [
       BoxShadow(
-        color: Colors.black.withOpacity(0.08),
+        color: Colors.black.withValues(alpha: 0.08),
         blurRadius: 20,
         offset: const Offset(0, 10),
       ),
@@ -57,7 +57,7 @@ class AdminMenuTheme {
   
   static BoxShadow cardShadow(Color gradientColor) {
     return BoxShadow(
-      color: gradientColor.withOpacity(0.4),
+      color: gradientColor.withValues(alpha: 0.4),
       blurRadius: 15,
       offset: const Offset(0, 8),
     );
@@ -66,7 +66,7 @@ class AdminMenuTheme {
   static List<BoxShadow> navBarShadow() {
     return [
       BoxShadow(
-        color: Colors.black.withOpacity(0.1),
+        color: Colors.black.withValues(alpha: 0.1),
         blurRadius: 20,
         offset: const Offset(0, -5),
       ),

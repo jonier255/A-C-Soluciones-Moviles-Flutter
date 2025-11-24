@@ -83,13 +83,13 @@ class AdminDetailTheme {
   static List<BoxShadow> avatarShadow() {
     return [
       BoxShadow(
-        color: const Color.fromARGB(255, 20, 39, 212).withOpacity(0.4),
+        color: const Color.fromARGB(255, 20, 39, 212).withValues(alpha: 0.4),
         blurRadius: 25,
         offset: const Offset(0, 12),
         spreadRadius: 2,
       ),
       BoxShadow(
-        color: Colors.black.withOpacity(0.1),
+        color: Colors.black.withValues(alpha: 0.1),
         blurRadius: 15,
         offset: const Offset(0, 8),
       ),
@@ -99,7 +99,7 @@ class AdminDetailTheme {
   static List<BoxShadow> cardShadow() {
     return [
       BoxShadow(
-        color: Colors.black.withOpacity(0.08),
+        color: Colors.black.withValues(alpha: 0.08),
         blurRadius: 12,
         offset: const Offset(0, 4),
       ),
@@ -108,7 +108,7 @@ class AdminDetailTheme {
   
   static BoxShadow buttonShadow(Color color, {bool isOutlined = false}) {
     return BoxShadow(
-      color: color.withOpacity(isOutlined ? 0.1 : 0.3),
+      color: color.withValues(alpha: isOutlined ? 0.1 : 0.3),
       blurRadius: 10,
       offset: const Offset(0, 4),
     );

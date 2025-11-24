@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_a_c_soluciones/model/administrador/admin_model.dart';
-import 'package:flutter_a_c_soluciones/repository/services_admin/service_AdminUpdateProfile.dart';
+import 'package:flutter_a_c_soluciones/repository/services_admin/service_admin_update_profile.dart';
 
 part 'edit_profile_admin_event.dart';
 part 'edit_profile_admin_state.dart';
@@ -15,7 +15,7 @@ class EditProfileAdminBloc extends Bloc<EditProfileAdminEvent, EditProfileAdminS
     on<UpdateAdminProfile>(_onUpdateAdminProfile);
   }
 
-  void _onLoadAdminProfile(
+  Future<void> _onLoadAdminProfile(
     LoadAdminProfile event,
     Emitter<EditProfileAdminState> emit,
   ) async {
@@ -28,7 +28,7 @@ class EditProfileAdminBloc extends Bloc<EditProfileAdminEvent, EditProfileAdminS
     }
   }
 
-  void _onUpdateAdminProfile(
+  Future<void> _onUpdateAdminProfile(
     UpdateAdminProfile event,
     Emitter<EditProfileAdminState> emit,
   ) async {

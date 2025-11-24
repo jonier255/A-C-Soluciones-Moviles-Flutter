@@ -132,6 +132,8 @@ class ProfileForm extends StatelessWidget {
       final storage = SecureStorageService();
       final adminIdStr = await storage.getAdminId();
       
+      if (!context.mounted) return;
+      
       if (adminIdStr == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -153,6 +155,8 @@ class ProfileForm extends StatelessWidget {
         rol: 'administrador',
       );
 
+      if (!context.mounted) return;
+      
       context.read<EditProfileAdminBloc>().add(
         UpdateAdminProfile(adminData: updatedAdmin),
       );

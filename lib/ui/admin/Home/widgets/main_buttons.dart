@@ -12,7 +12,7 @@ class MainButtonsSection extends StatelessWidget {
     
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: AdminHomeTheme.horizontalPadding(sw)),
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Expanded(
@@ -20,18 +20,11 @@ class MainButtonsSection extends StatelessWidget {
               icon: Icons.engineering_rounded,
               label: "Técnico",
               gradient: AdminHomeTheme.technicoGradient,
-              onTap: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CreateTechnicalScreen(),
-                  ),
-                );
-              }
+              
             ),
           ),
-          const SizedBox(width: 16),
-          const Expanded(
+          SizedBox(width: 16),
+          Expanded(
             child: MainButton(
               icon: Icons.person_rounded,
               label: "Cliente",

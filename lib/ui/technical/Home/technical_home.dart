@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_event.dart';
-import 'package:flutter_a_c_soluciones/model/technical/task_model.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_state.dart';
+import 'package:flutter_a_c_soluciones/model/technical/task_model.dart';
 import 'package:flutter_a_c_soluciones/repository/task_repository.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/Visits/visits_details_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/widgets/bottom_nav_bar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TechnicalHomeScreen extends StatelessWidget {
   const TechnicalHomeScreen({super.key});
@@ -14,19 +15,25 @@ class TechnicalHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => TaskBloc(taskRepository: TaskRepository())..add(LoadTasks()),
-      child: Scaffold(
+      child: const Scaffold(
         backgroundColor: Colors.white,
-        bottomNavigationBar: const BottomNavBar(),
+        bottomNavigationBar: BottomNavBar(),
         body: SafeArea(
-          child: ListView(
-            children: const [
+          child: Column(
+            children: [
               _HeaderSection(),
-              SizedBox(height: 20),
-              _MainButtonsSection(),
-              SizedBox(height: 20),
-              _QuickAccessSection(),
-              SizedBox(height: 20),
-              _RecentTasksSection(), // Reemplaza solicitudes por tareas o mantenimientos
+              Expanded(
+                child: Column(
+                  children: [
+                    SizedBox(height: 4),
+                    _MainButtonsSection(),
+                    SizedBox(height: 8),
+                    _QuickAccessSection(),
+                    SizedBox(height: 8),
+                    Expanded(child: _RecentTasksSection()),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -41,50 +48,111 @@ class _HeaderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04), // Responsive horizontal padding
-      child: Column(
-        children: [
-          Center(
-            child: Image.asset(
-              "assets/soluciones.png",
-              height: screenHeight * 0.15, // Responsive height
-            ),
+    return ClipPath(
+      clipper: WaveClipper(),
+      child: Container(
+        height: screenHeight * 0.18,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color.fromARGB(255, 45, 78, 224),
+              Color.fromARGB(255, 29, 26, 190),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-          SizedBox(height: screenHeight * 0.01), // Responsive height
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.4),
-                  spreadRadius: 1,
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xFF667eea),
+              blurRadius: 15,
+              offset: Offset(0, 8),
             ),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: "Buscar tarea o cliente",
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
+          ],
+        ),
+        child: Stack(
+          children: [
+            // Círculos decorativos
+            Positioned(
+              top: -20,
+              right: -20,
+              child: Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white.withValues(alpha: 0.08),
                 ),
-                filled: true,
-                fillColor: const Color(0xFFF0F2F5),
-                contentPadding: EdgeInsets.symmetric(vertical: screenHeight * 0.01), // Responsive vertical padding
               ),
             ),
-          ),
-        ],
+            Positioned(
+              bottom: 20,
+              left: -15,
+              child: Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white.withValues(alpha: 0.06),
+                ),
+              ),
+            ),
+            // Logo centrado
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 15),
+                child: ColorFiltered(
+                  colorFilter: const ColorFilter.mode(
+                    Colors.white,
+                    BlendMode.srcIn,
+                  ),
+                  child: Image.asset(
+                    "assets/soluciones.png",
+                    height: screenHeight * 0.095,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
+}
+
+// Wave Clipper para la curva superior
+class WaveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+    path.lineTo(0, size.height - 40);
+
+    var firstControlPoint = Offset(size.width / 4, size.height);
+    var firstEndPoint = Offset(size.width / 2, size.height - 40);
+    path.quadraticBezierTo(
+      firstControlPoint.dx,
+      firstControlPoint.dy,
+      firstEndPoint.dx,
+      firstEndPoint.dy,
+    );
+
+    var secondControlPoint = Offset(size.width * 3 / 4, size.height - 80);
+    var secondEndPoint = Offset(size.width, size.height - 40);
+    path.quadraticBezierTo(
+      secondControlPoint.dx,
+      secondControlPoint.dy,
+      secondEndPoint.dx,
+      secondEndPoint.dy,
+    );
+
+    path.lineTo(size.width, 0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }
 
 // Botones principales (por ejemplo: Asignadas y Finalizadas)
@@ -127,30 +195,45 @@ class _MainButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return Container(
-      width: screenWidth * 0.35, // Responsive width
-      height: screenHeight * 0.12, // Responsive height
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 17, 115, 196),
-        borderRadius: BorderRadius.circular(22),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
+    return Card(
+      elevation: 6,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: screenWidth * 0.12, color: Colors.white), // Responsive icon size
-          SizedBox(height: screenHeight * 0.005), // Responsive height
-          Text(label,
-              style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold)),
-        ],
+      child: Container(
+        width: screenWidth * 0.4,
+        height: screenHeight * 0.11,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue[700]!, Colors.blue[500]!],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.blue.withValues(alpha: 0.4),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: screenWidth * 0.1, color: Colors.white),
+            SizedBox(height: screenHeight * 0.008),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: screenWidth * 0.042,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -203,33 +286,46 @@ class _QuickButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.015, horizontal: screenWidth * 0.02), // Responsive padding
-      decoration: BoxDecoration(
-        color: const Color(0xFFF0F2F5),
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 5,
-            offset: const Offset(0, 2),
-          ),
-        ],
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: Colors.black, size: screenWidth * 0.05), // Responsive icon size
-          SizedBox(width: screenWidth * 0.02), // Responsive width
-          Flexible(
-            child: Text(
-              label,
-              style: TextStyle(fontSize: screenWidth * 0.035, fontWeight: FontWeight.bold), // Responsive font size
-              overflow: TextOverflow.ellipsis,
-            ),
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          vertical: screenHeight * 0.014,
+          horizontal: screenWidth * 0.03,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: Colors.blue[200]!,
+            width: 1.5,
           ),
-        ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              color: Colors.blue[700],
+              size: screenWidth * 0.06,
+            ),
+            SizedBox(width: screenWidth * 0.02),
+            Flexible(
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: screenWidth * 0.038,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue[800],
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -247,78 +343,92 @@ class _RecentTasksSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Tareas recientes",
-            style: TextStyle(
-              fontSize: screenWidth * 0.05, // Responsive font size
-              fontWeight: FontWeight.bold,
-              shadows: [
-                Shadow(
-                  blurRadius: 4.0,
-                  color: Colors.black.withOpacity(0.5),
-                  offset: const Offset(1.0, 1.0),
+          Row(
+            children: [
+              Icon(
+                Icons.schedule,
+                color: Colors.blue[700],
+                size: screenWidth * 0.07,
+              ),
+              SizedBox(width: screenWidth * 0.02),
+              Text(
+                "Tareas recientes",
+                style: TextStyle(
+                  fontSize: screenWidth * 0.052,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue[800],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          SizedBox(height: screenHeight * 0.02), // Responsive height
+          SizedBox(height: screenHeight * 0.015),
           BlocBuilder<TaskBloc, TaskState>(
             builder: (context, state) {
               if (state is TaskLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
               if (state is TaskSuccess) {
-                final recentTasks = state.tasks.take(3).toList();
+                final recentTasks = state.tasks.take(2).toList();
                 if (recentTasks.isEmpty) {
                   return const Center(child: Text("No hay tareas recientes."));
                 }
                 return Column(
                   children: [
-                    Container(
-                      padding: EdgeInsets.all(screenWidth * 0.025), // Responsive padding
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(30),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.blue.withOpacity(0.9),
-                            spreadRadius: 4,
-                            blurRadius: 12,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Column(
+                        Column(
                           children: recentTasks
                               .map((task) => _TaskCard(task: task))
                               .toList(),
                         ),
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.01), // Responsive height
+                    SizedBox(height: screenHeight * 0.015), // Responsive height
                     Center(
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/technical_assigned_visits');
-                        },
-                        child: Text(
-                          "Ver más...",
-                          style: TextStyle(
-                            fontSize: screenWidth * 0.04, // Responsive font size
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                            shadows: [
-                              Shadow(
-                                blurRadius: 4.0,
-                                color: Colors.black.withOpacity(0.5),
-                                offset: const Offset(1.0, 1.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.blue[700]!, Colors.blue[500]!],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                          borderRadius: BorderRadius.circular(25),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.blue.withValues(alpha: 0.4),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(25),
+                            onTap: () {
+                              Navigator.pushNamed(context, '/technical_assigned_visits');
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: screenWidth * 0.06,
+                                vertical: screenHeight * 0.012,
                               ),
-                            ],
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    "Ver más",
+                                    style: TextStyle(
+                                      fontSize: screenWidth * 0.04,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  SizedBox(width: screenWidth * 0.02),
+                                  Icon(
+                                    Icons.arrow_forward_rounded,
+                                    color: Colors.white,
+                                    size: screenWidth * 0.05,
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -339,6 +449,44 @@ class _RecentTasksSection extends StatelessWidget {
 
 
 // Tarjeta de tarea individual
+// Función helper para obtener la etiqueta amigable del estado
+String _getStateLabel(String state) {
+  const Map<String, String> stateLabels = {
+    'programada': 'Programada',
+    'en_camino': 'En camino',
+    'iniciada': 'Iniciada',
+    'completada': 'Completada',
+    'cancelada': 'Cancelada',
+  };
+  return stateLabels[state] ?? state;
+}
+
+// Función helper para obtener el color de fondo del estado
+Color? _getStateBackgroundColor(String state) {
+  const Map<String, int> stateColorValues = {
+    'programada': 0xFFFFF3E0,  // Colors.orange[100]
+    'en_camino': 0xFFE3F2FD,   // Colors.blue[100]
+    'iniciada': 0xFFC8E6C9,    // Colors.green[100]
+    'completada': 0xFFC8E6C9,  // Colors.green[100]
+    'cancelada': 0xFFFFCDD2,   // Colors.red[100]
+  };
+  final colorValue = stateColorValues[state];
+  return colorValue != null ? Color(colorValue) : Colors.grey[100];
+}
+
+// Función helper para obtener el color del texto del estado
+Color? _getStateTextColor(String state) {
+  const Map<String, int> stateColorValues = {
+    'programada': 0xFFE65100,  // Colors.orange[800]
+    'en_camino': 0xFF1565C0,   // Colors.blue[800]
+    'iniciada': 0xFF2E7D32,    // Colors.green[800]
+    'completada': 0xFF1B5E20,  // Colors.green[900]
+    'cancelada': 0xFFC62828,   // Colors.red[800]
+  };
+  final colorValue = stateColorValues[state];
+  return colorValue != null ? Color(colorValue) : Colors.grey[800];
+}
+
 class _TaskCard extends StatelessWidget {
   final TaskModel task;
 
@@ -347,57 +495,124 @@ class _TaskCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return Card(
-      elevation: 6,
-      color: Colors.white,
-      margin: EdgeInsets.symmetric(vertical: screenHeight * 0.01, horizontal: screenWidth * 0.04), // Responsive margin
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      child: Padding(
-        padding: EdgeInsets.all(screenWidth * 0.035), // Responsive padding
-        child: Row(
-          children: [
-            Icon(Icons.handyman, size: screenWidth * 0.09, color: Colors.black), // Responsive icon size
-            SizedBox(width: screenWidth * 0.04), // Responsive width
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(task.servicio.nombre,
-                      style: TextStyle(
-                          fontSize: screenWidth * 0.035, fontWeight: FontWeight.bold)), // Responsive font size
-                  SizedBox(height: screenHeight * 0.005), // Responsive height
-                  Text(
-                    task.servicio.descripcion.length > 50
-                        ? '${task.servicio.descripcion.substring(0, 50)}...'
-                        : task.servicio.descripcion,
-                    style: TextStyle(fontSize: screenWidth * 0.03, color: Colors.grey), // Responsive font size
-                  ),
-                  SizedBox(height: screenHeight * 0.005), // Responsive height
-                  Text("Fecha: ${task.fechaProgramada.toString().substring(0, 10)}",
-                      style:
-                          TextStyle(fontSize: screenWidth * 0.03, color: Colors.grey)), // Responsive font size
-                ],
-              ),
+    return InkWell(
+      onTap: () async {
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => VisitsDetailsScreen(task: task),
+          ),
+        );
+        // Recargar la lista cuando se regresa
+        if (context.mounted) {
+          context.read<TaskBloc>().add(LoadTasks());
+        }
+      },
+      child: Card(
+        elevation: 4,
+        margin: EdgeInsets.symmetric(
+          vertical: screenHeight * 0.006,
+          horizontal: screenWidth * 0.04,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: Colors.blue[100]!,
+              width: 1,
             ),
-            Container(padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025, vertical: screenHeight * 0.008), // Responsive padding
-              decoration: BoxDecoration(
-                color: task.estado == "completada"
-                    ? Colors.green[100]
-                    : Colors.orange[100],
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                task.estado,
-                style: TextStyle(
-                  color: task.estado == "completada"
-                      ? Colors.green[800]
-                      : Colors.orange[800],
-                  fontWeight: FontWeight.bold,
-                  fontSize: screenWidth * 0.03, // Responsive font size
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(screenWidth * 0.035),
+            child: Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(screenWidth * 0.025),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.blue[700]!, Colors.blue[500]!],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Icons.handyman,
+                    size: screenWidth * 0.07,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-            )
-          ],
+                SizedBox(width: screenWidth * 0.03),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        task.servicio.nombre.length > 30
+                            ? '${task.servicio.nombre.substring(0, 30)}...'
+                            : task.servicio.nombre,
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.038,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue[800],
+                        ),
+                      ),
+                      SizedBox(height: screenHeight * 0.004),
+                      Text(
+                        task.servicio.descripcion.length > 30
+                            ? '${task.servicio.descripcion.substring(0, 30)}...'
+                            : task.servicio.descripcion,
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.032,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      SizedBox(height: screenHeight * 0.004),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.calendar_today,
+                            size: screenWidth * 0.03,
+                            color: Colors.grey[500],
+                          ),
+                          SizedBox(width: screenWidth * 0.01),
+                          Text(
+                            task.fechaProgramada.toString().substring(0, 10),
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.03,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth * 0.022,
+                    vertical: screenHeight * 0.006,
+                  ),
+                  decoration: BoxDecoration(
+                    color: _getStateBackgroundColor(task.estado),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    _getStateLabel(task.estado),
+                    style: TextStyle(
+                      color: _getStateTextColor(task.estado),
+                      fontWeight: FontWeight.bold,
+                      fontSize: screenWidth * 0.028,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

@@ -16,7 +16,7 @@ class EditProfileClientBloc extends Bloc<EditProfileClientEvent, EditProfileClie
     on<UpdateClientProfile>(_onUpdateClientProfile);
   }
 
-  void _onLoadClientProfile(
+  Future<void> _onLoadClientProfile(
     LoadClientProfile event,
     Emitter<EditProfileClientState> emit,
   ) async {
@@ -44,11 +44,11 @@ class EditProfileClientBloc extends Bloc<EditProfileClientEvent, EditProfileClie
       );
       emit(EditProfileClientLoaded(client));
     } else {
-      emit(EditProfileClientFailure('No se encontraron datos del usuario'));
+      emit(const EditProfileClientFailure('No se encontraron datos del usuario'));
     }
   }
 
-  void _onUpdateClientProfile(
+  Future<void> _onUpdateClientProfile(
     UpdateClientProfile event,
     Emitter<EditProfileClientState> emit,
   ) async {

@@ -54,7 +54,7 @@ class AdminDetailHeader extends StatelessWidget {
         height: sw * (isTop ? 0.5 : 0.4),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.white.withOpacity(0.08),
+          color: Colors.white.withValues(alpha: 0.08),
         ),
       ),
     );
@@ -64,9 +64,9 @@ class AdminDetailHeader extends StatelessWidget {
   Widget _buildBackButton(BuildContext context, double sw, bool isTablet) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
+        color: Colors.white.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withOpacity(0.3)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
       ),
       child: IconButton(
         icon: Icon(

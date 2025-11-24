@@ -26,7 +26,7 @@ class VerifyCodeScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.blue.withOpacity(0.9),
+                          color: Colors.blue.withValues(alpha: 0.9),
                           spreadRadius: 2,
                           blurRadius: 10,
                           offset: const Offset(0, 4),

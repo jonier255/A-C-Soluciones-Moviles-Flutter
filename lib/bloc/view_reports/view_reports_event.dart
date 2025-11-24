@@ -8,3 +8,12 @@ abstract class ViewReportsEvent extends Equatable {
 }
 
 class LoadViewReports extends ViewReportsEvent {}
+
+class LoadMoreViewReports extends ViewReportsEvent {
+  final int page;
+  
+  const LoadMoreViewReports(this.page);
+  
+  @override
+  List<Object> get props => [page];
+}

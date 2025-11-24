@@ -7,7 +7,6 @@ import 'dart:async' as _i4;
 
 import 'package:flutter_a_c_soluciones/model/administrador/visits_model.dart'
     as _i2;
-import 'package:flutter_a_c_soluciones/model/technical/task_model.dart' as _i5;
 import 'package:flutter_a_c_soluciones/repository/task_repository.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -27,6 +26,16 @@ import 'package:mockito/mockito.dart' as _i1;
 
 class _FakeVisitsModel_0 extends _i1.SmartFake implements _i2.VisitsModel {
   _FakeVisitsModel_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeTaskResponse_1 extends _i1.SmartFake implements _i3.TaskResponse {
+  _FakeTaskResponse_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -76,11 +85,19 @@ class MockTaskRepository extends _i1.Mock implements _i3.TaskRepository {
       ) as _i4.Future<void>);
 
   @override
-  _i4.Future<List<_i5.TaskModel>> getTasks() => (super.noSuchMethod(
+  _i4.Future<_i3.TaskResponse> getTasks({int? page = 1}) => (super.noSuchMethod(
         Invocation.method(
           #getTasks,
           [],
+          {#page: page},
         ),
-        returnValue: _i4.Future<List<_i5.TaskModel>>.value(<_i5.TaskModel>[]),
-      ) as _i4.Future<List<_i5.TaskModel>>);
+        returnValue: _i4.Future<_i3.TaskResponse>.value(_FakeTaskResponse_1(
+          this,
+          Invocation.method(
+            #getTasks,
+            [],
+            {#page: page},
+          ),
+        )),
+      ) as _i4.Future<_i3.TaskResponse>);
 }
