@@ -38,40 +38,42 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(screenWidth * 0.05),
+        padding: EdgeInsets.symmetric(
+          horizontal: screenWidth * 0.04,
+          vertical: screenHeight * 0.01,
+        ),
         child: Column(
           children: [
             // Card con nombre del servicio
             Card(
-              elevation: 4,
+              elevation: 2,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(12),
               ),
               child: Container(
-                width: screenWidth * 0.9,
-                padding: EdgeInsets.all(screenWidth * 0.05),
+                padding: EdgeInsets.all(screenWidth * 0.03),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [Color(0xFFE3F2FD), Colors.white],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
                   children: [
                     Icon(
                       Icons.business_center,
                       color: Colors.blue[800],
-                      size: screenWidth * 0.08,
+                      size: screenWidth * 0.06,
                     ),
-                    SizedBox(width: screenWidth * 0.03),
+                    SizedBox(width: screenWidth * 0.02),
                     Expanded(
                       child: Text(
                         widget.service.nombre,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: screenWidth * 0.052,
+                          fontSize: screenWidth * 0.04,
                           color: Colors.blue[800],
                         ),
                       ),
@@ -80,39 +82,38 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                 ),
               ),
             ),
-            SizedBox(height: screenHeight * 0.02),
+            SizedBox(height: screenHeight * 0.01),
 
             // Card con información del servicio
             Card(
-              elevation: 4,
+              elevation: 2,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(12),
               ),
               child: Container(
-                width: screenWidth * 0.9,
-                padding: EdgeInsets.all(screenWidth * 0.05),
+                padding: EdgeInsets.all(screenWidth * 0.03),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        const Icon(Icons.info_outline, color: Colors.blue, size: 28),
-                        SizedBox(width: screenWidth * 0.03),
+                        const Icon(Icons.info_outline, color: Colors.blue, size: 20),
+                        SizedBox(width: screenWidth * 0.02),
                         Text(
                           'Información del Servicio',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: screenWidth * 0.052,
+                            fontSize: screenWidth * 0.038,
                             color: Colors.blue[800],
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: screenHeight * 0.02),
+                    SizedBox(height: screenHeight * 0.01),
                     _buildDetailRow(
                       Icons.description,
                       'Descripción:',
@@ -120,7 +121,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                       screenWidth,
                       screenHeight,
                     ),
-                    SizedBox(height: screenHeight * 0.015),
+                    SizedBox(height: screenHeight * 0.008),
                     _buildDetailRow(
                       Icons.flag_outlined,
                       'Estado:',
@@ -128,7 +129,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                       screenWidth,
                       screenHeight,
                     ),
-                    SizedBox(height: screenHeight * 0.015),
+                    SizedBox(height: screenHeight * 0.008),
                     _buildDetailRow(
                       Icons.calendar_today,
                       'Fecha de Creación:',
@@ -136,7 +137,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                       screenWidth,
                       screenHeight,
                     ),
-                    SizedBox(height: screenHeight * 0.015),
+                    SizedBox(height: screenHeight * 0.008),
                     _buildDetailRow(
                       Icons.update,
                       'Última Modificación:',
@@ -148,7 +149,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                 ),
               ),
             ),
-            SizedBox(height: screenHeight * 0.02),
+            SizedBox(height: screenHeight * 0.01),
           ],
         ),
       ),
@@ -163,17 +164,17 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
     double screenHeight,
   ) {
     return Container(
-      padding: EdgeInsets.all(screenWidth * 0.035),
+      padding: EdgeInsets.all(screenWidth * 0.025),
       decoration: BoxDecoration(
         color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey[200]!, width: 1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey[200]!, width: 0.5),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: Colors.blue[700], size: screenWidth * 0.055),
-          SizedBox(width: screenWidth * 0.03),
+          Icon(icon, color: Colors.blue[700], size: screenWidth * 0.04),
+          SizedBox(width: screenWidth * 0.02),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,18 +183,20 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                   title,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: screenWidth * 0.04,
+                    fontSize: screenWidth * 0.032,
                     color: Colors.grey[700],
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.005),
+                SizedBox(height: screenHeight * 0.003),
                 Text(
                   value.isNotEmpty ? value : '—',
                   style: TextStyle(
-                    fontSize: screenWidth * 0.042,
+                    fontSize: screenWidth * 0.034,
                     color: Colors.grey[900],
-                    height: 1.4,
+                    height: 1.2,
                   ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
