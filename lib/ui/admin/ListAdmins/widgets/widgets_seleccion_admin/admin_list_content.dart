@@ -90,7 +90,7 @@ class _AdminListContentState extends State<AdminListContent> {
     );
   }
 
-  Widget _buildAdminsContainer(List admins) {
+  Widget _buildAdminsContainer(List<dynamic> admins) {
     return admins.isNotEmpty
         ? ListView.builder(
             physics: const BouncingScrollPhysics(),

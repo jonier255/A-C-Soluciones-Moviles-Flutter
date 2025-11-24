@@ -108,7 +108,7 @@ class AdminDetailTheme {
   
   static BoxShadow buttonShadow(Color color, {bool isOutlined = false}) {
     return BoxShadow(
-      color: color.withOpacity(isOutlined ? 0.1 : 0.3),
+      color: color.withValues(alpha: isOutlined ? 0.1 : 0.3),
       blurRadius: 10,
       offset: const Offset(0, 4),
     );

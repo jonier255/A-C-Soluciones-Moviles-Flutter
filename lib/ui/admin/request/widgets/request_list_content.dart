@@ -82,7 +82,7 @@ class _RequestListContentState extends State<RequestListContent> {
     );
   }
 
-  Widget _buildRequestsContainer(List requests, Size size) {
+  Widget _buildRequestsContainer(List<dynamic> requests, Size size) {
     final sw = size.width;
     final sh = size.height;
     final containerMarginHorizontal = sw * 0.04;
