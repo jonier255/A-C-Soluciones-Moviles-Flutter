@@ -177,4 +177,3 @@ class _MockSolicitudApiRepositoryEmpty implements SolicitudApiRepository {
     throw UnimplementedError();
   }
 }
-

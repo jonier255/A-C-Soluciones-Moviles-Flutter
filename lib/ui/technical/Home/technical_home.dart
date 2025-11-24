@@ -144,12 +144,26 @@ class _MainButton extends StatelessWidget {
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: screenWidth * 0.12, color: Colors.white), // Responsive icon size
-          SizedBox(height: screenHeight * 0.005), // Responsive height
-          Text(label,
-              style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold)),
+          Icon(icon, size: screenWidth * 0.07, color: Colors.white), // Smaller icon size
+          const SizedBox(height: 2), // Minimal spacing
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2.0),
+              child: Text(
+                label,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 10,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -261,45 +275,24 @@ class _RecentTasksSection extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: screenHeight * 0.02), // Responsive height
+          SizedBox(height: screenHeight * 0.01), // Responsive height
           BlocBuilder<TaskBloc, TaskState>(
             builder: (context, state) {
               if (state is TaskLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
               if (state is TaskSuccess) {
-                final recentTasks = state.tasks.take(3).toList();
+                final recentTasks = state.tasks.take(2).toList();
                 if (recentTasks.isEmpty) {
                   return const Center(child: Text("No hay tareas recientes."));
                 }
                 return Column(
                   children: [
-                    Container(
-                      padding: EdgeInsets.all(screenWidth * 0.025), // Responsive padding
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(30),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.blue.withOpacity(0.9),
-                            spreadRadius: 4,
-                            blurRadius: 12,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Column(
+                        Column(
                           children: recentTasks
                               .map((task) => _TaskCard(task: task))
                               .toList(),
                         ),
-                      ),
-                    ),
                     SizedBox(height: screenHeight * 0.01), // Responsive height
                     Center(
                       child: TextButton(
@@ -362,13 +355,17 @@ class _TaskCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(task.servicio.nombre,
-                      style: TextStyle(
-                          fontSize: screenWidth * 0.035, fontWeight: FontWeight.bold)), // Responsive font size
+                  Text(
+                    task.servicio.nombre.length > 35
+                        ? '${task.servicio.nombre.substring(0, 35)}...'
+                        : task.servicio.nombre,
+                    style: TextStyle(
+                        fontSize: screenWidth * 0.035, fontWeight: FontWeight.bold),
+                  ),
                   SizedBox(height: screenHeight * 0.005), // Responsive height
                   Text(
-                    task.servicio.descripcion.length > 50
-                        ? '${task.servicio.descripcion.substring(0, 50)}...'
+                    task.servicio.descripcion.length > 35
+                        ? '${task.servicio.descripcion.substring(0, 35)}...'
                         : task.servicio.descripcion,
                     style: TextStyle(fontSize: screenWidth * 0.03, color: Colors.grey), // Responsive font size
                   ),
