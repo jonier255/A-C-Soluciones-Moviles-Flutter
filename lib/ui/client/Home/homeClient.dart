@@ -31,7 +31,7 @@ class ClientHomeContent extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.08),
+                      color: Colors.black.withValues(alpha: 0.08),
                       blurRadius: 20,
                       offset: const Offset(0, 4),
                     ),
@@ -57,7 +57,7 @@ class ClientHomeContent extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.08),
+                    color: Colors.black.withValues(alpha: 0.08),
                     blurRadius: 20,
                     offset: const Offset(0, 4),
                   ),
@@ -132,13 +132,13 @@ class ClientHomeContent extends StatelessWidget {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    const Color(0xFF2E91D8).withOpacity(0.1),
-                    const Color(0xFF56AFEC).withOpacity(0.1),
+                    const Color(0xFF2E91D8).withValues(alpha: 0.1),
+                    const Color(0xFF56AFEC).withValues(alpha: 0.1),
                   ],
                 ),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: const Color(0xFF2E91D8).withOpacity(0.2),
+                  color: const Color(0xFF2E91D8).withValues(alpha: 0.2),
                   width: 1,
                 ),
               ),
@@ -187,7 +187,7 @@ class ClientHomeContent extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.08),
+                    color: Colors.black.withValues(alpha: 0.08),
                     blurRadius: 20,
                     offset: const Offset(0, 4),
                   ),
@@ -253,7 +253,7 @@ class ClientHomeContent extends StatelessWidget {
               Container(
                 padding: EdgeInsets.all(isTablet ? 14 : 12),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Icon(

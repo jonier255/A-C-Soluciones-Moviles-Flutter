@@ -82,7 +82,7 @@ class _PageButton extends StatelessWidget {
         color: selected ? const Color.fromARGB(255, 43, 46, 206) : Colors.white,
         borderRadius: BorderRadius.circular(12),
         elevation: selected ? 4 : 0,
-        shadowColor: const Color.fromARGB(255, 37, 48, 197).withOpacity(0.3),
+        shadowColor: const Color.fromARGB(255, 37, 48, 197).withValues(alpha: 0.3),
         child: InkWell(
           onTap: onPressed,
           borderRadius: BorderRadius.circular(12),
@@ -129,7 +129,7 @@ class _ArrowButton extends StatelessWidget {
       color: const Color.fromARGB(255, 17, 68, 209),
       borderRadius: BorderRadius.circular(12),
       elevation: 4,
-      shadowColor: const Color.fromARGB(255, 19, 38, 211).withOpacity(0.3),
+      shadowColor: const Color.fromARGB(255, 19, 38, 211).withValues(alpha: 0.3),
       child: InkWell(
         onTap: onPressed,
         borderRadius: BorderRadius.circular(12),

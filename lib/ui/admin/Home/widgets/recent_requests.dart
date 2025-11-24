@@ -156,7 +156,7 @@ class RequestCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -214,7 +214,7 @@ class RequestCard extends StatelessWidget {
                         vertical: sh * 0.005,
                       ),
                       decoration: BoxDecoration(
-                        color: _getStatusColor(request.estado).withOpacity(0.1),
+                        color: _getStatusColor(request.estado).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(AdminHomeTheme.statusBadgeRadius),
                         border: Border.all(
                           color: _getStatusColor(request.estado),

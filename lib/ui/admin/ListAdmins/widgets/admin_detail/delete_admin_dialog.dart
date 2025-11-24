@@ -16,7 +16,7 @@ class DeleteAdminDialog {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE74C3C).withOpacity(0.1),
+                  color: const Color(0xFFE74C3C).withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(

@@ -76,7 +76,7 @@ class RequestScreenTheme {
   static List<BoxShadow> containerShadow() {
     return [
       BoxShadow(
-        color: primaryGradientEnd.withOpacity(0.3),
+        color: primaryGradientEnd.withValues(alpha: 0.3),
         spreadRadius: 0,
         blurRadius: 20,
         offset: const Offset(0, 8),
@@ -87,7 +87,7 @@ class RequestScreenTheme {
   static List<BoxShadow> cardShadow() {
     return [
       BoxShadow(
-        color: Colors.black.withOpacity(0.08),
+        color: Colors.black.withValues(alpha: 0.08),
         spreadRadius: 0,
         blurRadius: 15,
         offset: const Offset(0, 4),
@@ -98,7 +98,7 @@ class RequestScreenTheme {
   static List<BoxShadow> iconShadow() {
     return [
       BoxShadow(
-        color: const Color.fromARGB(255, 104, 171, 230).withOpacity(0.3),
+        color: const Color.fromARGB(255, 104, 171, 230).withValues(alpha: 0.3),
         spreadRadius: 0,
         blurRadius: 12,
         offset: const Offset(0, 4),
@@ -109,7 +109,7 @@ class RequestScreenTheme {
   static List<BoxShadow> buttonShadow() {
     return [
       BoxShadow(
-        color: primaryGradientStart.withOpacity(0.4),
+        color: primaryGradientStart.withValues(alpha: 0.4),
         spreadRadius: 0,
         blurRadius: 10,
         offset: const Offset(0, 5),

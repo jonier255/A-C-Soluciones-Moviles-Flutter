@@ -117,7 +117,7 @@ class _AssignVisitsViewState extends State<AssignVisitsView> {
     return Card(
       color: AssignVisitsTheme.cardColor,
       elevation: 6,
-      shadowColor: AssignVisitsTheme.accentBlue.withOpacity(0.9),
+      shadowColor: AssignVisitsTheme.accentBlue.withValues(alpha: 0.9),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: EdgeInsets.all(padding),

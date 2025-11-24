@@ -83,7 +83,7 @@ class AdminHomeTheme {
   static List<BoxShadow> cardShadow() {
     return [
       BoxShadow(
-        color: primaryGradientEnd.withOpacity(0.3),
+        color: primaryGradientEnd.withValues(alpha: 0.3),
         blurRadius: 20,
         offset: const Offset(0, 8),
       ),
@@ -93,7 +93,7 @@ class AdminHomeTheme {
   static List<BoxShadow> buttonShadow(Color color) {
     return [
       BoxShadow(
-        color: color.withOpacity(0.4),
+        color: color.withValues(alpha: 0.4),
         blurRadius: 15,
         offset: const Offset(0, 8),
       ),
@@ -103,7 +103,7 @@ class AdminHomeTheme {
   static List<BoxShadow> quickButtonShadow() {
     return [
       BoxShadow(
-        color: Colors.black.withOpacity(0.08),
+        color: Colors.black.withValues(alpha: 0.08),
         blurRadius: 12,
         offset: const Offset(0, 4),
       ),
@@ -113,7 +113,7 @@ class AdminHomeTheme {
   static List<BoxShadow> headerShadow() {
     return [
       BoxShadow(
-        color: primaryGradientStart.withOpacity(0.3),
+        color: primaryGradientStart.withValues(alpha: 0.3),
         blurRadius: 20,
         offset: const Offset(0, 10),
       ),

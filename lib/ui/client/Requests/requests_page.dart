@@ -51,7 +51,7 @@ class _RequestsContentState extends State<RequestsContent> {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -152,7 +152,7 @@ class _RequestsContentState extends State<RequestsContent> {
                         width: isTablet ? 150 : 120,
                         height: isTablet ? 150 : 120,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                           shape: BoxShape.circle,
                         ),
                         padding: const EdgeInsets.all(8),
@@ -266,7 +266,7 @@ class _RequestsContentState extends State<RequestsContent> {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
+                            color: Colors.black.withValues(alpha: 0.08),
                             blurRadius: 20,
                             offset: const Offset(0, 4),
                           ),
@@ -303,7 +303,7 @@ class _RequestsContentState extends State<RequestsContent> {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
+                            color: Colors.black.withValues(alpha: 0.08),
                             blurRadius: 20,
                             offset: const Offset(0, 4),
                           ),
@@ -368,7 +368,7 @@ class _RequestsContentState extends State<RequestsContent> {
                           color: Colors.white,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
+                              color: Colors.black.withValues(alpha: 0.05),
                               blurRadius: 10,
                               offset: const Offset(0, -2),
                             ),
@@ -413,7 +413,7 @@ class _RequestsContentState extends State<RequestsContent> {
                                 vertical: isTablet ? 12 : 8,
                               ),
                               decoration: BoxDecoration(
-                                color: const Color(0xFF2E91D8).withOpacity(0.1),
+                                color: const Color(0xFF2E91D8).withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
@@ -532,7 +532,7 @@ class _RequestsContentState extends State<RequestsContent> {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 20,
               offset: const Offset(0, 4),
             ),
@@ -543,7 +543,7 @@ class _RequestsContentState extends State<RequestsContent> {
             Container(
               padding: EdgeInsets.all(isTablet ? 16 : 12),
               decoration: BoxDecoration(
-                color: estadoColor.withOpacity(0.1),
+                color: estadoColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Icon(
@@ -597,7 +597,7 @@ class _RequestsContentState extends State<RequestsContent> {
                 vertical: isTablet ? 10 : 8,
               ),
               decoration: BoxDecoration(
-                color: estadoColor.withOpacity(0.1),
+                color: estadoColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(

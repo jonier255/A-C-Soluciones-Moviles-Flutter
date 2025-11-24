@@ -47,7 +47,7 @@ class AdminListTheme {
   static List<BoxShadow> containerShadow() {
     return [
       BoxShadow(
-        color: greenAccent.withOpacity(0.9),
+        color: greenAccent.withValues(alpha: 0.9),
         spreadRadius: 4,
         blurRadius: 8,
         offset: const Offset(0, 3),
@@ -58,7 +58,7 @@ class AdminListTheme {
   static List<BoxShadow> iconShadow() {
     return [
       BoxShadow(
-        color: Colors.black.withOpacity(0.3),
+        color: Colors.black.withValues(alpha: 0.3),
         spreadRadius: 2,
         blurRadius: 5,
         offset: const Offset(0, 3),

@@ -53,7 +53,7 @@ class _ServicesContentState extends State<ServicesContent> {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -98,7 +98,7 @@ class _ServicesContentState extends State<ServicesContent> {
                         Container(
                           padding: EdgeInsets.all(isTablet ? 16 : 12),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Icon(
@@ -171,7 +171,7 @@ class _ServicesContentState extends State<ServicesContent> {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
+                            color: Colors.black.withValues(alpha: 0.08),
                             blurRadius: 20,
                             offset: const Offset(0, 4),
                           ),
@@ -208,7 +208,7 @@ class _ServicesContentState extends State<ServicesContent> {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
+                            color: Colors.black.withValues(alpha: 0.08),
                             blurRadius: 20,
                             offset: const Offset(0, 4),
                           ),
@@ -272,7 +272,7 @@ class _ServicesContentState extends State<ServicesContent> {
                           color: Colors.white,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
+                              color: Colors.black.withValues(alpha: 0.05),
                               blurRadius: 10,
                               offset: const Offset(0, -2),
                             ),
@@ -317,7 +317,7 @@ class _ServicesContentState extends State<ServicesContent> {
                                 vertical: isTablet ? 12 : 8,
                               ),
                               decoration: BoxDecoration(
-                                color: const Color(0xFF2E91D8).withOpacity(0.1),
+                                color: const Color(0xFF2E91D8).withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
@@ -432,7 +432,7 @@ class _ServicesContentState extends State<ServicesContent> {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
+                  color: Colors.black.withValues(alpha: 0.08),
                   blurRadius: 20,
                   offset: const Offset(0, 4),
                 ),
@@ -443,7 +443,7 @@ class _ServicesContentState extends State<ServicesContent> {
                 Container(
                   padding: EdgeInsets.all(isTablet ? 16 : 12),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF2E91D8).withOpacity(0.1),
+                    color: const Color(0xFF2E91D8).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Icon(
