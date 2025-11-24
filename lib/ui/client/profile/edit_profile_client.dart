@@ -36,7 +36,6 @@ class _EditProfileClientScreenState extends State<EditProfileClientScreen> {
   Future<void> _loadInitialDataFromLogin() async {
     // Cargar datos iniciales del login desde SecureStorage
     final storage = SecureStorageService();
-    final clienteIdStr = await storage.getUserData('cliente_id');
     final userName = await storage.getUserData('user_name');
     final userEmail = await storage.getUserData('user_email');
     

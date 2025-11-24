@@ -121,13 +121,15 @@ class CuentaScreen extends StatelessWidget {
                                                         onPressed: () async {
                               final secureStorage = SecureStorageService();
                               await secureStorage.clearAll();
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const LoginScreen(),
-                                ),
-                                (route) => false,
-                              );
+                              if (context.mounted) {
+                                await Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginScreen(),
+                                  ),
+                                  (route) => false,
+                                );
+                              }
                             },
                             child: const Text(
                               "Cerrar Sesión",

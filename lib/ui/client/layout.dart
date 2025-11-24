@@ -96,7 +96,6 @@ class _ClientLayoutState extends State<ClientLayout> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
-    final isTablet = screenWidth > 600;
     final isDesktop = screenWidth > 1024;
 
     return BlocBuilder<LoginBloc, LoginState>(

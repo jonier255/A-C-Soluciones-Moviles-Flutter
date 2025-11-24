@@ -53,11 +53,16 @@ class _CrearSolicitudModalState extends State<CrearSolicitudModal> {
         comentarios: _comentarios,
         fechaSolicitud: _fechaSolicitud,
       );
-      Navigator.pop(context, true);
+      if (context.mounted) {
+        Navigator.pop(context, true);
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
+      if (!context.mounted) return;
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
+      }
     } finally {
       setState(() => _loading = false);
     }

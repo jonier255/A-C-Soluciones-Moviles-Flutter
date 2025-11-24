@@ -59,9 +59,7 @@ class _ChatContentState extends State<ChatContent> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
-    final screenHeight = mediaQuery.size.height;
     final isTablet = screenWidth > 600;
-    final isDesktop = screenWidth > 1024;
 
     return ColoredBox(
       color: const Color(0xFFF5F7FA),

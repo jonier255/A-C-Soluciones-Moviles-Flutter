@@ -45,7 +45,7 @@ class DateTimeField extends StatelessWidget {
         initialTime: TimeOfDay.now(),
       );
       
-      if (time != null) {
+      if (time != null && context.mounted) {
         final dateTime = DateTime(
           date.year,
           date.month,

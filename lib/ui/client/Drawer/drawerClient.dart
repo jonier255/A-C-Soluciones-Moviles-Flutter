@@ -18,7 +18,6 @@ class DrawerClient extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
-    final screenHeight = mediaQuery.size.height;
     final isTablet = screenWidth > 600;
 
     return Drawer(
@@ -185,6 +184,7 @@ class DrawerClient extends StatelessWidget {
         onTap: () async {
           if (isLogout) {
             // Mostrar diálogo de confirmación primero
+            if (!context.mounted) return;
             final confirmLogout = await showDialog<bool>(
               context: context,
               builder: (BuildContext dialogContext) {
@@ -257,6 +257,7 @@ class DrawerClient extends StatelessWidget {
             // Si el usuario confirmó, proceder con el logout
             if (confirmLogout == true) {
               // Cerrar el drawer primero
+              if (!context.mounted) return;
               if (Navigator.canPop(context)) {
                 Navigator.pop(context);
               } else {
@@ -273,7 +274,7 @@ class DrawerClient extends StatelessWidget {
               // Navegar al login y eliminar todas las rutas anteriores
               // Usar rootNavigator para asegurar que navegamos desde el Navigator raíz
               if (context.mounted) {
-                Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                await Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
                   MaterialPageRoute(
                     builder: (context) => const LoginScreen(),
                   ),
@@ -282,6 +283,7 @@ class DrawerClient extends StatelessWidget {
               }
             } else {
               // Si canceló, solo cerrar el drawer
+              if (!context.mounted) return;
               if (Navigator.canPop(context)) {
                 Navigator.pop(context);
               } else {

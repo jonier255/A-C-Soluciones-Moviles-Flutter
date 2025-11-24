@@ -19,7 +19,6 @@ class ClientHeader extends StatelessWidget {
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
     final isTablet = screenWidth > 600;
-    final isDesktop = screenWidth > 1024;
 
     return Container(
       width: double.infinity,
