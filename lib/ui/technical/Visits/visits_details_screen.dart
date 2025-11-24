@@ -145,105 +145,204 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               padding: EdgeInsets.all(screenWidth * 0.05),
-              child: Center(
-                child: Container(
-                  width: screenWidth * 0.9,
-                  padding: EdgeInsets.all(screenWidth * 0.06),
-                  margin: EdgeInsets.symmetric(vertical: screenHeight * 0.025),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(screenWidth * 0.045),
-                    boxShadow: [
-                      const BoxShadow(
-                        color: Colors.blue,
-                        blurRadius: 15,
-                        spreadRadius: 3,
-                        offset: Offset(0, 5),
-                      ),
-                    ],
-                    border: const Border(
-                      top: BorderSide(color: Colors.blueAccent, width: 1.5),
-                      left: BorderSide(color: Colors.blueAccent, width: 1.5),
-                      right: BorderSide(color: Colors.blueAccent, width: 1.5),
-                      bottom: BorderSide(color: Colors.blueAccent, width: 1.5),
+              child: Column(
+                children: [
+                  // Card con descripción
+                  Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Descripción',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: screenWidth * 0.05,
-                            color: Colors.black87),
+                    child: Container(
+                      width: screenWidth * 0.9,
+                      padding: EdgeInsets.all(screenWidth * 0.05),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFFE3F2FD), Colors.white],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      SizedBox(height: screenHeight * 0.01),
-                      Text(widget.task.servicio.descripcion,
-                          style: TextStyle(fontSize: screenWidth * 0.042)),
-                      SizedBox(height: screenHeight * 0.035),
-                      Text(
-                        'Información',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: screenWidth * 0.05,
-                            color: Colors.black87),
-                      ),
-                      SizedBox(height: screenHeight * 0.02),
-                      _buildDetailRow(
-                          'Notas previas:', widget.task.notasPrevias ?? '', screenWidth, screenHeight),
-                      SizedBox(height: screenHeight * 0.012),
-                      _buildDetailRow('Notas posteriores:',
-                          widget.task.notasPosteriores ?? '', screenWidth, screenHeight),
-                      SizedBox(height: screenHeight * 0.012),
-                      _buildDetailRow(
-                          'Fecha programada:',
-                          widget.task.fechaProgramada
-                              .toString()
-                              .substring(0, 10), screenWidth, screenHeight),
-                      SizedBox(height: screenHeight * 0.012),
-                      _buildDetailRow('Duración estimada:',
-                          '${widget.task.duracionEstimada} minutos', screenWidth, screenHeight),
-                      SizedBox(height: screenHeight * 0.03),
-                      _buildStateDropdown(screenWidth, screenHeight),
-                      SizedBox(height: screenHeight * 0.03),
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: _pdfPath != null
-                              ? _openPdf
-                              : () async {
-                                  final result = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => CreateReportScreen(
-                                          visitId: widget.task.id),
-                                    ),
-                                  );
-                                  // Si el reporte se creó exitosamente, recargar el PDF path
-                                  if (result == true && mounted) {
-                                    await _fetchPdfPath();
-                                  }
-                                },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blueAccent,
-                            foregroundColor: Colors.white,
-                            padding: EdgeInsets.symmetric(
-                                horizontal: screenWidth * 0.075, vertical: screenHeight * 0.017),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(screenWidth * 0.02),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(Icons.description, color: Colors.blue, size: 28),
+                              SizedBox(width: screenWidth * 0.03),
+                              Text(
+                                'Descripción',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: screenWidth * 0.052,
+                                  color: Colors.blue[800],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: screenHeight * 0.015),
+                          Text(
+                            widget.task.servicio.descripcion,
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.042,
+                              color: Colors.grey[800],
+                              height: 1.5,
                             ),
                           ),
-                          child: Text(
-                              _pdfPath != null
-                                  ? 'Ver reporte'
-                                  : 'Generar reporte',
-                              style: TextStyle(
-                                  fontSize: screenWidth * 0.042, fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.02),
+
+                  // Card con información detallada
+                  Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Container(
+                      width: screenWidth * 0.9,
+                      padding: EdgeInsets.all(screenWidth * 0.05),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(Icons.info_outline, color: Colors.blue, size: 28),
+                              SizedBox(width: screenWidth * 0.03),
+                              Text(
+                                'Información',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: screenWidth * 0.052,
+                                  color: Colors.blue[800],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: screenHeight * 0.02),
+                          _buildDetailRow(
+                            Icons.note_alt_outlined,
+                            'Notas previas:',
+                            widget.task.notasPrevias ?? '',
+                            screenWidth,
+                            screenHeight,
+                          ),
+                          SizedBox(height: screenHeight * 0.015),
+                          _buildDetailRow(
+                            Icons.notes,
+                            'Notas posteriores:',
+                            widget.task.notasPosteriores ?? '',
+                            screenWidth,
+                            screenHeight,
+                          ),
+                          SizedBox(height: screenHeight * 0.015),
+                          _buildDetailRow(
+                            Icons.calendar_today,
+                            'Fecha programada:',
+                            widget.task.fechaProgramada.toString().substring(0, 10),
+                            screenWidth,
+                            screenHeight,
+                          ),
+                          SizedBox(height: screenHeight * 0.015),
+                          _buildDetailRow(
+                            Icons.timer_outlined,
+                            'Duración estimada:',
+                            '${widget.task.duracionEstimada} minutos',
+                            screenWidth,
+                            screenHeight,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.02),
+
+                  // Card con estado
+                  Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Container(
+                      width: screenWidth * 0.9,
+                      padding: EdgeInsets.all(screenWidth * 0.05),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: _buildStateDropdown(screenWidth, screenHeight),
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.025),
+
+                  // Botón de reporte
+                  Container(
+                    width: screenWidth * 0.9,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.blue[600]!, Colors.blue[400]!],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.blue.withOpacity(0.4),
+                          blurRadius: 12,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
+                    ),
+                    child: ElevatedButton.icon(
+                      onPressed: _pdfPath != null
+                          ? _openPdf
+                          : () async {
+                              final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      CreateReportScreen(visitId: widget.task.id),
+                                ),
+                              );
+                              if (result == true && mounted) {
+                                await _fetchPdfPath();
+                              }
+                            },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        foregroundColor: Colors.white,
+                        shadowColor: Colors.transparent,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: screenWidth * 0.075,
+                          vertical: screenHeight * 0.02,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                    ],
+                      icon: Icon(
+                        _pdfPath != null ? Icons.picture_as_pdf : Icons.add_circle_outline,
+                        size: screenWidth * 0.06,
+                      ),
+                      label: Text(
+                        _pdfPath != null ? 'Ver reporte' : 'Generar reporte',
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.045,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  SizedBox(height: screenHeight * 0.02),
+                ],
               ),
             ),
     );
@@ -270,29 +369,47 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
     );
   }
 
-  Widget _buildDetailRow(String title, String value, double screenWidth, double screenHeight) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
-      child: Column(
+  Widget _buildDetailRow(
+    IconData icon,
+    String title,
+    String value,
+    double screenWidth,
+    double screenHeight,
+  ) {
+    return Container(
+      padding: EdgeInsets.all(screenWidth * 0.035),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey[200]!, width: 1),
+      ),
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: screenWidth * 0.042,
-                  color: Colors.black87)),
-          SizedBox(height: screenHeight * 0.005),
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.only(bottom: screenHeight * 0.008, top: screenHeight * 0.004),
-            decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: Colors.lightBlueAccent, width: 1.2),
-              ),
-            ),
-            child: Text(
-              value.isNotEmpty ? value : '—',
-              style: TextStyle(fontSize: screenWidth * 0.038, color: Colors.black87),
+          Icon(icon, color: Colors.blue[700], size: screenWidth * 0.055),
+          SizedBox(width: screenWidth * 0.03),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: screenWidth * 0.04,
+                    color: Colors.grey[700],
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.005),
+                Text(
+                  value.isNotEmpty ? value : '—',
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.042,
+                    color: Colors.grey[900],
+                    height: 1.4,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
