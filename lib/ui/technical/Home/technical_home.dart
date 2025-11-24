@@ -129,8 +129,8 @@ class _MainButton extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Container(
-      width: screenWidth * 0.35, // Responsive width
-      height: screenHeight * 0.12, // Responsive height
+      width: screenWidth * 0.38,
+      height: screenHeight * 0.13,
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 17, 115, 196),
         borderRadius: BorderRadius.circular(22),
@@ -145,24 +145,16 @@ class _MainButton extends StatelessWidget {
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: screenWidth * 0.07, color: Colors.white), // Smaller icon size
-          const SizedBox(height: 2), // Minimal spacing
-          Flexible(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 2.0),
-              child: Text(
-                label,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 10,
-                ),
-              ),
+          Icon(icon, size: screenWidth * 0.11, color: Colors.white),
+          SizedBox(height: screenHeight * 0.007),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: screenWidth * 0.04,
             ),
           ),
         ],

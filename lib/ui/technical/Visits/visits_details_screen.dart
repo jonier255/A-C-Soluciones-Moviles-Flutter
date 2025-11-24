@@ -377,15 +377,19 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
             Icon(
               Icons.flag_outlined,
               color: Colors.blue[700],
-              size: screenWidth * 0.06,
+              size: screenWidth * 0.055,
             ),
             SizedBox(width: screenWidth * 0.02),
-            Text(
-              'Estado de la visita',
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: screenWidth * 0.045,
-                color: Colors.grey[800],
+            Flexible(
+              child: Text(
+                'Estado de la visita',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: screenWidth * 0.043,
+                  color: Colors.grey[800],
+                  height: 1.3,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
@@ -406,7 +410,7 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
               border: InputBorder.none,
               contentPadding: EdgeInsets.symmetric(
                 horizontal: screenWidth * 0.04,
-                vertical: screenHeight * 0.015,
+                vertical: screenHeight * 0.022,
               ),
             ),
             dropdownColor: Colors.white,
@@ -436,6 +440,7 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
                         fontSize: screenWidth * 0.042,
                         fontWeight: FontWeight.w500,
                         color: style?['color'] ?? Colors.grey[800],
+                        height: 1.4,
                       ),
                     ),
                   ],
