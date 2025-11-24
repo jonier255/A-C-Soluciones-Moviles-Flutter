@@ -70,7 +70,7 @@ class _ReportListState extends State<_ReportList> {
       if (!storageStatus.isGranted) {
          if (storageStatus.isPermanentlyDenied) {
             if (!mounted) return;
-            showDialog(
+            await showDialog(
               context: context,
               builder: (context) => AlertDialog(
                 title: const Text('Permiso Requerido'),
