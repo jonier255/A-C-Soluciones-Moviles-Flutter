@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../bloc/request/request_state.dart';
-import '../../../../bloc/request/request_bloc.dart';
+import '../../../../bloc/administrador/request/request_state.dart';
+import '../../../../bloc/administrador/request/request_bloc.dart';
 import 'request_card.dart';
 import 'pagination_controls.dart';
 import 'request_screen_constants.dart';

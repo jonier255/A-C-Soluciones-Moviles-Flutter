@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_a_c_soluciones/bloc/request/request_bloc.dart';
+import 'package:flutter_a_c_soluciones/bloc/administrador/request/request_bloc.dart';
 import 'package:flutter_a_c_soluciones/repository/services_admin/request_repository.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
 import 'admin_menu_constants.dart';

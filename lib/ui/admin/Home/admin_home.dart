@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../bloc/request/request_bloc.dart';
-import '../../../bloc/request/request_event.dart';
+import '../../../bloc/administrador/request/request_bloc.dart';
+import '../../../bloc/administrador/request/request_event.dart';
 import '../../../repository/services_admin/request_repository.dart';
 import 'widgets/admin_home_constants.dart';
 import 'widgets/wave_header.dart';

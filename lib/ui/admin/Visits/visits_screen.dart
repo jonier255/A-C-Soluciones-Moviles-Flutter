@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/Home/admin_home.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
-import '../../../bloc/request/request_bloc.dart';
+import '../../../bloc/administrador/request/request_bloc.dart';
 import '../../../repository/services_admin/request_repository.dart';
-import '../../../bloc/visits/visits_bloc.dart';
-import '../../../bloc/visits/visits_event.dart';
-import '../../../bloc/visits/visits_state.dart';
+import '../../../bloc/administrador/visits/visits_bloc.dart';
+import '../../../bloc/administrador/visits/visits_event.dart';
+import '../../../bloc/administrador/visits/visits_state.dart';
 
 class VisitsScreen extends StatefulWidget {
   @override

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_a_c_soluciones/bloc/listAdmins/admins_bloc.dart';
+import 'package:flutter_a_c_soluciones/bloc/administrador/listAdmins/admins_bloc.dart';
 import 'package:flutter_a_c_soluciones/repository/services_admin/service_ListAdmin.dart';
 import 'list_admin_screen.dart';
 import 'widgets/widgets_seleccion_admin/admin_menu_constants.dart';

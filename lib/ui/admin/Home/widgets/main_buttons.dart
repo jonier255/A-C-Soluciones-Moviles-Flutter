@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/GestionTecnicos/create_technical_screen.dart';
 import 'admin_home_constants.dart';
 
 /// Sección con botones principales de acción (Técnico, Cliente)
@@ -13,16 +14,24 @@ class MainButtonsSection extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: AdminHomeTheme.horizontalPadding(sw)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: const [
+        children: [
           Expanded(
             child: MainButton(
               icon: Icons.engineering_rounded,
               label: "Técnico",
               gradient: AdminHomeTheme.technicoGradient,
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CreateTechnicalScreen(),
+                  ),
+                );
+              }
             ),
           ),
-          SizedBox(width: 16),
-          Expanded(
+          const SizedBox(width: 16),
+          const Expanded(
             child: MainButton(
               icon: Icons.person_rounded,
               label: "Cliente",

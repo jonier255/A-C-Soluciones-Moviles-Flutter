@@ -1,4 +1,4 @@
-import '../../model/administrador/request_model.dart';
+import '../../../model/administrador/request_model.dart';
 
 abstract class RequestState {}
 

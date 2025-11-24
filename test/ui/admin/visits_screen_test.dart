@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter_a_c_soluciones/bloc/visits/visits_bloc.dart';
-import 'package:flutter_a_c_soluciones/bloc/visits/visits_event.dart';
-import 'package:flutter_a_c_soluciones/bloc/visits/visits_state.dart';
+import 'package:flutter_a_c_soluciones/bloc/administrador/visits/visits_bloc.dart';
+import 'package:flutter_a_c_soluciones/bloc/administrador/visits/visits_event.dart';
+import 'package:flutter_a_c_soluciones/bloc/administrador/visits/visits_state.dart';
 import 'package:flutter_a_c_soluciones/model/administrador/visits_model.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/Visits/visits_screen.dart';
 
