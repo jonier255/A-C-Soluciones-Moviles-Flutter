@@ -281,6 +281,44 @@ class _PaginationWidget extends StatelessWidget {
   }
 }
 
+// Función helper para obtener la etiqueta amigable del estado
+String _getStateLabel(String state) {
+  const Map<String, String> stateLabels = {
+    'programada': 'Programada',
+    'en_camino': 'En camino',
+    'iniciada': 'Iniciada',
+    'completada': 'Completada',
+    'cancelada': 'Cancelada',
+  };
+  return stateLabels[state] ?? state;
+}
+
+// Función helper para obtener el color de fondo del estado
+Color? _getStateBackgroundColor(String state) {
+  const Map<String, int> stateColorValues = {
+    'programada': 0xFFFFF3E0,  // Colors.orange[100]
+    'en_camino': 0xFFE3F2FD,   // Colors.blue[100]
+    'iniciada': 0xFFC8E6C9,    // Colors.green[100]
+    'completada': 0xFFC8E6C9,  // Colors.green[100]
+    'cancelada': 0xFFFFCDD2,   // Colors.red[100]
+  };
+  final colorValue = stateColorValues[state];
+  return colorValue != null ? Color(colorValue) : Colors.grey[100];
+}
+
+// Función helper para obtener el color del texto del estado
+Color? _getStateTextColor(String state) {
+  const Map<String, int> stateColorValues = {
+    'programada': 0xFFE65100,  // Colors.orange[800]
+    'en_camino': 0xFF1565C0,   // Colors.blue[800]
+    'iniciada': 0xFF2E7D32,    // Colors.green[800]
+    'completada': 0xFF1B5E20,  // Colors.green[900]
+    'cancelada': 0xFFC62828,   // Colors.red[800]
+  };
+  final colorValue = stateColorValues[state];
+  return colorValue != null ? Color(colorValue) : Colors.grey[800];
+}
+
 class _TaskCard extends StatelessWidget {
   final TaskModel task;
 
@@ -337,13 +375,13 @@ class _TaskCard extends StatelessWidget {
               ),
               Container(padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025, vertical: screenHeight * 0.008),
                 decoration: BoxDecoration(
-                  color: Colors.green[100],
+                  color: _getStateBackgroundColor(task.estado),
                   borderRadius: BorderRadius.circular(screenWidth * 0.03),
                 ),
                 child: Text(
-                  task.estado,
+                  _getStateLabel(task.estado),
                   style: TextStyle(
-                    color: Colors.green[800],
+                    color: _getStateTextColor(task.estado),
                     fontWeight: FontWeight.bold,
                     fontSize: screenWidth * 0.03,
                   ),
