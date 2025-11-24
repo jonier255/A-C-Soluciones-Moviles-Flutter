@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_event.dart';
-import 'package:flutter_a_c_soluciones/model/technical/task_model.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_state.dart';
+import 'package:flutter_a_c_soluciones/model/technical/task_model.dart';
 import 'package:flutter_a_c_soluciones/repository/task_repository.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/Visits/visits_details_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/widgets/bottom_nav_bar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TechnicalHomeScreen extends StatelessWidget {
   const TechnicalHomeScreen({super.key});
@@ -15,14 +15,14 @@ class TechnicalHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => TaskBloc(taskRepository: TaskRepository())..add(LoadTasks()),
-      child: Scaffold(
+      child: const Scaffold(
         backgroundColor: Colors.white,
-        bottomNavigationBar: const BottomNavBar(),
+        bottomNavigationBar: BottomNavBar(),
         body: SafeArea(
           child: Column(
             children: [
-              const _HeaderSection(),
-              const Expanded(
+              _HeaderSection(),
+              Expanded(
                 child: Column(
                   children: [
                     SizedBox(height: 4),
@@ -82,7 +82,7 @@ class _HeaderSection extends StatelessWidget {
                 height: 80,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withOpacity(0.08),
+                  color: Colors.white.withValues(alpha: 0.08),
                 ),
               ),
             ),
@@ -94,7 +94,7 @@ class _HeaderSection extends StatelessWidget {
                 height: 60,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withOpacity(0.06),
+                  color: Colors.white.withValues(alpha: 0.06),
                 ),
               ),
             ),

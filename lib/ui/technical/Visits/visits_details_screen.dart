@@ -1,13 +1,14 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/model/technical/task_model.dart';
 import 'package:flutter_a_c_soluciones/repository/report_repository.dart';
 import 'package:flutter_a_c_soluciones/repository/task_repository.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/Reports/create_report_screen.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/widgets/bottom_nav_bar.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_file/open_file.dart';
-import 'package:flutter_a_c_soluciones/ui/technical/widgets/bottom_nav_bar.dart';
+import 'package:path_provider/path_provider.dart';
 
 class VisitsDetailsScreen extends StatefulWidget {
   final TaskModel task;
@@ -311,7 +312,7 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
                       boxShadow: _visitState == 'completada'
                           ? [
                               BoxShadow(
-                                color: Colors.blue.withOpacity(0.4),
+                                color: Colors.blue.withValues(alpha: 0.4),
                                 blurRadius: 12,
                                 offset: const Offset(0, 6),
                               ),

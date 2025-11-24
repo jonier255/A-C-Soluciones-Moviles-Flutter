@@ -1,10 +1,10 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_a_c_soluciones/bloc/view_reports/view_reports_bloc.dart';
-import 'package:flutter_a_c_soluciones/repository/report_repository.dart';
 import 'package:flutter_a_c_soluciones/model/administrador/visits_model.dart';
-import 'package:mockito/mockito.dart';
+import 'package:flutter_a_c_soluciones/repository/report_repository.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 
 import 'report_bloc_test.mocks.dart';
 
@@ -45,6 +45,7 @@ void main() {
               ),
             ],
             hasMorePages: false,
+            totalPages: 1,
           ),
         );
         return ViewReportsBloc(reportRepository: mockReportRepository);

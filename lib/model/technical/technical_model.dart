@@ -11,7 +11,7 @@ class UpdateTechnicalRequest extends Equatable {
   final String especialidad;
 
 
-  UpdateTechnicalRequest({
+  const UpdateTechnicalRequest({
     required this.nombre,
     required this.apellido,
     required this.numeroCedula,

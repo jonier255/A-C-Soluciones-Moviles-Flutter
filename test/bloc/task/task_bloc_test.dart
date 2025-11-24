@@ -48,6 +48,7 @@ void main() {
               ),
             ],
             hasMorePages: false,
+            totalPages: 1,
           ),
         );
         return TaskBloc(taskRepository: mockTaskRepository);
@@ -101,6 +102,7 @@ void main() {
               ),
             ],
             hasMorePages: false,
+            totalPages: 1,
           ),
         );
         return TaskBloc(taskRepository: mockTaskRepository);

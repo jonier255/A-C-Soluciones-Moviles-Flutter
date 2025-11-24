@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter_a_c_soluciones/bloc/report/report_bloc.dart';
 import 'package:flutter_a_c_soluciones/repository/report_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreateReportScreen extends StatelessWidget {
   final int visitId;
@@ -141,7 +141,7 @@ class _CreateReportViewState extends State<_CreateReportView> {
           preferredSize: const Size.fromHeight(4.0),
           child: LinearProgressIndicator(
             value: (_currentPage + 1) / 4,
-            backgroundColor: Colors.white.withOpacity(0.3),
+            backgroundColor: Colors.white.withValues(alpha: 0.3),
             valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
           ),
         ),
@@ -378,7 +378,7 @@ class _CreateReportViewState extends State<_CreateReportView> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
+            color: Colors.grey.withValues(alpha: 0.3),
             spreadRadius: 1,
             blurRadius: 5,
             offset: const Offset(0, -3),

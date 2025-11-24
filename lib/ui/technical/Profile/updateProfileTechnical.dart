@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/editProfileTechnical/edit_profile_technical_bloc.dart';
 import 'package:flutter_a_c_soluciones/model/technical/technical_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EditarInformacionScreenTechnical extends StatefulWidget {
   const EditarInformacionScreenTechnical({super.key});
@@ -245,11 +245,11 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(color: Colors.red, width: 1),
+          borderSide: const BorderSide(color: Colors.red, width: 1),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(color: Colors.red, width: 2),
+          borderSide: const BorderSide(color: Colors.red, width: 2),
         ),
       ),
       validator: (value) {

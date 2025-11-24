@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../bloc/service/service_bloc.dart';
-import '../../../bloc/service/service_event.dart';
-import '../../../bloc/service/service_state.dart';
-import '../../../model/servicio_model.dart';
-import '../../../repository/service_repository.dart';
-import 'service_details_screen.dart';
+import 'package:flutter_a_c_soluciones/bloc/service/service_bloc.dart';
+import 'package:flutter_a_c_soluciones/bloc/service/service_event.dart';
+import 'package:flutter_a_c_soluciones/bloc/service/service_state.dart';
+import 'package:flutter_a_c_soluciones/model/servicio_model.dart';
+import 'package:flutter_a_c_soluciones/repository/service_repository.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/Services/service_details_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/widgets/bottom_nav_bar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ServicesScreen extends StatelessWidget {
   const ServicesScreen({super.key});
@@ -165,7 +165,7 @@ class _PaginationWidget extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
+            color: Colors.grey.withValues(alpha: 0.3),
             spreadRadius: 1,
             blurRadius: 3,
             offset: const Offset(0, -2),
