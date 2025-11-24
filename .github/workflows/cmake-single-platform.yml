@@ -28,52 +28,71 @@ jobs:
       - name: Build APK
         run: flutter build apk --release
 
-      # 🚀 SUBIR APK A DIAWI
+      #  SUBIR APK A DIAWI
       - name: Upload to Diawi
         id: diawi_upload
         run: |
           echo "Uploading APK to Diawi..."
-          RESPONSE=$(curl -F token=${{ secrets.DIAWI_TOKEN }} \
+          RESPONSE=$(curl -s -F token=${{ secrets.DIAWI_TOKEN }} \
                          -F file=@build/app/outputs/flutter-apk/app-release.apk \
                          -F find_by_udid=0 \
                          -F install_url=1 \
                          https://upload.diawi.com/)
 
+          echo "Upload response:"
           echo "$RESPONSE"
+
+          # Guardar la respuesta cruda
           echo "$RESPONSE" > diawi-upload.json
 
-          JOB=$(echo "$RESPONSE" | jq -r '.job')
+          # Extraer job (si falla, job será vacío o null)
+          JOB=$(echo "$RESPONSE" | jq -r '.job // empty')
+
+          if [ -z "$JOB" ]; then
+            echo " ERROR: Diawi no devolvió un job válido."
+            exit 1
+          fi
+
           echo "job=$JOB" >> $GITHUB_OUTPUT
 
-      # POLLING HASTA OBTENER EL LINK FINAL
+      #  POLLING HASTA OBTENER EL LINK FINAL (MANEJO DE ERRORES INCLUIDO)
       - name: Check Diawi Processing
         id: diawi_poll
         run: |
           JOB=${{ steps.diawi_upload.outputs.job }}
-
           echo "Polling job: $JOB"
 
           for i in {1..20}
           do
-            STATUS=$(curl -s -X POST https://upload.diawi.com/status \
+            RAW=$(curl -s -X POST https://upload.diawi.com/status \
                         -F token=${{ secrets.DIAWI_TOKEN }} \
                         -F job=$JOB)
 
-            echo "Status: $STATUS"
+            echo "Raw Status Response:"
+            echo "$RAW"
 
-            RESULT=$(echo $STATUS | jq -r '.status')
-            LINK=$(echo $STATUS | jq -r '.link')
+            # Verificar si la respuesta es JSON válido
+            if ! echo "$RAW" | jq . >/dev/null 2>&1; then
+              echo "Diawi devolvió un error no-JSON. Reintentando..."
+              sleep 10
+              continue
+            fi
 
+            RESULT=$(echo $RAW | jq -r '.status')
+            LINK=$(echo $RAW | jq -r '.link')
+
+            # Si el link ya está disponible
             if [ "$RESULT" = "0" ] && [ "$LINK" != "null" ]; then
+              echo " Link final obtenido: $LINK"
               echo "link=$LINK" >> $GITHUB_OUTPUT
               exit 0
             fi
 
-            echo "Waiting 10 seconds..."
+            echo "Aún procesando. Reintentando en 10 segundos..."
             sleep 10
           done
 
-          echo "Failed to get link."
+          echo "Error: No se obtuvo link final tras varios intentos."
           exit 1
 
       # PUBLICAR EL LINK EN EL PR
@@ -85,15 +104,14 @@ jobs:
             **Nueva versión lista en Diawi**
             [Instalar actualización](${{ steps.diawi_poll.outputs.link }})
 
-      # GUARDAR EL LINK COMO ARTIFACT
-      # create commit
+      #  GUARDAR EL LINK COMO ARTIFACT
       - name: Save Diawi Link
         run: |
           echo "${{ steps.diawi_poll.outputs.link }}" > diawi-link.txt
-        shell: bash
 
       - name: Upload Diawi Link Artifact
         uses: actions/upload-artifact@v4
         with:
           name: diawi-link
           path: diawi-link.txt
+
