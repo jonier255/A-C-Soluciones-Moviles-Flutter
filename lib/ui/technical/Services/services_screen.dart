@@ -301,15 +301,21 @@ class _ServiceCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(service.nombre,
-                        style: TextStyle(
-                            fontSize: screenWidth * 0.038, fontWeight: FontWeight.bold)),
+                    Text(
+                      service.nombre,
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.038,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     SizedBox(height: screenHeight * 0.005),
                     Text(
-                      service.descripcion.length > 50
-                          ? '${service.descripcion.substring(0, 50)}...'
-                          : service.descripcion,
+                      service.descripcion,
                       style: TextStyle(fontSize: screenWidth * 0.032, color: Colors.grey),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
