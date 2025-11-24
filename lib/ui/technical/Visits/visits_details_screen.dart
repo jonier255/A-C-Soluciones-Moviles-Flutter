@@ -157,89 +157,92 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              padding: EdgeInsets.all(screenWidth * 0.05),
+              padding: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.04,
+                vertical: screenHeight * 0.01,
+              ),
               child: Column(
                 children: [
                   // Card con descripción
                   Card(
-                    elevation: 4,
+                    elevation: 2,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     child: Container(
-                      width: screenWidth * 0.9,
-                      padding: EdgeInsets.all(screenWidth * 0.05),
+                      padding: EdgeInsets.all(screenWidth * 0.03),
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
                           colors: [Color(0xFFE3F2FD), Colors.white],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.description, color: Colors.blue, size: 28),
-                              SizedBox(width: screenWidth * 0.03),
+                              const Icon(Icons.description, color: Colors.blue, size: 20),
+                              SizedBox(width: screenWidth * 0.02),
                               Text(
                                 'Descripción',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: screenWidth * 0.052,
+                                  fontSize: screenWidth * 0.038,
                                   color: Colors.blue[800],
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: screenHeight * 0.015),
+                          SizedBox(height: screenHeight * 0.008),
                           Text(
                             widget.task.servicio.descripcion,
                             style: TextStyle(
-                              fontSize: screenWidth * 0.042,
+                              fontSize: screenWidth * 0.032,
                               color: Colors.grey[800],
-                              height: 1.5,
+                              height: 1.3,
                             ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.02),
+                  SizedBox(height: screenHeight * 0.01),
 
                   // Card con información detallada
                   Card(
-                    elevation: 4,
+                    elevation: 2,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     child: Container(
-                      width: screenWidth * 0.9,
-                      padding: EdgeInsets.all(screenWidth * 0.05),
+                      padding: EdgeInsets.all(screenWidth * 0.03),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.info_outline, color: Colors.blue, size: 28),
-                              SizedBox(width: screenWidth * 0.03),
+                              const Icon(Icons.info_outline, color: Colors.blue, size: 20),
+                              SizedBox(width: screenWidth * 0.02),
                               Text(
                                 'Información',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: screenWidth * 0.052,
+                                  fontSize: screenWidth * 0.038,
                                   color: Colors.blue[800],
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: screenHeight * 0.02),
+                          SizedBox(height: screenHeight * 0.01),
                           _buildDetailRow(
                             Icons.note_alt_outlined,
                             'Notas previas:',
@@ -275,29 +278,27 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.02),
+                  SizedBox(height: screenHeight * 0.01),
 
                   // Card con estado
                   Card(
-                    elevation: 4,
+                    elevation: 2,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     child: Container(
-                      width: screenWidth * 0.9,
-                      padding: EdgeInsets.all(screenWidth * 0.05),
+                      padding: EdgeInsets.all(screenWidth * 0.03),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: _buildStateDropdown(screenWidth, screenHeight),
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.025),
+                  SizedBox(height: screenHeight * 0.01),
 
                   // Botón de reporte
                   Container(
-                    width: screenWidth * 0.9,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: _visitState == 'completada'
@@ -306,7 +307,7 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
                       ),
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(25),
                       boxShadow: _visitState == 'completada'
                           ? [
                               BoxShadow(
@@ -340,23 +341,22 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
                         disabledForegroundColor: Colors.grey[600],
                         shadowColor: Colors.transparent,
                         padding: EdgeInsets.symmetric(
-                          horizontal: screenWidth * 0.075,
-                          vertical: screenHeight * 0.02,
+                          horizontal: screenWidth * 0.05,
+                          vertical: screenHeight * 0.012,
                         ),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(25),
                         ),
                       ),
                       icon: Icon(
                         _pdfPath != null ? Icons.picture_as_pdf : Icons.add_circle_outline,
-                        size: screenWidth * 0.06,
+                        size: screenWidth * 0.045,
                       ),
                       label: Text(
                         _pdfPath != null ? 'Ver reporte' : 'Generar reporte',
                         style: TextStyle(
-                          fontSize: screenWidth * 0.045,
+                          fontSize: screenWidth * 0.038,
                           fontWeight: FontWeight.bold,
-                          letterSpacing: 0.5,
                         ),
                       ),
                     ),
@@ -448,15 +448,15 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.symmetric(
-                horizontal: screenWidth * 0.04,
-                vertical: screenHeight * 0.022,
+                horizontal: screenWidth * 0.03,
+                vertical: screenHeight * 0.014,
               ),
             ),
             dropdownColor: Colors.white,
             icon: Icon(
               Icons.keyboard_arrow_down_rounded,
               color: isDisabled ? Colors.grey[400] : Colors.blue[700],
-              size: screenWidth * 0.07,
+              size: screenWidth * 0.055,
             ),
             items: stateLabels.entries.map((entry) {
               final stateValue = entry.key;
@@ -470,13 +470,13 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
                     Icon(
                       style?['icon'] ?? Icons.help_outline,
                       color: style?['color'] ?? Colors.grey,
-                      size: screenWidth * 0.055,
+                      size: screenWidth * 0.045,
                     ),
-                    SizedBox(width: screenWidth * 0.03),
+                    SizedBox(width: screenWidth * 0.02),
                     Text(
                       stateLabel,
                       style: TextStyle(
-                        fontSize: screenWidth * 0.042,
+                        fontSize: screenWidth * 0.036,
                         fontWeight: FontWeight.w500,
                         color: style?['color'] ?? Colors.grey[800],
                         height: 1.4,
@@ -519,17 +519,17 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
     double screenHeight,
   ) {
     return Container(
-      padding: EdgeInsets.all(screenWidth * 0.035),
+      padding: EdgeInsets.all(screenWidth * 0.025),
       decoration: BoxDecoration(
         color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey[200]!, width: 1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey[200]!, width: 0.5),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: Colors.blue[700], size: screenWidth * 0.055),
-          SizedBox(width: screenWidth * 0.03),
+          Icon(icon, color: Colors.blue[700], size: screenWidth * 0.04),
+          SizedBox(width: screenWidth * 0.02),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -538,18 +538,20 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
                   title,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: screenWidth * 0.04,
+                    fontSize: screenWidth * 0.032,
                     color: Colors.grey[700],
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.005),
+                SizedBox(height: screenHeight * 0.003),
                 Text(
                   value.isNotEmpty ? value : '—',
                   style: TextStyle(
-                    fontSize: screenWidth * 0.042,
+                    fontSize: screenWidth * 0.034,
                     color: Colors.grey[900],
-                    height: 1.4,
+                    height: 1.2,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
