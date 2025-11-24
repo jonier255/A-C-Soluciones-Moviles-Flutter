@@ -9,6 +9,15 @@ abstract class TaskEvent extends Equatable {
 
 class LoadTasks extends TaskEvent {}
 
+class LoadMoreTasks extends TaskEvent {
+  final int page;
+  
+  const LoadMoreTasks(this.page);
+  
+  @override
+  List<Object> get props => [page];
+}
+
 class UpdateTaskStatus extends TaskEvent {
   final String taskId;
   final String newStatus;

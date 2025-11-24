@@ -193,7 +193,7 @@ class ReportRepository {
     }
   }
 
-  Future<List<VisitWithReport>> getVisitsWithReports() async {
+  Future<ReportResponse> getVisitsWithReports({int page = 1, int perPage = 10}) async {
     final token = await _storageService.getToken();
     if (token == null) {
       throw Exception('Token not found');
@@ -226,9 +226,16 @@ class ReportRepository {
     // 2. Filter reports by the current technician's ID
     final technicianFichas = allFichas.where((ficha) => ficha.tecnicoId == technicalId).toList();
 
-    // 3. For each report, fetch its corresponding visit details
+    // 3. Apply pagination
+    final startIndex = (page - 1) * perPage;
+    final endIndex = startIndex + perPage;
+    final paginatedFichas = technicianFichas.skip(startIndex).take(perPage).toList();
+    final hasMorePages = endIndex < technicianFichas.length;
+    final totalPages = (technicianFichas.length / perPage).ceil();
+
+    // 4. For each report, fetch its corresponding visit details
     final List<VisitWithReport> visitsWithReports = [];
-    for (var ficha in technicianFichas) {
+    for (var ficha in paginatedFichas) {
       try {
         final visitId = ficha.visitId;
         final visitResponse = await http.get(
@@ -254,6 +261,14 @@ class ReportRepository {
       }
     }
     
-    return visitsWithReports;
+    return ReportResponse(reports: visitsWithReports, hasMorePages: hasMorePages, totalPages: totalPages);
   }
+}
+
+class ReportResponse {
+  final List<VisitWithReport> reports;
+  final bool hasMorePages;
+  final int totalPages;
+  
+  ReportResponse({required this.reports, required this.hasMorePages, required this.totalPages});
 }

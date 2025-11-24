@@ -25,24 +25,27 @@ void main() {
     blocTest<ViewReportsBloc, ViewReportsState>(
       'emits [ViewReportsLoading, ViewReportsLoaded] when LoadViewReports is added and fetching is successful',
       build: () {
-        when(mockReportRepository.getVisitsWithReports()).thenAnswer(
-          (_) async => [
-            VisitWithReport(
-              visit: VisitsModel(
-                id: 1,
-                fechaProgramada: DateTime.now(),
-                duracionEstimada: 60,
-                estado: 'completada',
-                notasPrevias: 'Notas previas',
-                notasPosteriores: 'Notas posteriores',
-                fechaCreacion: DateTime.now(),
-                solicitudId: 1,
-                tecnicoId: 1,
-                servicioId: 1,
+        when(mockReportRepository.getVisitsWithReports(page: anyNamed('page'), perPage: anyNamed('perPage'))).thenAnswer(
+          (_) async => ReportResponse(
+            reports: [
+              VisitWithReport(
+                visit: VisitsModel(
+                  id: 1,
+                  fechaProgramada: DateTime.now(),
+                  duracionEstimada: 60,
+                  estado: 'completada',
+                  notasPrevias: 'Notas previas',
+                  notasPosteriores: 'Notas posteriores',
+                  fechaCreacion: DateTime.now(),
+                  solicitudId: 1,
+                  tecnicoId: 1,
+                  servicioId: 1,
+                ),
+                pdfPath: 'path/to/report.pdf',
               ),
-              pdfPath: 'path/to/report.pdf',
-            ),
-          ],
+            ],
+            hasMorePages: false,
+          ),
         );
         return ViewReportsBloc(reportRepository: mockReportRepository);
       },
@@ -52,14 +55,14 @@ void main() {
         isA<ViewReportsLoaded>(),
       ],
       verify: (_) {
-        verify(mockReportRepository.getVisitsWithReports()).called(1);
+        verify(mockReportRepository.getVisitsWithReports(page: 1)).called(1);
       },
     );
 
     blocTest<ViewReportsBloc, ViewReportsState>(
       'emits [ViewReportsLoading, ViewReportsFailure] when LoadViewReports is added and fetching fails',
       build: () {
-        when(mockReportRepository.getVisitsWithReports()).thenThrow(Exception('Failed to load reports'));
+        when(mockReportRepository.getVisitsWithReports(page: anyNamed('page'), perPage: anyNamed('perPage'))).thenThrow(Exception('Failed to load reports'));
         return ViewReportsBloc(reportRepository: mockReportRepository);
       },
       act: (bloc) => bloc.add(LoadViewReports()),
@@ -68,7 +71,7 @@ void main() {
         const ViewReportsFailure('Exception: Failed to load reports'),
       ],
       verify: (_) {
-        verify(mockReportRepository.getVisitsWithReports()).called(1);
+        verify(mockReportRepository.getVisitsWithReports(page: 1)).called(1);
       },
     );
   });

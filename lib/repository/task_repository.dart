@@ -49,39 +49,70 @@ class TaskRepository {
     if (response.statusCode != 200) {
       throw Exception('Fallo en la actualización del estado (status: ${response.statusCode})');
     }
+    
+    // Limpiar cache para forzar recarga de datos
+    clearCache();
   }
 
-  Future<List<TaskModel>> getTasks() async {
-    final token = await _storageService.getToken();
-    if (token == null) {
-      throw Exception(
-          'Token no encontrado. Por favor, inicie sesión de nuevo.');
-    }
+  static const int pageSize = 10;
+  static List<TaskModel>? _cachedTasks;
 
-    final response = await http.get(
-      Uri.parse('http://10.0.2.2:8000/api/visitas/asignados/'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final decoded = json.decode(response.body);
-
-      if (decoded is Map<String, dynamic> && decoded['data'] is List) {
-        final List<dynamic> list = decoded['data'] as List<dynamic>;
-
-        return list
-            .map((item) => TaskModel.fromJson(item as Map<String, dynamic>))
-            .toList();
-      } else {
-        throw Exception('Estructura de respuesta inesperada');
+  Future<TaskResponse> getTasks({int page = 1}) async {
+    // Si no hay cache, obtener todas las tareas del servidor
+    if (_cachedTasks == null) {
+      final token = await _storageService.getToken();
+      if (token == null) {
+        throw Exception(
+            'Token no encontrado. Por favor, inicie sesión de nuevo.');
       }
-    } else if (response.statusCode == 401) {
-      throw Exception('Sesión expirada. Por favor, inicie sesión de nuevo.');
-    } else {
-      throw Exception('Fallo en la solicitud (status: ${response.statusCode})');
+
+      final response = await http.get(
+        Uri.parse('http://10.0.2.2:8000/api/visitas/asignados/'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final decoded = json.decode(response.body);
+
+        if (decoded is Map<String, dynamic> && decoded['data'] is List) {
+          final List<dynamic> list = decoded['data'] as List<dynamic>;
+
+          _cachedTasks = list
+              .map((item) => TaskModel.fromJson(item as Map<String, dynamic>))
+              .toList();
+        } else {
+          throw Exception('Estructura de respuesta inesperada');
+        }
+      } else if (response.statusCode == 401) {
+        throw Exception('Sesión expirada. Por favor, inicie sesión de nuevo.');
+      } else {
+        throw Exception('Fallo en la solicitud (status: ${response.statusCode})');
+      }
     }
+
+    // Implementar paginación en memoria
+    final startIndex = (page - 1) * pageSize;
+    final endIndex = startIndex + pageSize;
+    
+    final paginatedTasks = _cachedTasks!.skip(startIndex).take(pageSize).toList();
+    final hasMorePages = endIndex < _cachedTasks!.length;
+    final totalPages = (_cachedTasks!.length / pageSize).ceil();
+
+    return TaskResponse(tasks: paginatedTasks, hasMorePages: hasMorePages, totalPages: totalPages);
   }
+  
+  void clearCache() {
+    _cachedTasks = null;
+  }
+}
+
+class TaskResponse {
+  final List<TaskModel> tasks;
+  final bool hasMorePages;
+  final int totalPages;
+  
+  TaskResponse({required this.tasks, required this.hasMorePages, required this.totalPages});
 }

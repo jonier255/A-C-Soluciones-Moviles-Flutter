@@ -14,34 +14,220 @@ class CompletedVisitsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => TaskBloc(taskRepository: TaskRepository())..add(LoadTasks()),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Visitas Terminadas'),
-        ),
-        bottomNavigationBar: const BottomNavBar(),
-        body: BlocBuilder<TaskBloc, TaskState>(
-          builder: (context, state) {
-            if (state is TaskLoading) {
-              return const Center(child: CircularProgressIndicator());
+      child: const _CompletedVisitsContent(),
+    );
+  }
+}
+
+class _CompletedVisitsContent extends StatelessWidget {
+  const _CompletedVisitsContent();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Visitas Terminadas'),
+      ),
+      bottomNavigationBar: const BottomNavBar(),
+      body: BlocBuilder<TaskBloc, TaskState>(
+        builder: (context, state) {
+          if (state is TaskLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state is TaskSuccess || state is TaskLoadingMore) {
+            final tasks = state is TaskSuccess 
+                ? state.tasks 
+                : (state as TaskLoadingMore).currentTasks;
+            final currentPage = state is TaskSuccess ? state.currentPage : 1;
+            
+            final completedTasks = tasks.where((task) => task.estado == 'completada').toList();
+            if (completedTasks.isEmpty) {
+              return const Center(child: Text("No hay visitas terminadas."));
             }
-            if (state is TaskSuccess) {
-              final completedTasks = state.tasks.where((task) => task.estado == 'completada').toList();
-              if (completedTasks.isEmpty) {
-                return const Center(child: Text("No hay visitas terminadas."));
+            return Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  color: Colors.grey[100],
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Página $currentPage',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        '${completedTasks.length} visitas completadas',
+                        style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: completedTasks.length,
+                    itemBuilder: (context, index) {
+                      return _TaskCard(task: completedTasks[index]);
+                    },
+                  ),
+                ),
+                _PaginationWidget(
+                  currentPage: currentPage,
+                  totalPages: state is TaskSuccess ? state.totalPages : 1,
+                  isLoading: state is TaskLoadingMore,
+                  onPageChanged: (page) {
+                    context.read<TaskBloc>().add(LoadMoreTasks(page));
+                  },
+                ),
+              ],
+            );
+          }
+          if (state is TaskFailure) {
+            return Center(child: Text(state.error));
+          }
+          return const Center(child: Text("Cargando visitas..."));
+        },
+      ),
+    );
+  }
+}
+
+class _PaginationWidget extends StatelessWidget {
+  final int currentPage;
+  final int totalPages;
+  final bool isLoading;
+  final Function(int) onPageChanged;
+
+  const _PaginationWidget({
+    required this.currentPage,
+    required this.totalPages,
+    required this.isLoading,
+    required this.onPageChanged,
+  });
+
+  List<int> _getPageNumbers() {
+    List<int> pages = [];
+    
+    if (totalPages <= 5) {
+      // Si hay 5 o menos páginas, mostrarlas todas
+      for (int i = 1; i <= totalPages; i++) {
+        pages.add(i);
+      }
+    } else if (currentPage <= 3) {
+      // Estamos al inicio, mostrar primeras 5 páginas
+      for (int i = 1; i <= 5; i++) {
+        pages.add(i);
+      }
+      pages.add(-1); // ...
+    } else if (currentPage >= totalPages - 2) {
+      // Estamos cerca del final
+      pages.add(1);
+      pages.add(-1); // ...
+      for (int i = totalPages - 4; i <= totalPages; i++) {
+        if (i > 1) pages.add(i);
+      }
+    } else {
+      // Estamos en el medio
+      pages.add(1);
+      pages.add(-1); // ...
+      
+      // Mostrar páginas alrededor de la actual
+      for (int i = currentPage - 1; i <= currentPage + 1; i++) {
+        pages.add(i);
+      }
+      
+      pages.add(-1); // ...
+    }
+    
+    return pages;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final pages = _getPageNumbers();
+    
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 1,
+            blurRadius: 3,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          IconButton(
+            onPressed: currentPage > 1 && !isLoading
+                ? () => onPageChanged(currentPage - 1)
+                : null,
+            icon: const Icon(Icons.chevron_left),
+            color: Colors.blue,
+            disabledColor: Colors.grey,
+          ),
+          const SizedBox(width: 8),
+          
+          if (isLoading)
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+            )
+          else
+            ...pages.map((page) {
+              if (page == -1) {
+                return const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 4.0),
+                  child: Text('...', style: TextStyle(fontSize: 18)),
+                );
               }
-              return ListView.builder(
-                itemCount: completedTasks.length,
-                itemBuilder: (context, index) {
-                  return _TaskCard(task: completedTasks[index]);
-                },
+              
+              final isCurrentPage = page == currentPage;
+              
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: InkWell(
+                  onTap: isCurrentPage || isLoading ? null : () => onPageChanged(page),
+                  borderRadius: BorderRadius.circular(4),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: isCurrentPage ? Colors.blue : Colors.transparent,
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(
+                        color: isCurrentPage ? Colors.blue : Colors.grey.shade300,
+                      ),
+                    ),
+                    child: Text(
+                      page.toString(),
+                      style: TextStyle(
+                        color: isCurrentPage ? Colors.white : Colors.black87,
+                        fontWeight: isCurrentPage ? FontWeight.bold : FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                ),
               );
-            }
-            if (state is TaskFailure) {
-              return Center(child: Text(state.error));
-            }
-            return const Center(child: Text("Cargando visitas..."));
-          },
-        ),
+            }).toList(),
+          
+          const SizedBox(width: 8),
+          IconButton(
+            onPressed: currentPage < totalPages && !isLoading
+                ? () => onPageChanged(currentPage + 1)
+                : null,
+            icon: const Icon(Icons.chevron_right),
+            color: Colors.blue,
+            disabledColor: Colors.grey,
+          ),
+        ],
       ),
     );
   }

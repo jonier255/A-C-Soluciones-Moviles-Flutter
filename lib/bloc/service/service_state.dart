@@ -26,15 +26,17 @@ class ServiceSuccess extends ServiceState {
   final List<Servicio> services;
   final bool hasMorePages;  // Si hay más páginas para cargar
   final int currentPage;    // Página actual
+  final int totalPages;     // Total de páginas disponibles
   
   const ServiceSuccess(
     this.services, {
     this.hasMorePages = true,
     this.currentPage = 1,
+    this.totalPages = 1,
   });
 
   @override
-  List<Object> get props => [services, hasMorePages, currentPage];
+  List<Object> get props => [services, hasMorePages, currentPage, totalPages];
 }
 
 class ServiceFailure extends ServiceState {
