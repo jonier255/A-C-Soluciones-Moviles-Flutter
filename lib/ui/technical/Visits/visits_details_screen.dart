@@ -300,37 +300,44 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
                     width: screenWidth * 0.9,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [Colors.blue[600]!, Colors.blue[400]!],
+                        colors: _visitState == 'completada'
+                            ? [Colors.blue[600]!, Colors.blue[400]!]
+                            : [Colors.grey[400]!, Colors.grey[300]!],
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
                       ),
                       borderRadius: BorderRadius.circular(30),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.blue.withOpacity(0.4),
-                          blurRadius: 12,
-                          offset: const Offset(0, 6),
-                        ),
-                      ],
+                      boxShadow: _visitState == 'completada'
+                          ? [
+                              BoxShadow(
+                                color: Colors.blue.withOpacity(0.4),
+                                blurRadius: 12,
+                                offset: const Offset(0, 6),
+                              ),
+                            ]
+                          : [],
                     ),
                     child: ElevatedButton.icon(
-                      onPressed: _pdfPath != null
-                          ? _openPdf
-                          : () async {
-                              final result = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      CreateReportScreen(visitId: widget.task.id),
-                                ),
-                              );
-                              if (result == true && mounted) {
-                                await _fetchPdfPath();
-                              }
-                            },
+                      onPressed: _visitState != 'completada'
+                          ? null
+                          : (_pdfPath != null
+                              ? _openPdf
+                              : () async {
+                                  final result = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          CreateReportScreen(visitId: widget.task.id),
+                                    ),
+                                  );
+                                  if (result == true && mounted) {
+                                    await _fetchPdfPath();
+                                  }
+                                }),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent,
                         foregroundColor: Colors.white,
+                        disabledForegroundColor: Colors.grey[600],
                         shadowColor: Colors.transparent,
                         padding: EdgeInsets.symmetric(
                           horizontal: screenWidth * 0.075,
@@ -354,6 +361,25 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
                       ),
                     ),
                   ),
+                  if (_visitState != 'completada')
+                    Padding(
+                      padding: EdgeInsets.only(top: screenHeight * 0.01),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.info_outline, size: screenWidth * 0.04, color: Colors.grey[600]),
+                          SizedBox(width: screenWidth * 0.015),
+                          Text(
+                            'Completa la visita para generar el reporte',
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.032,
+                              color: Colors.grey[600],
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   SizedBox(height: screenHeight * 0.02),
                 ],
               ),
