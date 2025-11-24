@@ -278,7 +278,7 @@ class _PaginationWidget extends StatelessWidget {
     final pages = _getPageNumbers();
     
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 4.0),
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -293,15 +293,31 @@ class _PaginationWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          // Botón Inicio
           IconButton(
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            onPressed: currentPage > 1 && !isLoading
+                ? () => onPageChanged(1)
+                : null,
+            icon: const Icon(Icons.first_page, size: 20),
+            color: Colors.blue,
+            disabledColor: Colors.grey,
+            tooltip: 'Primera página',
+          ),
+          // Botón Anterior
+          IconButton(
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
             onPressed: currentPage > 1 && !isLoading
                 ? () => onPageChanged(currentPage - 1)
                 : null,
-            icon: const Icon(Icons.chevron_left),
+            icon: const Icon(Icons.chevron_left, size: 20),
             color: Colors.blue,
             disabledColor: Colors.grey,
+            tooltip: 'Página anterior',
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 4),
           
           if (isLoading)
             const Padding(
@@ -324,12 +340,14 @@ class _PaginationWidget extends StatelessWidget {
               final isCurrentPage = page == currentPage;
               
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                padding: const EdgeInsets.symmetric(horizontal: 1.0),
                 child: InkWell(
                   onTap: isCurrentPage || isLoading ? null : () => onPageChanged(page),
                   borderRadius: BorderRadius.circular(4),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    width: 32,
+                    height: 32,
+                    alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: isCurrentPage ? Colors.blue : Colors.transparent,
                       borderRadius: BorderRadius.circular(4),
@@ -349,14 +367,30 @@ class _PaginationWidget extends StatelessWidget {
               );
             }).toList(),
           
-          const SizedBox(width: 8),
+          const SizedBox(width: 4),
+          // Botón Siguiente
           IconButton(
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
             onPressed: currentPage < totalPages && !isLoading
                 ? () => onPageChanged(currentPage + 1)
                 : null,
-            icon: const Icon(Icons.chevron_right),
+            icon: const Icon(Icons.chevron_right, size: 20),
             color: Colors.blue,
             disabledColor: Colors.grey,
+            tooltip: 'Página siguiente',
+          ),
+          // Botón Final
+          IconButton(
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            onPressed: currentPage < totalPages && !isLoading
+                ? () => onPageChanged(totalPages)
+                : null,
+            icon: const Icon(Icons.last_page, size: 20),
+            color: Colors.blue,
+            disabledColor: Colors.grey,
+            tooltip: 'Última página',
           ),
         ],
       ),
