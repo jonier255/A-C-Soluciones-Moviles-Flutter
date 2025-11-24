@@ -303,13 +303,17 @@ class _TaskCard extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return InkWell(
-      onTap: () {
-        Navigator.push(
+      onTap: () async {
+        await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => VisitsDetailsScreen(task: task),
           ),
         );
+        // Recargar la lista cuando se regresa
+        if (context.mounted) {
+          context.read<TaskBloc>().add(LoadTasks());
+        }
       },
       child: Card(
         elevation: 6,
