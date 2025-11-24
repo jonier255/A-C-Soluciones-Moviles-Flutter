@@ -53,7 +53,7 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
   }
 
   void _handleStateChange(String? newState) {
-    if (newState == null) return;
+    if (newState == null || newState == _visitState) return;
     if (['completada', 'cancelada'].contains(newState)) {
       _showConfirmationDialog(newState);
     } else {
@@ -349,23 +349,121 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
   }
 
   Widget _buildStateDropdown(double screenWidth, double screenHeight) {
-    return DropdownButtonFormField<String>(
-      value: _visitState,
-      decoration: InputDecoration(
-        labelText: 'Estado',
-        labelStyle: TextStyle(fontSize: screenWidth * 0.042),
-        border: const OutlineInputBorder(),
-        contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.035, vertical: screenHeight * 0.015),
-      ),
-      items: ['programada', 'en_camino', 'iniciada', 'completada', 'cancelada']
-          .map((label) => DropdownMenuItem(
-                value: label,
-                child: Text(label, style: TextStyle(fontSize: screenWidth * 0.042)),
-              ))
-          .toList(),
-      onChanged: ['completada', 'cancelada'].contains(_visitState)
-          ? null
-          : _handleStateChange,
+    // Mapa de estados internos a nombres amigables
+    final Map<String, String> stateLabels = {
+      'programada': 'Programada',
+      'en_camino': 'En camino',
+      'iniciada': 'Iniciada',
+      'completada': 'Completada',
+      'cancelada': 'Cancelada',
+    };
+
+    // Mapa de estados a colores e iconos
+    final Map<String, Map<String, dynamic>> stateStyles = {
+      'programada': {'color': Colors.orange[700], 'icon': Icons.schedule},
+      'en_camino': {'color': Colors.blue[700], 'icon': Icons.directions_car},
+      'iniciada': {'color': Colors.green[700], 'icon': Icons.play_circle_outline},
+      'completada': {'color': Colors.green[900], 'icon': Icons.check_circle},
+      'cancelada': {'color': Colors.red[700], 'icon': Icons.cancel},
+    };
+
+    final bool isDisabled = ['completada', 'cancelada'].contains(_visitState);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(
+              Icons.flag_outlined,
+              color: Colors.blue[700],
+              size: screenWidth * 0.06,
+            ),
+            SizedBox(width: screenWidth * 0.02),
+            Text(
+              'Estado de la visita',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: screenWidth * 0.045,
+                color: Colors.grey[800],
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: screenHeight * 0.015),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isDisabled ? Colors.grey[400]! : Colors.blue[300]!,
+              width: 1.5,
+            ),
+            color: isDisabled ? Colors.grey[100] : Colors.white,
+          ),
+          child: DropdownButtonFormField<String>(
+            value: _visitState,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.04,
+                vertical: screenHeight * 0.015,
+              ),
+            ),
+            dropdownColor: Colors.white,
+            icon: Icon(
+              Icons.keyboard_arrow_down_rounded,
+              color: isDisabled ? Colors.grey[400] : Colors.blue[700],
+              size: screenWidth * 0.07,
+            ),
+            items: stateLabels.entries.map((entry) {
+              final stateValue = entry.key;
+              final stateLabel = entry.value;
+              final style = stateStyles[stateValue];
+              
+              return DropdownMenuItem(
+                value: stateValue,
+                child: Row(
+                  children: [
+                    Icon(
+                      style?['icon'] ?? Icons.help_outline,
+                      color: style?['color'] ?? Colors.grey,
+                      size: screenWidth * 0.055,
+                    ),
+                    SizedBox(width: screenWidth * 0.03),
+                    Text(
+                      stateLabel,
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.042,
+                        fontWeight: FontWeight.w500,
+                        color: style?['color'] ?? Colors.grey[800],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+            onChanged: isDisabled ? null : _handleStateChange,
+          ),
+        ),
+        if (isDisabled)
+          Padding(
+            padding: EdgeInsets.only(top: screenHeight * 0.01, left: screenWidth * 0.02),
+            child: Row(
+              children: [
+                Icon(Icons.lock_outline, size: screenWidth * 0.04, color: Colors.grey[600]),
+                SizedBox(width: screenWidth * 0.015),
+                Text(
+                  'El estado no puede modificarse',
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.035,
+                    color: Colors.grey[600],
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
     );
   }
 
