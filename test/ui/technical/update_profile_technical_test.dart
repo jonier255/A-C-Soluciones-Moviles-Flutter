@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_a_c_soluciones/bloc/editProfileTechnical/edit_profile_technical_bloc.dart';
 import 'package:flutter_a_c_soluciones/model/technical/technical_model.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/Profile/updateProfileTechnical.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MockEditProfileTechnicalBloc extends MockBloc<EditProfileTechnicalEvent, EditProfileTechnicalState>
     implements EditProfileTechnicalBloc {}
@@ -21,7 +22,7 @@ void main() {
       mockEditProfileTechnicalBloc.close();
     });
 
-    final tTechnical = UpdateTechnicalRequest(
+    final tTechnical = const UpdateTechnicalRequest(
       id: 1,
       nombre: 'John',
       apellido: 'Doe',
@@ -37,7 +38,7 @@ void main() {
         MaterialApp(
           home: BlocProvider<EditProfileTechnicalBloc>.value(
             value: mockEditProfileTechnicalBloc,
-            child: EditarInformacionScreenTechnical(),
+            child: const EditarInformacionScreenTechnical(),
           ),
         ),
       );
@@ -90,7 +91,7 @@ void main() {
     testWidgets('shows error message when state is EditProfileTechnicalFailure', (WidgetTester tester) async {
       whenListen(
         mockEditProfileTechnicalBloc,
-        Stream.fromIterable([EditProfileTechnicalLoaded(tTechnical), EditProfileTechnicalFailure('Test Error')]),
+        Stream.fromIterable([EditProfileTechnicalLoaded(tTechnical), const EditProfileTechnicalFailure('Test Error')]),
         initialState: EditProfileTechnicalLoaded(tTechnical),
       );
 

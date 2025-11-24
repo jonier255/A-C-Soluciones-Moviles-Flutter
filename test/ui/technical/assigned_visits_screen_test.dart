@@ -88,9 +88,9 @@ void main() {
       whenListen(
         mockTaskBloc,
         Stream.fromIterable([
-          const TaskSuccess(const [])
+          const TaskSuccess([])
         ]),
-        initialState: const TaskSuccess(const []),
+        initialState: const TaskSuccess([]),
       );
 
       await pumpAssignedVisitsScreen(tester);

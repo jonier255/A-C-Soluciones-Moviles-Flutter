@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_a_c_soluciones/bloc/service/service_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/service/service_event.dart';
 import 'package:flutter_a_c_soluciones/bloc/service/service_state.dart';
 import 'package:flutter_a_c_soluciones/model/servicio_model.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/Services/services_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MockServiceBloc extends MockBloc<ServiceEvent, ServiceState> implements ServiceBloc {}
 
@@ -75,9 +76,9 @@ void main() {
       whenListen(
         mockServiceBloc,
         Stream.fromIterable([
-          ServiceSuccess(const [])
+          const ServiceSuccess([])
         ]),
-        initialState: ServiceSuccess(const []),
+        initialState: const ServiceSuccess([]),
       );
 
       await pumpServicesScreen(tester);
@@ -90,8 +91,8 @@ void main() {
     testWidgets('shows error message when state is ServiceFailure', (WidgetTester tester) async {
       whenListen(
         mockServiceBloc,
-        Stream.fromIterable([ServiceFailure(error: 'Test Error')]),
-        initialState: ServiceFailure(error: 'Test Error'),
+        Stream.fromIterable([const ServiceFailure(error: 'Test Error')]),
+        initialState: const ServiceFailure(error: 'Test Error'),
       );
 
       await pumpServicesScreen(tester);

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_a_c_soluciones/bloc/view_reports/view_reports_bloc.dart';
 import 'package:flutter_a_c_soluciones/model/administrador/visits_model.dart';
 import 'package:flutter_a_c_soluciones/repository/report_repository.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/Reports/view_report_list_page_tc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MockViewReportsBloc extends MockBloc<ViewReportsEvent, ViewReportsState>
     implements ViewReportsBloc {}
@@ -45,7 +46,7 @@ void main() {
         MaterialApp(
           home: BlocProvider<ViewReportsBloc>.value(
             value: mockViewReportsBloc,
-            child: ViewReportListPageTc(),
+            child: const ViewReportListPageTc(),
           ),
         ),
       );
@@ -84,9 +85,9 @@ void main() {
       whenListen(
         mockViewReportsBloc,
         Stream.fromIterable([
-          ViewReportsLoaded([])
+          const ViewReportsLoaded([])
         ]),
-        initialState: ViewReportsLoaded([]),
+        initialState: const ViewReportsLoaded([]),
       );
 
       await pumpViewReportListPageTc(tester);
@@ -99,8 +100,8 @@ void main() {
     testWidgets('shows error message when state is ViewReportsFailure', (WidgetTester tester) async {
       whenListen(
         mockViewReportsBloc,
-        Stream.fromIterable([ViewReportsFailure('Test Error')]),
-        initialState: ViewReportsFailure('Test Error'),
+        Stream.fromIterable([const ViewReportsFailure('Test Error')]),
+        initialState: const ViewReportsFailure('Test Error'),
       );
 
       await pumpViewReportListPageTc(tester);

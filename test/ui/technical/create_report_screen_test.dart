@@ -83,7 +83,7 @@ void main() {
 
       await pumpCreateReportScreen(tester);
       
-      mockReportBloc.emit(ReportCreationFailure('Test Error'));
+      mockReportBloc.emit(const ReportCreationFailure('Test Error'));
       await tester.pump();
 
     });

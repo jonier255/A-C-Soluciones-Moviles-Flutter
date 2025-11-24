@@ -1,13 +1,14 @@
-import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_event.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_state.dart';
 import 'package:flutter_a_c_soluciones/model/servicio_model.dart';
 import 'package:flutter_a_c_soluciones/model/technical/task_model.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/Home/technical_home.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MockTaskBloc extends MockBloc<TaskEvent, TaskState> implements TaskBloc {}
 
@@ -106,9 +107,9 @@ void main() {
       whenListen(
         mockTaskBloc,
         Stream.fromIterable([
-          TaskSuccess(const [])
+          const TaskSuccess([])
         ]),
-        initialState: TaskSuccess(const []),
+        initialState: const TaskSuccess([]),
       );
 
       await pumpTechnicalHomeScreen(tester);
@@ -121,8 +122,8 @@ void main() {
     testWidgets('shows error message when state is TaskFailure', (WidgetTester tester) async {
       whenListen(
         mockTaskBloc,
-        Stream.fromIterable([TaskFailure(error: 'Test Error')]),
-        initialState: TaskFailure(error: 'Test Error'),
+        Stream.fromIterable([const TaskFailure(error: 'Test Error')]),
+        initialState: const TaskFailure(error: 'Test Error'),
       );
 
       await pumpTechnicalHomeScreen(tester);
