@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc_test/bloc_test.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/bloc/editProfileTechnical/edit_profile_technical_bloc.dart';
 import 'package:flutter_a_c_soluciones/model/technical/technical_model.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/Profile/accountTechnical.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockEditProfileTechnicalBloc extends MockBloc<EditProfileTechnicalEvent, EditProfileTechnicalState>
     implements EditProfileTechnicalBloc {}
@@ -22,7 +22,7 @@ void main() {
       mockEditProfileTechnicalBloc.close();
     });
 
-    final tTechnical = UpdateTechnicalRequest(
+    const tTechnical = UpdateTechnicalRequest(
       id: 1,
       nombre: 'John',
       apellido: 'Doe',
@@ -38,7 +38,7 @@ void main() {
         MaterialApp(
           home: BlocProvider<EditProfileTechnicalBloc>.value(
             value: mockEditProfileTechnicalBloc,
-            child: AccountTechnicalScreen(),
+            child: const AccountTechnicalScreen(),
           ),
         ),
       );
@@ -73,8 +73,8 @@ void main() {
     });
 
     testWidgets('shows error message when state is EditProfileTechnicalFailure', (WidgetTester tester) async {
-      when(() => mockEditProfileTechnicalBloc.state).thenReturn(EditProfileTechnicalFailure('Test Error'));
-      when(() => mockEditProfileTechnicalBloc.stream).thenAnswer((_) => Stream.value(EditProfileTechnicalFailure('Test Error')));
+      when(() => mockEditProfileTechnicalBloc.state).thenReturn(const EditProfileTechnicalFailure('Test Error'));
+      when(() => mockEditProfileTechnicalBloc.stream).thenAnswer((_) => Stream.value(const EditProfileTechnicalFailure('Test Error')));
 
       await pumpAccountTechnicalScreen(tester);
       await tester.pump();

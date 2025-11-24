@@ -116,7 +116,7 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
         final dir = await getApplicationDocumentsDirectory();
         final file = File('${dir.path}/report.pdf');
         await file.writeAsBytes(response.bodyBytes);
-        OpenFile.open(file.path);
+        await OpenFile.open(file.path);
       } else {
         throw Exception('No se pudo descargar el PDF');
       }
@@ -445,7 +445,7 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
             color: isDisabled ? Colors.grey[100] : Colors.white,
           ),
           child: DropdownButtonFormField<String>(
-            value: _visitState,
+            initialValue: _visitState,
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.symmetric(

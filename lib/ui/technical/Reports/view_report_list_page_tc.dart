@@ -79,13 +79,13 @@ class _ReportListState extends State<_ReportList> {
                 actions: [
                   TextButton(
                     child: const Text('Cancelar'),
-                    onPressed: () => Navigator.of(context).pop(),
+                    onPressed: () async => Navigator.of(context).pop(),
                   ),
                   TextButton(
                     child: const Text('Abrir Configuración'),
-                    onPressed: () {
-                      openAppSettings();
-                      Navigator.of(context).pop();
+                    onPressed: () async {
+                      await openAppSettings();
+                      if (context.mounted) Navigator.of(context).pop();
                     },
                   ),
                 ],
@@ -112,8 +112,8 @@ class _ReportListState extends State<_ReportList> {
       final String fileName = fullPdfPath.split(RegExp(r'[\/]+')).last;
       final String savePath = '${safeDir.path}/$fileName';
 
-      final _storageService = SecureStorageService();
-      final token = await _storageService.getToken();
+      final storageService = SecureStorageService();
+      final token = await storageService.getToken();
       if (token == null) {
         throw Exception('Token no encontrado. Por favor, inicie sesión de nuevo.');
       }
@@ -376,7 +376,7 @@ class _PaginationWidget extends StatelessWidget {
                   ),
                 ),
               );
-            }).toList(),
+            }),
           
           const SizedBox(width: 4),
           // Botón Siguiente

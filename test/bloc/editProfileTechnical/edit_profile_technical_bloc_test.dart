@@ -1,12 +1,12 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_a_c_soluciones/bloc/editProfileTechnical/edit_profile_technical_bloc.dart';
 import 'package:flutter_a_c_soluciones/model/technical/technical_model.dart';
 import 'package:flutter_a_c_soluciones/repository/services_technical/service_TechnicalUpdateProfile.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 // Manual mock for success case
 class MockTechnicalUpdateProfileRepositorySuccess implements TechnicalUpdateProfileRepository {
-  UpdateTechnicalRequest _technicalProfile = UpdateTechnicalRequest(
+  UpdateTechnicalRequest _technicalProfile = const UpdateTechnicalRequest(
     id: 1,
     nombre: 'John',
     apellido: 'Doe',
@@ -61,7 +61,7 @@ void main() {
       act: (bloc) => bloc.add(LoadTechnicalProfile()),
       expect: () => [
         EditProfileTechnicalLoading(),
-        EditProfileTechnicalLoaded(
+        const EditProfileTechnicalLoaded(
           UpdateTechnicalRequest(
             id: 1,
             nombre: 'John',
@@ -84,7 +84,7 @@ void main() {
       act: (bloc) => bloc.add(LoadTechnicalProfile()),
       expect: () => [
         EditProfileTechnicalLoading(),
-        EditProfileTechnicalFailure('Exception: Failed to load technical profile'),
+        const EditProfileTechnicalFailure('Exception: Failed to load technical profile'),
       ],
     );
 
@@ -94,7 +94,7 @@ void main() {
         technicalUpdateProfileRepository: MockTechnicalUpdateProfileRepositorySuccess(),
       ),
       act: (bloc) => bloc.add(
-        UpdateTechnicalProfile(
+        const UpdateTechnicalProfile(
           technicalData: UpdateTechnicalRequest(
             id: 1,
             nombre: 'Jane', // Changed name
@@ -119,7 +119,7 @@ void main() {
         technicalUpdateProfileRepository: MockTechnicalUpdateProfileRepositoryFailure(),
       ),
       act: (bloc) => bloc.add(
-        UpdateTechnicalProfile(
+        const UpdateTechnicalProfile(
           technicalData: UpdateTechnicalRequest(
             id: 1,
             nombre: 'Jane',
@@ -134,7 +134,7 @@ void main() {
       ),
       expect: () => [
         EditProfileTechnicalLoading(),
-        EditProfileTechnicalFailure('Exception: Failed to update technical profile'),
+        const EditProfileTechnicalFailure('Exception: Failed to update technical profile'),
       ],
     );
   });

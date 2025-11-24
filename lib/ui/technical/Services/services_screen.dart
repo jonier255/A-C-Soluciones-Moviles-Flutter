@@ -248,7 +248,7 @@ class _PaginationWidget extends StatelessWidget {
                   ),
                 ),
               );
-            }).toList(),
+            }),
           
           const SizedBox(width: 4),
           // Botón Siguiente
