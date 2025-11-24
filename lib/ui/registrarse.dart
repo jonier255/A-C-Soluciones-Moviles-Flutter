@@ -141,9 +141,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                   .nombreController.text,
                                               apellido: _registerBloc
                                                   .apellidoController.text,
-                                              numero_de_cedula: _registerBloc
+                                              numeroDeCedula: _registerBloc
                                                   .numeroDeCedulaController.text,
-                                              correo_electronico: _registerBloc
+                                              correoElectronico: _registerBloc
                                                   .correoElectronicoController
                                                   .text,
                                               telefono: _registerBloc

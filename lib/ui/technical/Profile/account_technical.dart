@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/bloc/editProfileTechnical/edit_profile_technical_bloc.dart';
 import 'package:flutter_a_c_soluciones/repository/secure_storage_service.dart';
-import 'package:flutter_a_c_soluciones/repository/services_technical/service_TechnicalUpdateProfile.dart';
+import 'package:flutter_a_c_soluciones/repository/services_technical/service_technical_update_profile.dart';
 import 'package:flutter_a_c_soluciones/ui/login.dart';
-import 'package:flutter_a_c_soluciones/ui/technical/Profile/updateProfileTechnical.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/Profile/update_profile_technical.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AccountTechnicalScreen extends StatefulWidget {

@@ -303,32 +303,34 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
 
     setState(() => _isLoading = true);
 
+    final navigator = Navigator.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+
     try {
-     
       await Future.delayed(const Duration(seconds: 2));
 
       if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Row(
-            children: [
-              Icon(Icons.check_circle_rounded, color: ServiceMenuTheme.statusCompleted),  // Icono verde
-              SizedBox(width: 12),
-              Text('Servicio creado exitosamente'),
-            ],
-          ),
-          backgroundColor: Colors.white,
-          behavior: SnackBarBehavior.floating,  // Flota sobre la pantalla
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      
+      messenger.showSnackBar(
+      SnackBar(
+        content: const Row(
+          children: [
+            Icon(Icons.check_circle_rounded, color: ServiceMenuTheme.statusCompleted),  // Icono verde
+            SizedBox(width: 12),
+            Text('Servicio creado exitosamente'),
+          ],
         ),
+        backgroundColor: Colors.white,
+        behavior: SnackBarBehavior.floating,  // Flota sobre la pantalla
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
       );
 
-      Navigator.pop(context);
+      navigator.pop();
     } catch (e) {
       if (!mounted) return;
       
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.showSnackBar(
         SnackBar(
           content: const Row(
             children: [

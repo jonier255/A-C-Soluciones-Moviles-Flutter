@@ -40,13 +40,13 @@ void main() {
     });
 
     blocTest<RegisterBloc, RegisterState>(
-      'emits [RegisterLoading, RegisterSuccess] when RegisterButtonPressed is added and registration is successful.',
+      'emits [RegisterLoading, RegisterSuccess] when RegisterButtonPressed is added and registration succeeds.',
       build: () => RegisterBloc(apiServiceRegister: MockAPIServiceRegisterSuccess()),
       act: (bloc) => bloc.add(RegisterButtonPressed(
         nombre: 'test',
         apellido: 'test',
-        numero_de_cedula: '12345',
-        correo_electronico: 'test@test.com',
+        numeroDeCedula: '12345',
+        correoElectronico: 'test@test.com',
         telefono: '1234567890',
         direccion: 'test address',
         contrasenia: 'password',
@@ -63,8 +63,8 @@ void main() {
       act: (bloc) => bloc.add(RegisterButtonPressed(
         nombre: 'test',
         apellido: 'test',
-        numero_de_cedula: '12345',
-        correo_electronico: 'test@test.com',
+        numeroDeCedula: '12345',
+        correoElectronico: 'test@test.com',
         telefono: '1234567890',
         direccion: 'test address',
         contrasenia: 'password',

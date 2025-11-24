@@ -25,8 +25,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         final registerRequest = RegisterRequestModel(
           nombre: event.nombre,
           apellido: event.apellido,
-          numero_de_cedula: event.numero_de_cedula,
-          correo_electronico: event.correo_electronico,
+          numeroDeCedula: event.numeroDeCedula,
+          correoElectronico: event.correoElectronico,
           telefono: event.telefono,
           direccion: event.direccion,
           contrasenia: event.contrasenia,

@@ -389,37 +389,35 @@ class _ServicesContentState extends State<ServicesContent> {
                 repository: SolicitudApiRepository(),
               ),
             );
-            if (result == true) {
-              if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: const Row(
-                      children: [
-                        Icon(Icons.check_circle, color: Colors.white),
-                        SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            'Solicitud creada con éxito',
-                            style: TextStyle(fontSize: 16),
-                          ),
+            if (result == true && context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const Row(
+                    children: [
+                      Icon(Icons.check_circle, color: Colors.white),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'Solicitud creada con éxito',
+                          style: TextStyle(fontSize: 16),
                         ),
-                      ],
-                    ),
-                    backgroundColor: Colors.green.shade600,
-                    behavior: SnackBarBehavior.floating,
-                    margin: const EdgeInsets.only(
-                      top: 20,
-                      left: 16,
-                      right: 16,
-                    ),
-                    elevation: 8,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    duration: const Duration(seconds: 3),
+                      ),
+                    ],
                   ),
-                );
-              }
+                  backgroundColor: Colors.green.shade600,
+                  behavior: SnackBarBehavior.floating,
+                  margin: const EdgeInsets.only(
+                    top: 20,
+                    left: 16,
+                    right: 16,
+                  ),
+                  elevation: 8,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  duration: const Duration(seconds: 3),
+                ),
+              );
             }
           },
           borderRadius: BorderRadius.circular(20),

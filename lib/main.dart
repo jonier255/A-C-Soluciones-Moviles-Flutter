@@ -7,7 +7,7 @@ import 'package:flutter_a_c_soluciones/ui/admin/Home/admin_home.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/Visits/visits_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/changePassword/forget.dart';
-import 'package:flutter_a_c_soluciones/ui/changePassword/verifyCode.dart';
+import 'package:flutter_a_c_soluciones/ui/changePassword/verify_code.dart';
 import 'package:flutter_a_c_soluciones/ui/client/layout.dart';
 import 'package:flutter_a_c_soluciones/ui/login.dart';
 import 'package:flutter_a_c_soluciones/ui/registrarse.dart';

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_a_c_soluciones/model/technical/technical_model.dart';
-import 'package:flutter_a_c_soluciones/repository/services_technical/service_TechnicalUpdateProfile.dart';
+import 'package:flutter_a_c_soluciones/repository/services_technical/service_technical_update_profile.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'edit_profile_technical_event.dart';

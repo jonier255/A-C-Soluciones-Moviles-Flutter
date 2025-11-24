@@ -3,9 +3,9 @@ import 'package:flutter_a_c_soluciones/bloc/editProfileAdmin/edit_profile_admin_
 import 'package:flutter_a_c_soluciones/bloc/request/request_bloc.dart';
 import 'package:flutter_a_c_soluciones/repository/secure_storage_service.dart';
 import 'package:flutter_a_c_soluciones/repository/services_admin/request_repository.dart';
-import 'package:flutter_a_c_soluciones/repository/services_admin/service_AdminUpdateProfile.dart';
+import 'package:flutter_a_c_soluciones/repository/services_admin/service_admin_update_profile.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/Home/admin_home.dart';
-import 'package:flutter_a_c_soluciones/ui/admin/Profile/updateProfileAdmin.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/Profile/update_profile_admin.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/login.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

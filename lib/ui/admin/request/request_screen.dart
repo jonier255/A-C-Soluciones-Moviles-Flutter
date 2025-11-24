@@ -13,10 +13,10 @@ class RequestScreen extends StatefulWidget {
   const RequestScreen({super.key});
 
   @override
-  _RequestScreenState createState() => _RequestScreenState();
+  RequestScreenState createState() => RequestScreenState();
 }
 
-class _RequestScreenState extends State<RequestScreen> {
+class RequestScreenState extends State<RequestScreen> {
   @override
   void initState() {
     super.initState();

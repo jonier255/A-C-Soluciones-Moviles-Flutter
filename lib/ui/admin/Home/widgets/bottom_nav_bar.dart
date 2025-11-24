@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_a_c_soluciones/ui/admin/Profile/accountAdmin.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/Profile/account_admin.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

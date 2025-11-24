@@ -52,10 +52,10 @@ class AssignVisitsView extends StatefulWidget {
   const AssignVisitsView({super.key});
 
   @override
-  _AssignVisitsViewState createState() => _AssignVisitsViewState();
+  AssignVisitsViewState createState() => AssignVisitsViewState();
 }
 
-class _AssignVisitsViewState extends State<AssignVisitsView> {
+class AssignVisitsViewState extends State<AssignVisitsView> {
   final _formKey = GlobalKey<FormState>();
   final _fechaProgramadaController = TextEditingController();
   final _duracionEstimadaController = TextEditingController();

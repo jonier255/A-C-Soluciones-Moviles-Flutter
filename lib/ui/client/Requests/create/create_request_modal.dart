@@ -44,6 +44,10 @@ class _CrearSolicitudModalState extends State<CrearSolicitudModal> {
     _formKey.currentState!.save();
 
     setState(() => _loading = true);
+    
+    final navigator = Navigator.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    
     try {
       await widget.repository.crearSolicitud(
         clienteId: widget.clienteId,
@@ -53,18 +57,17 @@ class _CrearSolicitudModalState extends State<CrearSolicitudModal> {
         comentarios: _comentarios,
         fechaSolicitud: _fechaSolicitud,
       );
-      if (context.mounted) {
-        Navigator.pop(context, true);
-      }
+      if (!context.mounted) return;
+      navigator.pop(true);
     } catch (e) {
       if (!context.mounted) return;
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
-        );
-      }
+      messenger.showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
     } finally {
-      setState(() => _loading = false);
+      if (mounted) {
+        setState(() => _loading = false);
+      }
     }
   }
 

@@ -11,10 +11,10 @@ class AdminsScreen extends StatefulWidget {
   const AdminsScreen({super.key});
 
   @override
-  _AdminsScreenState createState() => _AdminsScreenState();
+  AdminsScreenState createState() => AdminsScreenState();
 }
 
-class _AdminsScreenState extends State<AdminsScreen> {
+class AdminsScreenState extends State<AdminsScreen> {
   @override
   void initState() {
     super.initState();

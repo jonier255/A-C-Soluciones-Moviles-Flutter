@@ -1,7 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_a_c_soluciones/bloc/editProfileTechnical/edit_profile_technical_bloc.dart';
 import 'package:flutter_a_c_soluciones/model/technical/technical_model.dart';
-import 'package:flutter_a_c_soluciones/repository/services_technical/service_TechnicalUpdateProfile.dart';
+import 'package:flutter_a_c_soluciones/repository/services_technical/service_technical_update_profile.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 // Manual mock for success case

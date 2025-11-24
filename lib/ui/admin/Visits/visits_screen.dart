@@ -13,10 +13,10 @@ class VisitsScreen extends StatefulWidget {
   const VisitsScreen({super.key});
 
   @override
-  _VisitsScreenState createState() => _VisitsScreenState();
+  VisitsScreenState createState() => VisitsScreenState();
 }
 
-class _VisitsScreenState extends State<VisitsScreen> {
+class VisitsScreenState extends State<VisitsScreen> {
   int _currentPage = 1; // página actual
   final int _visitsPerPage = 4; // cantidad de cards por página
 
