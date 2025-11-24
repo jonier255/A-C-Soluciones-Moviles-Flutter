@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/register/register_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/register/register_event.dart';
 import 'package:flutter_a_c_soluciones/bloc/register/register_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});

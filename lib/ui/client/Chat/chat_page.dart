@@ -63,7 +63,7 @@ class _ChatContentState extends State<ChatContent> {
     final isTablet = screenWidth > 600;
     final isDesktop = screenWidth > 1024;
 
-    return Container(
+    return ColoredBox(
       color: const Color(0xFFF5F7FA),
       child: Column(
         children: [
@@ -191,7 +191,7 @@ class _ChatContentState extends State<ChatContent> {
                       ),
                     ),
                   )
-                : Container(
+                : ColoredBox(
                     color: const Color(0xFFF5F7FA),
                     child: ListView.builder(
                       controller: _scrollController,

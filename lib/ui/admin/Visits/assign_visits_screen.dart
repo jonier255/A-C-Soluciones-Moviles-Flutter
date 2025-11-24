@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_a_c_soluciones/bloc/request/request_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/request/request_event.dart';
 import 'package:flutter_a_c_soluciones/bloc/request/request_state.dart';
+import 'package:flutter_a_c_soluciones/bloc/servicios/servicios_bloc.dart';
+import 'package:flutter_a_c_soluciones/bloc/tecnicos/tecnicos_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/visits/assign_visits/assign_visits_bloc.dart';
 import 'package:flutter_a_c_soluciones/model/administrador/visits_model.dart';
+import 'package:flutter_a_c_soluciones/repository/service_repository.dart';
+import 'package:flutter_a_c_soluciones/repository/services_admin/request_repository.dart';
+import 'package:flutter_a_c_soluciones/repository/services_admin/tecnicos_repository.dart';
 import 'package:flutter_a_c_soluciones/repository/services_admin/visits_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_a_c_soluciones/bloc/tecnicos/tecnicos_bloc.dart';
-import 'package:flutter_a_c_soluciones/bloc/request/request_bloc.dart';
-import 'package:flutter_a_c_soluciones/bloc/servicios/servicios_bloc.dart';
-import 'package:flutter_a_c_soluciones/repository/services_admin/tecnicos_repository.dart';
-import 'package:flutter_a_c_soluciones/repository/services_admin/request_repository.dart';
-import 'package:flutter_a_c_soluciones/repository/service_repository.dart';
+
 import 'widgets/assign_visits_constants.dart';
-import 'widgets/form_fields.dart';
 import 'widgets/assign_visits_widgets.dart';
+import 'widgets/form_fields.dart';
 
 class AssignVisitsScreen extends StatelessWidget {
   const AssignVisitsScreen({super.key});
@@ -264,7 +265,7 @@ class _AssignVisitsViewState extends State<AssignVisitsView> {
           return FieldContainer(
             child: DropdownButtonFormField<int>(
               isExpanded: true,
-              value: _selectedTecnicoId,
+              initialValue: _selectedTecnicoId,
               decoration: buildInputDecoration(context, 'Seleccione un técnico', icon: Icons.engineering),
               icon: const Icon(Icons.arrow_drop_down, color: AssignVisitsTheme.accentBlue),
               items: state.tecnicos.map((tecnico) {
@@ -299,7 +300,7 @@ class _AssignVisitsViewState extends State<AssignVisitsView> {
           return FieldContainer(
             child: DropdownButtonFormField<int>(
               isExpanded: true,
-              value: _selectedSolicitudId,
+              initialValue: _selectedSolicitudId,
               decoration: buildInputDecoration(context, 'Seleccione una solicitud', icon: Icons.assignment),
               icon: const Icon(Icons.arrow_drop_down, color: AssignVisitsTheme.accentBlue),
               items: state.requests.map((solicitud) {
@@ -334,7 +335,7 @@ class _AssignVisitsViewState extends State<AssignVisitsView> {
           return FieldContainer(
             child: DropdownButtonFormField<int>(
               isExpanded: true,
-              value: _selectedServicioId,
+              initialValue: _selectedServicioId,
               decoration: buildInputDecoration(context, 'Seleccione un servicio', icon: Icons.home_repair_service),
               icon: const Icon(Icons.arrow_drop_down, color: AssignVisitsTheme.accentBlue),
               items: state.servicios.map((servicio) {

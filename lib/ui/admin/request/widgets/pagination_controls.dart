@@ -67,7 +67,7 @@ class PaginationControls extends StatelessWidget {
                   onPressed: () => onPageChanged(pageNumber),
                 ),
               );
-            }).toList(),
+            }),
             if (currentPage < totalPages)
               SizedBox(width: sw * 0.02),
             if (currentPage < totalPages)

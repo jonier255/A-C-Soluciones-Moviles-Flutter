@@ -15,7 +15,7 @@ class EditProfileAdminBloc extends Bloc<EditProfileAdminEvent, EditProfileAdminS
     on<UpdateAdminProfile>(_onUpdateAdminProfile);
   }
 
-  void _onLoadAdminProfile(
+  Future<void> _onLoadAdminProfile(
     LoadAdminProfile event,
     Emitter<EditProfileAdminState> emit,
   ) async {
@@ -28,7 +28,7 @@ class EditProfileAdminBloc extends Bloc<EditProfileAdminEvent, EditProfileAdminS
     }
   }
 
-  void _onUpdateAdminProfile(
+  Future<void> _onUpdateAdminProfile(
     UpdateAdminProfile event,
     Emitter<EditProfileAdminState> emit,
   ) async {

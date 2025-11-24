@@ -29,7 +29,7 @@ class SecureStorageService {
 
   /// Guarda datos adicionales del usuario (nombre, correo, rol, etc.)
   Future<void> saveUserData(Map<String, String> userData) async {
-    for (var entry in userData.entries) {
+    for (final entry in userData.entries) {
       await _storage.write(key: entry.key, value: entry.value);
     }
   }

@@ -71,7 +71,7 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
   Widget _buildHeader(BuildContext context, double sw, double sh) {
     return Container(
       height: sh * 0.15, 
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: ServiceMenuTheme.createServiceGradient,  
       ),
       child: Padding(
@@ -149,7 +149,7 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
         decoration: InputDecoration(
           labelText: 'Nombre del Servicio',
           hintText: 'Ej: Instalación eléctrica',
-          prefixIcon: Icon(
+          prefixIcon: const Icon(
             Icons.label_rounded,
             color: ServiceMenuTheme.primaryPurple,
           ),
@@ -201,8 +201,8 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
         decoration: InputDecoration(
           labelText: 'Descripción',
           hintText: 'Describe los detalles del servicio...',
-          prefixIcon: Padding(
-            padding: const EdgeInsets.only(bottom: 60),  
+          prefixIcon: const Padding(
+            padding: EdgeInsets.only(bottom: 60),  
             child: Icon(
               Icons.description_rounded,
               color: ServiceMenuTheme.primaryPurple,
@@ -311,11 +311,11 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Row(
+          content: const Row(
             children: [
               Icon(Icons.check_circle_rounded, color: ServiceMenuTheme.statusCompleted),  // Icono verde
-              const SizedBox(width: 12),
-              const Text('Servicio creado exitosamente'),
+              SizedBox(width: 12),
+              Text('Servicio creado exitosamente'),
             ],
           ),
           backgroundColor: Colors.white,
@@ -330,11 +330,11 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
       
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Row(
+          content: const Row(
             children: [
               Icon(Icons.error_rounded, color: ServiceMenuTheme.statusError),  // Icono rojo
-              const SizedBox(width: 12),
-              const Text('Error al crear el servicio'),
+              SizedBox(width: 12),
+              Text('Error al crear el servicio'),
             ],
           ),
           backgroundColor: Colors.white,

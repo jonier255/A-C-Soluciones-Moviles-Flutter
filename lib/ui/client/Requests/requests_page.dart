@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/model/client/solicitud_model.dart';
 import 'package:flutter_a_c_soluciones/repository/client/solicitud_api_solicitud.dart';
+import 'package:intl/intl.dart';
 
 class RequestsContent extends StatefulWidget {
   const RequestsContent({super.key});
@@ -41,12 +41,12 @@ class _RequestsContentState extends State<RequestsContent> {
             horizontal: isTablet ? 32 : 20,
           ),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                const Color(0xFF56AFEC),
-                const Color(0xFF2E91D8),
+                Color(0xFF56AFEC),
+                Color(0xFF2E91D8),
               ],
             ),
             boxShadow: [
@@ -243,7 +243,7 @@ class _RequestsContentState extends State<RequestsContent> {
           ),
         ),
         Expanded(
-          child: Container(
+          child: ColoredBox(
             color: const Color(0xFFF5F7FA),
             child: FutureBuilder<List<Solicitud>>(
               future: _futureSolicitudes,

@@ -13,7 +13,7 @@ class ViewReportsBloc extends Bloc<ViewReportsEvent, ViewReportsState> {
     on<LoadMoreViewReports>(_onLoadMoreViewReports);
   }
 
-  void _onLoadViewReports(
+  Future<void> _onLoadViewReports(
     LoadViewReports event,
     Emitter<ViewReportsState> emit,
   ) async {
@@ -31,7 +31,7 @@ class ViewReportsBloc extends Bloc<ViewReportsEvent, ViewReportsState> {
     }
   }
 
-  void _onLoadMoreViewReports(
+  Future<void> _onLoadMoreViewReports(
     LoadMoreViewReports event,
     Emitter<ViewReportsState> emit,
   ) async {

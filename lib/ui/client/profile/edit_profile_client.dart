@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/client/edit_profile_client_bloc.dart';
 import 'package:flutter_a_c_soluciones/model/client/client_profile_model.dart';
 import 'package:flutter_a_c_soluciones/repository/secure_storage_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EditProfileClientScreen extends StatefulWidget {
   const EditProfileClientScreen({super.key});

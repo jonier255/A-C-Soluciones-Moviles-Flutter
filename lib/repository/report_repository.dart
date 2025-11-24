@@ -235,7 +235,7 @@ class ReportRepository {
 
     // 4. For each report, fetch its corresponding visit details
     final List<VisitWithReport> visitsWithReports = [];
-    for (var ficha in paginatedFichas) {
+    for (final ficha in paginatedFichas) {
       try {
         final visitId = ficha.visitId;
         final visitResponse = await http.get(

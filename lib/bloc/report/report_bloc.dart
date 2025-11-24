@@ -14,7 +14,7 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
     on<CreateReport>(_onCreateReport);
   }
 
-  void _onCreateReport(
+  Future<void> _onCreateReport(
     CreateReport event,
     Emitter<ReportState> emit,
   ) async {

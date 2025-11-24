@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:flutter_a_c_soluciones/model/servicio_model.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/Services/service_details_screen.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('ServiceDetailsScreen', () {

@@ -1,14 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/bloc/service/service_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/service/service_event.dart';
 import 'package:flutter_a_c_soluciones/bloc/service/service_state.dart';
 import 'package:flutter_a_c_soluciones/model/servicio_model.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/Services/services_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 class MockServiceBloc extends MockBloc<ServiceEvent, ServiceState> implements ServiceBloc {}
 

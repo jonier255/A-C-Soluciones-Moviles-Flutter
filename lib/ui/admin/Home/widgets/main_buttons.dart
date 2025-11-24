@@ -11,9 +11,9 @@ class MainButtonsSection extends StatelessWidget {
     
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: AdminHomeTheme.horizontalPadding(sw)),
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: const [
+        children: [
           Expanded(
             child: MainButton(
               icon: Icons.engineering_rounded,

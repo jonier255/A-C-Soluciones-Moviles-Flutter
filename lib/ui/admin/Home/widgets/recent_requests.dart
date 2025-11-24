@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../../bloc/request/request_bloc.dart';
 import '../../../../bloc/request/request_state.dart';
 import '../../../../model/administrador/request_model.dart';
 import 'admin_home_constants.dart';
-import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
 
 class RecentRequestsSection extends StatelessWidget {
   const RecentRequestsSection({super.key});
@@ -144,10 +145,10 @@ class RequestCard extends StatelessWidget {
       margin: EdgeInsets.all(sw * 0.025),
       padding: EdgeInsets.all(sw * 0.04),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           colors: [
             Colors.white,
-            const Color(0xFFF8F9FA),
+            Color(0xFFF8F9FA),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -266,7 +267,7 @@ class ViewMoreButton extends StatelessWidget {
             MaterialPageRoute(
               builder: (_) => BlocProvider.value(
                 value: BlocProvider.of<RequestBloc>(context),
-                child: RequestScreen(),
+                child: const RequestScreen(),
               ),
             ),
           );

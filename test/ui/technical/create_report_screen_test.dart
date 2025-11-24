@@ -1,11 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/bloc/report/report_bloc.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/Reports/create_report_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 class MockReportBloc extends MockBloc<ReportEvent, ReportState> implements ReportBloc {}
 

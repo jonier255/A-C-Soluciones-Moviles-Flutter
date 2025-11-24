@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/bloc/visits/visits_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/visits/visits_event.dart';
 import 'package:flutter_a_c_soluciones/bloc/visits/visits_state.dart';
 import 'package:flutter_a_c_soluciones/model/administrador/visits_model.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/Visits/visits_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 // primero  pues se utliza un mock para una clase falsa que simula el VisitsBloc).
 // Esto ayda a controlar los estados del bloc para probar la interfaz.
@@ -51,7 +51,7 @@ void main() {
         MaterialApp(
           home: BlocProvider<VisitsBloc>.value(
             value: mockVisitsBloc,
-            child: VisitsScreen(),
+            child: const VisitsScreen(),
           ),
         ),
       );

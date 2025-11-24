@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_a_c_soluciones/repository/client/service_api_service.dart';
 import 'package:flutter_a_c_soluciones/model/client/service_model.dart';
-import 'package:flutter_a_c_soluciones/ui/client/Requests/create/create_request_modal.dart';
+import 'package:flutter_a_c_soluciones/repository/client/service_api_service.dart';
 import 'package:flutter_a_c_soluciones/repository/client/solicitud_api_solicitud.dart';
+import 'package:flutter_a_c_soluciones/ui/client/Requests/create/create_request_modal.dart';
 
 class ServicesContent extends StatefulWidget {
   final int clienteId;
 
-  ServicesContent({Key? key, required this.clienteId}) : super(key: key);
+  const ServicesContent({super.key, required this.clienteId});
 
   @override
   State<ServicesContent> createState() => _ServicesContentState();
@@ -148,7 +148,7 @@ class _ServicesContentState extends State<ServicesContent> {
           ),
         ),
         Expanded(
-          child: Container(
+          child: ColoredBox(
             color: const Color(0xFFF5F7FA),
             child: FutureBuilder<List<ServiceModel>>(
               future: _futureServices,
@@ -395,8 +395,8 @@ class _ServicesContentState extends State<ServicesContent> {
               if (mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Row(
-                      children: const [
+                    content: const Row(
+                      children: [
                         Icon(Icons.check_circle, color: Colors.white),
                         SizedBox(width: 12),
                         Expanded(

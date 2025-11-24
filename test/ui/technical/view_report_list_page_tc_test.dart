@@ -1,13 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/bloc/view_reports/view_reports_bloc.dart';
 import 'package:flutter_a_c_soluciones/model/administrador/visits_model.dart';
 import 'package:flutter_a_c_soluciones/repository/report_repository.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/Reports/view_report_list_page_tc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 class MockViewReportsBloc extends MockBloc<ViewReportsEvent, ViewReportsState>
     implements ViewReportsBloc {}

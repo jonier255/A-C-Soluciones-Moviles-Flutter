@@ -227,7 +227,7 @@ class _RequestInformationState extends State<RequestInformation> {
                         Expanded(
                           flex: 1,
                           child: DropdownButtonFormField<String>(
-                            value: _estadoSeleccionado,
+                            initialValue: _estadoSeleccionado,
                             hint: const Text('Estado'),
                             decoration: InputDecoration(
                               border: OutlineInputBorder(

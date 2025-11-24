@@ -1,4 +1,3 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_a_c_soluciones/bloc/register/register_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/register/register_event.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_a_c_soluciones/bloc/register/register_state.dart';
 import 'package:flutter_a_c_soluciones/model/register_request_model.dart';
 import 'package:flutter_a_c_soluciones/model/register_response_model.dart';
 import 'package:flutter_a_c_soluciones/repository/service_api_register.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 
 // Manual mock for success case
@@ -53,7 +53,7 @@ void main() {
       )),
       expect: () => [
         RegisterLoading(),
-        RegisterSuccess(message: "Registro exitoso"),
+        const RegisterSuccess(message: "Registro exitoso"),
       ],
     );
 
@@ -71,7 +71,7 @@ void main() {
       )),
       expect: () => [
         RegisterLoading(),
-        RegisterFailure(error: 'Exception: Registration failed'),
+        const RegisterFailure(error: 'Exception: Registration failed'),
       ],
     );
   });

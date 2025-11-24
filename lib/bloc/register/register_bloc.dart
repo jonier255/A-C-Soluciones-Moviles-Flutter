@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/register/register_event.dart';
 import 'package:flutter_a_c_soluciones/bloc/register/register_state.dart';
 import 'package:flutter_a_c_soluciones/model/register_request_model.dart';
 import 'package:flutter_a_c_soluciones/repository/service_api_register.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final nombreController = TextEditingController();
@@ -34,7 +34,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
         // Se asume éxito si no hay excepción, ya que el backend devuelve el objeto de usuario en lugar de un mensaje.
         await this.apiServiceRegister.register(registerRequest);
-        emit(RegisterSuccess(message: "Registro exitoso"));
+        emit(const RegisterSuccess(message: "Registro exitoso"));
       } catch (e) {
         emit(RegisterFailure(error: e.toString()));
       }

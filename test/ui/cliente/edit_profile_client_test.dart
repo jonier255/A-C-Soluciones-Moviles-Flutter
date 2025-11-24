@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter_a_c_soluciones/ui/client/profile/edit_profile_client.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/bloc/client/edit_profile_client_bloc.dart';
 import 'package:flutter_a_c_soluciones/model/client/client_profile_model.dart';
 import 'package:flutter_a_c_soluciones/repository/client/client_profile_repository.dart';
+import 'package:flutter_a_c_soluciones/ui/client/profile/edit_profile_client.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 // Mock para ClientProfileRepository
 class MockClientProfileRepository implements ClientProfileRepository {
