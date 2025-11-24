@@ -58,6 +58,7 @@ class _ReportListState extends State<_ReportList> {
       var storageStatus = await Permission.storage.request();
       if (!storageStatus.isGranted) {
          if (storageStatus.isPermanentlyDenied) {
+            if (!mounted) return;
             showDialog(
               context: context,
               builder: (context) => AlertDialog(
@@ -80,6 +81,7 @@ class _ReportListState extends State<_ReportList> {
               ),
             );
          } else {
+            if (!mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text(

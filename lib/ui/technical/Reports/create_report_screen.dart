@@ -67,6 +67,7 @@ class _CreateReportViewState extends State<_CreateReportView> {
   Future<void> _pickImage(Function(XFile) onImagePicked) async {
     final pickedFile = await _imagePicker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
+      if (!mounted) return;
       setState(() {
         onImagePicked(pickedFile);
       });
@@ -199,7 +200,7 @@ class _CreateReportViewState extends State<_CreateReportView> {
             firstDate: DateTime(2000),
             lastDate: DateTime(2101),
           );
-          if (pickedDate != null) {
+          if (pickedDate != null && mounted) {
             controller.text = pickedDate.toLocal().toString().split(' ')[0];
           }
         },

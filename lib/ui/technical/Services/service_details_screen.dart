@@ -35,16 +35,18 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(screenWidth * 0.045),
               boxShadow: [
-                BoxShadow(
-                  color: Colors.blue.withOpacity(0.35),
+                const BoxShadow(
+                  color: Colors.blue,
                   blurRadius: 15,
                   spreadRadius: 3,
-                  offset: const Offset(0, 5),
+                  offset: Offset(0, 5),
                 ),
               ],
-              border: Border.all(
-                color: Colors.blueAccent.withOpacity(0.3),
-                width: 1.5,
+              border: const Border(
+                top: BorderSide(color: Colors.blueAccent, width: 1.5),
+                left: BorderSide(color: Colors.blueAccent, width: 1.5),
+                right: BorderSide(color: Colors.blueAccent, width: 1.5),
+                bottom: BorderSide(color: Colors.blueAccent, width: 1.5),
               ),
             ),
             child: Column(

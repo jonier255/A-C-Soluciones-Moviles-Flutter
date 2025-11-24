@@ -20,10 +20,10 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     // Define colors for a cleaner look
-    final primaryColor = Color(0xFF0D47A1); // Dark Blue
-    final backgroundColor = Color(0xFFF5F5F5); // Light Gray
-    final accentColor = Color(0xFFFFC107); // Amber
-    final textColor = Color(0xFF212121); // Dark Gray
+    const primaryColor = Color(0xFF0D47A1); // Dark Blue
+    const backgroundColor = Color(0xFFF5F5F5); // Light Gray
+    const accentColor = Color(0xFFFFC107); // Amber
+    const textColor = Color(0xFF212121); // Dark Gray
 
     return BlocProvider(
       create: (context) => EditProfileTechnicalBloc(
@@ -32,7 +32,7 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
       child: Scaffold(
         backgroundColor: backgroundColor,
         appBar: AppBar(
-          title: Text('Mi Perfil', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          title: const Text('Mi Perfil', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
           backgroundColor: primaryColor,
           elevation: 0,
         ),
@@ -98,15 +98,15 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
         child: Column(
           children: [
             _buildDetailItem(Icons.person, 'Nombre', userTechnical.nombre, textColor, accentColor, screenWidth),
-            Divider(height: 8, thickness: 1), // Reduced height
+            const Divider(height: 8, thickness: 1), // Reduced height
             _buildDetailItem(Icons.person_outline, 'Apellido', userTechnical.apellido, textColor, accentColor, screenWidth),
-            Divider(height: 8, thickness: 1), // Reduced height
+            const Divider(height: 8, thickness: 1), // Reduced height
             _buildDetailItem(Icons.credit_card, 'Cédula', userTechnical.numeroCedula, textColor, accentColor, screenWidth),
-            Divider(height: 8, thickness: 1), // Reduced height
+            const Divider(height: 8, thickness: 1), // Reduced height
             _buildDetailItem(Icons.phone, 'Teléfono', userTechnical.telefono, textColor, accentColor, screenWidth),
-            Divider(height: 8, thickness: 1), // Reduced height
+            const Divider(height: 8, thickness: 1), // Reduced height
             _buildDetailItem(Icons.work, 'Especialidad', userTechnical.especialidad, textColor, accentColor, screenWidth),
-            Divider(height: 8, thickness: 1), // Reduced height
+            const Divider(height: 8, thickness: 1), // Reduced height
             _buildDetailItem(Icons.email, 'Correo electrónico', userTechnical.correoElectronico, textColor, accentColor, screenWidth, isEmail: true),
           ],
         ),
@@ -118,7 +118,7 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
     return ListTile(
       dense: true, // Make tile more compact
       leading: Icon(icon, color: accentColor, size: screenWidth * 0.06), // Reduced icon size
-      title: Text(title, style: TextStyle(fontWeight: FontWeight.w600, color: textColor.withOpacity(0.7), fontSize: screenWidth * 0.035)),
+      title: Text(title, style: TextStyle(fontWeight: FontWeight.w600, color: textColor.withValues(alpha: 0.7), fontSize: screenWidth * 0.035)),
       subtitle: Text(value, style: TextStyle(fontSize: screenWidth * 0.04, fontWeight: FontWeight.bold, color: textColor)),
     );
   }
@@ -130,7 +130,7 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
       child: Column(
         children: [
           ElevatedButton.icon(
-            icon: Icon(Icons.edit, color: Colors.white),
+            icon: const Icon(Icons.edit, color: Colors.white),
             label: const Text('Editar Información', style: TextStyle(color: Colors.white)),
             onPressed: () async {
               final result = await Navigator.push(
@@ -157,11 +157,12 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
           ),
           SizedBox(height: screenHeight * 0.01), // Reduced height
           OutlinedButton.icon(
-            icon: Icon(Icons.logout, color: Colors.red),
+            icon: const Icon(Icons.logout, color: Colors.red),
             label: const Text('Cerrar Sesión', style: TextStyle(color: Colors.red)),
             onPressed: () async {
               final secureStorage = SecureStorageService();
               await secureStorage.clearAll();
+              if (!context.mounted) return;
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => const LoginScreen()),

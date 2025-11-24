@@ -70,18 +70,18 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Color(0xFF0D47A1);
-    final backgroundColor = Color(0xFFF5F5F5);
+    const primaryColor = Color(0xFF0D47A1);
+    const backgroundColor = Color(0xFFF5F5F5);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: Text('Editar Perfil', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        title: const Text('Editar Perfil', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: primaryColor,
         elevation: 0,
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: BlocConsumer<EditProfileTechnicalBloc, EditProfileTechnicalState>(
         listener: (context, state) {
@@ -159,7 +159,7 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
                 ),
                 SizedBox(height: screenHeight * 0.03),
                 ElevatedButton.icon(
-                  icon: Icon(Icons.save, color: Colors.white),
+                  icon: const Icon(Icons.save, color: Colors.white),
                   label: Text(isSubmitting ? 'Guardando...' : 'Guardar Cambios'),
                   onPressed: (isSubmitting || !_hasChanges) ? null : () {
                     setState(() {
@@ -192,7 +192,7 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
                 ),
                 SizedBox(height: screenHeight * 0.02),
                 OutlinedButton.icon(
-                  icon: Icon(Icons.cancel, color: Colors.grey[600]),
+                  icon: const Icon(Icons.cancel),
                   label: Text('Cancelar', style: TextStyle(color: Colors.grey[600])),
                   onPressed: () {
                     context.read<EditProfileTechnicalBloc>().add(LoadTechnicalProfile());
@@ -219,7 +219,7 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
       keyboardType: keyboardType,
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: TextStyle(color: primaryColor.withOpacity(0.7)),
+        labelStyle: TextStyle(color: primaryColor.withValues(alpha: 0.7)),
         prefixIcon: Icon(icon, color: primaryColor),
         filled: true,
         fillColor: Colors.white,

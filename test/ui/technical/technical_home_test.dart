@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_event.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_state.dart';
@@ -48,7 +48,7 @@ void main() {
         MaterialApp(
           home: BlocProvider<TaskBloc>.value(
             value: mockTaskBloc,
-            child: TechnicalHomeScreen(),
+            child: const TechnicalHomeScreen(),
           ),
         ),
       );
@@ -106,9 +106,9 @@ void main() {
       whenListen(
         mockTaskBloc,
         Stream.fromIterable([
-          TaskSuccess([])
+          TaskSuccess(const [])
         ]),
-        initialState: TaskSuccess([]),
+        initialState: TaskSuccess(const []),
       );
 
       await pumpTechnicalHomeScreen(tester);

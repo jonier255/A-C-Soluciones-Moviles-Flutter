@@ -36,11 +36,13 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
   Future<void> _fetchPdfPath() async {
     try {
       final pdfPath = await _reportRepository.getPdfPathForVisit(widget.task.id);
+      if (!mounted) return;
       setState(() {
         _pdfPath = pdfPath;
         _isLoading = false;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
       });
@@ -62,6 +64,7 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
   Future<void> _updateState(String newState) async {
     try {
       await _taskRepository.updateTaskState(widget.task.id, newState);
+      if (!mounted) return;
       setState(() {
         _visitState = newState;
       });
@@ -69,6 +72,7 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
         const SnackBar(content: Text('Estado actualizado con éxito')),
       );
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error al actualizar el estado: $e')),
       );
@@ -116,6 +120,7 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
         throw Exception('No se pudo descargar el PDF');
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error al abrir el PDF: $e')),
       );
@@ -149,16 +154,18 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(screenWidth * 0.045),
                     boxShadow: [
-                      BoxShadow(
-                        color: Colors.blue.withOpacity(0.35),
+                      const BoxShadow(
+                        color: Colors.blue,
                         blurRadius: 15,
                         spreadRadius: 3,
-                        offset: const Offset(0, 5),
+                        offset: Offset(0, 5),
                       ),
                     ],
-                    border: Border.all(
-                      color: Colors.blueAccent.withOpacity(0.3),
-                      width: 1.5,
+                    border: const Border(
+                      top: BorderSide(color: Colors.blueAccent, width: 1.5),
+                      left: BorderSide(color: Colors.blueAccent, width: 1.5),
+                      right: BorderSide(color: Colors.blueAccent, width: 1.5),
+                      bottom: BorderSide(color: Colors.blueAccent, width: 1.5),
                     ),
                   ),
                   child: Column(

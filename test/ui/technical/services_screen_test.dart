@@ -36,7 +36,7 @@ void main() {
         MaterialApp(
           home: BlocProvider<ServiceBloc>.value(
             value: mockServiceBloc,
-            child: ServicesScreen(),
+            child: const ServicesScreen(),
           ),
         ),
       );
@@ -75,9 +75,9 @@ void main() {
       whenListen(
         mockServiceBloc,
         Stream.fromIterable([
-          ServiceSuccess([])
+          ServiceSuccess(const [])
         ]),
-        initialState: ServiceSuccess([]),
+        initialState: ServiceSuccess(const []),
       );
 
       await pumpServicesScreen(tester);

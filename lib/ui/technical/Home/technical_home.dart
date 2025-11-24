@@ -19,14 +19,14 @@ class TechnicalHomeScreen extends StatelessWidget {
         bottomNavigationBar: const BottomNavBar(),
         body: SafeArea(
           child: ListView(
-            children: const [
-              _HeaderSection(),
-              SizedBox(height: 20),
-              _MainButtonsSection(),
-              SizedBox(height: 20),
-              _QuickAccessSection(),
-              SizedBox(height: 20),
-              _RecentTasksSection(), // Reemplaza solicitudes por tareas o mantenimientos
+            children: [
+              const _HeaderSection(),
+              const SizedBox(height: 20),
+              const _MainButtonsSection(),
+              const SizedBox(height: 20),
+              const _QuickAccessSection(),
+              const SizedBox(height: 20),
+              const _RecentTasksSection(), // Reemplaza solicitudes por tareas o mantenimientos
             ],
           ),
         ),
@@ -60,7 +60,7 @@ class _HeaderSection extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.4),
+                  color: Colors.black.withValues(alpha: 0.4),
                   spreadRadius: 1,
                   blurRadius: 8,
                   offset: const Offset(0, 4),
@@ -135,7 +135,7 @@ class _MainButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(22),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.5),
+            color: Colors.black.withValues(alpha: 0.5),
             spreadRadius: 1,
             blurRadius: 8,
             offset: const Offset(0, 4),
@@ -224,7 +224,7 @@ class _QuickButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.5),
+            color: Colors.black.withValues(alpha: 0.5),
             spreadRadius: 1,
             blurRadius: 5,
             offset: const Offset(0, 2),
@@ -269,7 +269,7 @@ class _RecentTasksSection extends StatelessWidget {
               shadows: [
                 Shadow(
                   blurRadius: 4.0,
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black.withValues(alpha: 0.5),
                   offset: const Offset(1.0, 1.0),
                 ),
               ],
@@ -308,7 +308,7 @@ class _RecentTasksSection extends StatelessWidget {
                             shadows: [
                               Shadow(
                                 blurRadius: 4.0,
-                                color: Colors.black.withOpacity(0.5),
+                                color: Colors.black.withValues(alpha: 0.5),
                                 offset: const Offset(1.0, 1.0),
                               ),
                             ],
