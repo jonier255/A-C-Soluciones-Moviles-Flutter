@@ -86,6 +86,7 @@ jobs:
             [Instalar actualización](${{ steps.diawi_poll.outputs.link }})
 
       # GUARDAR EL LINK COMO ARTIFACT
+      # create commit
       - name: Save Diawi Link
         run: |
           echo "${{ steps.diawi_poll.outputs.link }}" > diawi-link.txt
