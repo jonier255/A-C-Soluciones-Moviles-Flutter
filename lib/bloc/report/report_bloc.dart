@@ -18,8 +18,11 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
     CreateReport event,
     Emitter<ReportState> emit,
   ) async {
+    print('🔵 [ReportBloc] Iniciando creación de reporte...');
     emit(ReportCreationLoading());
+    
     try {
+      print('🔵 [ReportBloc] Llamando al repositorio...');
       await reportRepository.createMaintenanceSheet(
         visitId: event.visitId,
         introduccion: event.introduccion,
@@ -36,8 +39,11 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
         fotoEstadoFinal: event.fotoEstadoFinal,
         fotoDescripcionTrabajo: event.fotoDescripcionTrabajo,
       );
+      print('✅ [ReportBloc] Reporte creado exitosamente. Emitiendo ReportCreationSuccess...');
       emit(ReportCreationSuccess());
+      print('✅ [ReportBloc] Estado ReportCreationSuccess emitido.');
     } catch (e) {
+      print('❌ [ReportBloc] Error capturado: $e');
       try {
         final message = e.toString();
         final jsonStartIndex = message.indexOf('{');
@@ -48,14 +54,18 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
           if (responseData.containsKey('errors')) {
             final errors = responseData['errors'] as Map<String, dynamic>;
             final fieldErrors = errors.map((key, value) => MapEntry(key, value.toString()));
+            print('❌ [ReportBloc] Emitiendo error con fieldErrors');
             emit(ReportCreationFailure('Por favor, corrija los errores.', fieldErrors: fieldErrors));
           } else {
+            print('❌ [ReportBloc] Emitiendo error con mensaje');
             emit(ReportCreationFailure(responseData['message'] ?? 'Ocurrió un error inesperado.'));
           }
         } else {
+          print('❌ [ReportBloc] Emitiendo error genérico');
           emit(ReportCreationFailure(e.toString()));
         }
-      } catch (_) {
+      } catch (parseError) {
+        print('❌ [ReportBloc] Error al parsear: $parseError');
         emit(ReportCreationFailure(e.toString()));
       }
     }

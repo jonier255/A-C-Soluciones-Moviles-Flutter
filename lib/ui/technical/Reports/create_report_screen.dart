@@ -134,16 +134,29 @@ class _CreateReportViewState extends State<_CreateReportView> {
       ),
       body: BlocListener<ReportBloc, ReportState>(
         listener: (context, state) {
+          print('🟣 [UI] BlocListener recibió estado: ${state.runtimeType}');
+          
           if (state is ReportCreationSuccess) {
+            print('✅ [UI] Estado es ReportCreationSuccess - Mostrando SnackBar y navegando...');
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Reporte creado con éxito'), backgroundColor: Colors.green),
             );
-            Navigator.of(context).pop();
+            // Regresar a la pantalla anterior con resultado true para indicar éxito
+            Navigator.of(context).pop(true);
+            print('✅ [UI] Navegación completada');
           } else if (state is ReportCreationFailure) {
+            print('❌ [UI] Estado es ReportCreationFailure: ${state.error}');
             if (state.fieldErrors != null) {
               setState(() {
                 _fieldErrors = state.fieldErrors!;
               });
+              // Scroll a la página con errores si es necesario
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Por favor, corrija los errores en el formulario'),
+                  backgroundColor: Colors.orange,
+                ),
+              );
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Error: ${state.error}'), backgroundColor: Colors.red),

@@ -211,14 +211,18 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
                         child: ElevatedButton(
                           onPressed: _pdfPath != null
                               ? _openPdf
-                              : () {
-                                  Navigator.push(
+                              : () async {
+                                  final result = await Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => CreateReportScreen(
                                           visitId: widget.task.id),
                                     ),
                                   );
+                                  // Si el reporte se creó exitosamente, recargar el PDF path
+                                  if (result == true && mounted) {
+                                    await _fetchPdfPath();
+                                  }
                                 },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blueAccent,

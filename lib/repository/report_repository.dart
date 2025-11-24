@@ -36,18 +36,24 @@ class ReportRepository {
     XFile? fotoEstadoFinal,
     XFile? fotoDescripcionTrabajo,
   }) async {
+    print('🟢 [Repository] Iniciando createMaintenanceSheet para visitId: $visitId');
+    
     final token = await _storageService.getToken();
     if (token == null) {
       throw Exception('Token not found');
     }
     
+    print('🟢 [Repository] Token obtenido');
+    
     final taskRepository = TaskRepository();
     final solicitudRepository = SolicitudApiRepository();
 
+    print('🟢 [Repository] Obteniendo datos de la visita...');
     final visit = await taskRepository.getTaskById(visitId);
     final tecnicoId = visit.tecnicoId;
     final solicitudId = visit.solicitudId;
 
+    print('🟢 [Repository] Obteniendo datos de la solicitud...');
     final solicitud = await solicitudRepository.getSolicitudById(solicitudId);
     final clienteId = solicitud.clienteId;
 
@@ -55,6 +61,9 @@ class ReportRepository {
       throw Exception('Could not find client ID for this visit.');
     }
 
+    print('🟢 [Repository] Preparando request multipart...');
+    print('🟢 [Repository] clienteId: $clienteId, tecnicoId: $tecnicoId, visitId: $visitId');
+    
     var request = http.MultipartRequest('POST', Uri.parse('$_baseUrl/fichas'));
     request.headers['Authorization'] = 'Bearer $token';
 
@@ -73,21 +82,49 @@ class ReportRepository {
     request.fields['fecha_de_mantenimiento'] = fechaDeMantenimiento;
 
     if (fotoEstadoAntes != null) {
+      print('🟢 [Repository] Agregando foto estado antes...');
       request.files.add(await http.MultipartFile.fromPath('foto_estado_antes', fotoEstadoAntes.path));
     }
     if (fotoEstadoFinal != null) {
+      print('🟢 [Repository] Agregando foto estado final...');
       request.files.add(await http.MultipartFile.fromPath('foto_estado_final', fotoEstadoFinal.path));
     }
     if (fotoDescripcionTrabajo != null) {
+      print('🟢 [Repository] Agregando foto descripción trabajo...');
       request.files.add(await http.MultipartFile.fromPath('foto_descripcion_trabajo', fotoDescripcionTrabajo.path));
     }
 
-    final response = await request.send();
+    print('🟢 [Repository] Enviando request al servidor...');
+    final streamedResponse = await request.send();
+    print('🟢 [Repository] Response recibida. Status: ${streamedResponse.statusCode}');
+    
+    print('🟢 [Repository] Convirtiendo stream a Response...');
+    final response = await http.Response.fromStream(streamedResponse);
+    print('🟢 [Repository] Response convertida. Body length: ${response.body.length}');
 
     if (response.statusCode != 201 && response.statusCode != 200) {
-      final responseBody = await response.stream.bytesToString();
-      throw Exception('Error al crear el reporte: $responseBody');
+      print('❌ [Repository] Error en respuesta: ${response.statusCode}');
+      
+      // El backend tiene un bug: guarda el reporte pero devuelve 500
+      // Verificamos si el reporte realmente se creó esperando un poco y consultando
+      print('🟡 [Repository] Verificando si el reporte se creó a pesar del error...');
+      await Future.delayed(const Duration(seconds: 2));
+      
+      try {
+        final pdfPath = await getPdfPathForVisit(visitId);
+        if (pdfPath != null) {
+          print('✅ [Repository] Reporte encontrado a pesar del error 500! El backend lo guardó correctamente.');
+          return; // El reporte existe, consideramos esto un éxito
+        }
+      } catch (e) {
+        print('🟡 [Repository] No se pudo verificar el reporte: $e');
+      }
+      
+      throw Exception('Error al crear el reporte: ${response.body}');
     }
+    
+    print('✅ [Repository] Reporte creado exitosamente!');
+    return;
   }
 
   Future<String?> getPdfPathForVisit(int visitId) async {
