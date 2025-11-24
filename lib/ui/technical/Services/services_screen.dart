@@ -27,7 +27,20 @@ class _ServicesContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Servicios'),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue[700]!, Colors.blue[500]!],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        title: const Text(
+          'Servicios',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        elevation: 0,
       ),
       bottomNavigationBar: const BottomNavBar(),
       body: BlocBuilder<ServiceBloc, ServiceState>(

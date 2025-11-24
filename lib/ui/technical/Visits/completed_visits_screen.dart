@@ -27,7 +27,20 @@ class _CompletedVisitsContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Visitas Terminadas'),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue[700]!, Colors.blue[500]!],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        title: const Text(
+          'Visitas Terminadas',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        elevation: 0,
       ),
       bottomNavigationBar: const BottomNavBar(),
       body: BlocBuilder<TaskBloc, TaskState>(

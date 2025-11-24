@@ -78,10 +78,21 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: const Text('Editar Perfil', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        backgroundColor: primaryColor,
-        elevation: 0,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue[700]!, Colors.blue[500]!],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        title: const Text(
+          'Editar Perfil',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
         iconTheme: const IconThemeData(color: Colors.white),
+        elevation: 0,
       ),
       body: BlocConsumer<EditProfileTechnicalBloc, EditProfileTechnicalState>(
         listener: (context, state) {

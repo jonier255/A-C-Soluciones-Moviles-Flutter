@@ -122,13 +122,27 @@ class _CreateReportViewState extends State<_CreateReportView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Crear Reporte de Mantenimiento'),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue[700]!, Colors.blue[500]!],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        title: const Text(
+          'Crear Reporte',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+        elevation: 0,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(4.0),
           child: LinearProgressIndicator(
             value: (_currentPage + 1) / 4,
-            backgroundColor: Colors.grey[300],
-            valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+            backgroundColor: Colors.white.withOpacity(0.3),
+            valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
           ),
         ),
       ),

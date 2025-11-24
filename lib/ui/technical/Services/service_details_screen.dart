@@ -18,11 +18,24 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detalles del Servicio'),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue[700]!, Colors.blue[500]!],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        title: const Text(
+          'Detalles del Servicio',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(screenWidth * 0.05),

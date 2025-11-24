@@ -23,7 +23,6 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
     const primaryColor = Color(0xFF0D47A1); // Dark Blue
     const backgroundColor = Color(0xFFF5F5F5); // Light Gray
     const accentColor = Color(0xFFFFC107); // Amber
-    const textColor = Color(0xFF212121); // Dark Gray
 
     return BlocProvider(
       create: (context) => EditProfileTechnicalBloc(
@@ -32,8 +31,19 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
       child: Scaffold(
         backgroundColor: backgroundColor,
         appBar: AppBar(
-          title: const Text('Mi Perfil', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          backgroundColor: primaryColor,
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blue[700]!, Colors.blue[500]!],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+          ),
+          title: const Text(
+            'Mi Perfil',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
           elevation: 0,
         ),
         body: BlocBuilder<EditProfileTechnicalBloc, EditProfileTechnicalState>(
@@ -44,17 +54,103 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
               final userTechnical = state.technical;
               return SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.02),
-                  child: Column(
-                    children: [
-                      _buildProfileHeader(userTechnical.nombre, userTechnical.apellido, primaryColor, screenWidth, screenHeight),
-                      SizedBox(height: screenHeight * 0.02),
-                      _buildInfoCard(userTechnical, textColor, accentColor, screenWidth, screenHeight),
-                      SizedBox(height: screenHeight * 0.02),
-                      _buildActionButtons(context, primaryColor, accentColor, screenWidth, screenHeight),
-                    ],
-                  ),
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.01),
+                child: Column(
+                  children: [
+                    // Card con foto y nombre
+                    Card(
+                      elevation: 4,
+                      margin: EdgeInsets.zero,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Container(
+                        padding: EdgeInsets.all(screenWidth * 0.04),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFFE3F2FD), Colors.white],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: screenWidth * 0.10,
+                              backgroundImage: const NetworkImage(
+                                'https://cdn-icons-png.flaticon.com/512/219/219983.png',
+                              ),
+                              backgroundColor: Colors.white,
+                            ),
+                            SizedBox(width: screenWidth * 0.04),
+                            Expanded(
+                              child: Text(
+                                '${userTechnical.nombre} ${userTechnical.apellido}',
+                                style: TextStyle(
+                                  fontSize: screenWidth * 0.048,
+                                  fontWeight: FontWeight.bold,
+                                  color: primaryColor,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.012),
+
+                    // Card con información personal
+                    Card(
+                      elevation: 4,
+                      margin: EdgeInsets.zero,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Container(
+                        padding: EdgeInsets.all(screenWidth * 0.04),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(Icons.info_outline, color: Colors.blue[700], size: 22),
+                                SizedBox(width: screenWidth * 0.02),
+                                Text(
+                                  'Información Personal',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: screenWidth * 0.045,
+                                    color: Colors.blue[800],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: screenHeight * 0.012),
+                            _buildDetailRow(Icons.person, 'Nombre', userTechnical.nombre, screenWidth, screenHeight),
+                            SizedBox(height: screenHeight * 0.008),
+                            _buildDetailRow(Icons.person_outline, 'Apellido', userTechnical.apellido, screenWidth, screenHeight),
+                            SizedBox(height: screenHeight * 0.008),
+                            _buildDetailRow(Icons.credit_card, 'Cédula', userTechnical.numeroCedula, screenWidth, screenHeight),
+                            SizedBox(height: screenHeight * 0.008),
+                            _buildDetailRow(Icons.phone, 'Teléfono', userTechnical.telefono, screenWidth, screenHeight),
+                            SizedBox(height: screenHeight * 0.008),
+                            _buildDetailRow(Icons.work, 'Especialidad', userTechnical.especialidad, screenWidth, screenHeight),
+                            SizedBox(height: screenHeight * 0.008),
+                            _buildDetailRow(Icons.email, 'Correo', userTechnical.correoElectronico, screenWidth, screenHeight),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.012),
+
+                    // Botones de acción
+                    _buildActionButtons(context, primaryColor, accentColor, screenWidth, screenHeight),
+                  ],
                 ),
               );
             } else if (state is EditProfileTechnicalFailure) {
@@ -67,116 +163,149 @@ class _AccountTechnicalScreenState extends State<AccountTechnicalScreen> {
     );
   }
 
-  Widget _buildProfileHeader(String nombre, String apellido, Color primaryColor, double screenWidth, double screenHeight) {
-    return Column(
-      children: [
-        CircleAvatar(
-          radius: screenWidth * 0.15, // Reduced radius
-          backgroundImage: NetworkImage('https://cdn-icons-png.flaticon.com/512/219/219983.png'),
-          backgroundColor: Colors.white,
-        ),
-        SizedBox(height: screenHeight * 0.01), // Reduced height
-        Text(
-          '$nombre $apellido',
-          style: TextStyle(
-            fontSize: screenWidth * 0.06, // Reduced font size
-            fontWeight: FontWeight.bold,
-            color: primaryColor,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildInfoCard(dynamic userTechnical, Color textColor, Color accentColor, double screenWidth, double screenHeight) {
-    return Card(
-      elevation: 2,
-      margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.025),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: screenHeight * 0.015, horizontal: screenWidth * 0.025), // Reduced padding
-        child: Column(
-          children: [
-            _buildDetailItem(Icons.person, 'Nombre', userTechnical.nombre, textColor, accentColor, screenWidth),
-            const Divider(height: 8, thickness: 1), // Reduced height
-            _buildDetailItem(Icons.person_outline, 'Apellido', userTechnical.apellido, textColor, accentColor, screenWidth),
-            const Divider(height: 8, thickness: 1), // Reduced height
-            _buildDetailItem(Icons.credit_card, 'Cédula', userTechnical.numeroCedula, textColor, accentColor, screenWidth),
-            const Divider(height: 8, thickness: 1), // Reduced height
-            _buildDetailItem(Icons.phone, 'Teléfono', userTechnical.telefono, textColor, accentColor, screenWidth),
-            const Divider(height: 8, thickness: 1), // Reduced height
-            _buildDetailItem(Icons.work, 'Especialidad', userTechnical.especialidad, textColor, accentColor, screenWidth),
-            const Divider(height: 8, thickness: 1), // Reduced height
-            _buildDetailItem(Icons.email, 'Correo electrónico', userTechnical.correoElectronico, textColor, accentColor, screenWidth, isEmail: true),
-          ],
-        ),
+  Widget _buildDetailRow(
+    IconData icon,
+    String title,
+    String value,
+    double screenWidth,
+    double screenHeight,
+  ) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03, vertical: screenHeight * 0.008),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey[200]!, width: 1),
       ),
-    );
-  }
-
-  Widget _buildDetailItem(IconData icon, String title, String value, Color textColor, Color accentColor, double screenWidth, {bool isEmail = false}) {
-    return ListTile(
-      dense: true, // Make tile more compact
-      leading: Icon(icon, color: accentColor, size: screenWidth * 0.06), // Reduced icon size
-      title: Text(title, style: TextStyle(fontWeight: FontWeight.w600, color: textColor.withValues(alpha: 0.7), fontSize: screenWidth * 0.035)),
-      subtitle: Text(value, style: TextStyle(fontSize: screenWidth * 0.04, fontWeight: FontWeight.bold, color: textColor)),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.blue[700], size: screenWidth * 0.045),
+          SizedBox(width: screenWidth * 0.025),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: screenWidth * 0.032,
+                    color: Colors.grey[600],
+                  ),
+                ),
+                Text(
+                  value.isNotEmpty ? value : '—',
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.038,
+                    color: Colors.grey[900],
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildActionButtons(BuildContext context, Color primaryColor, Color accentColor, double screenWidth, double screenHeight) {
     final editProfileBloc = BlocProvider.of<EditProfileTechnicalBloc>(context);
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025),
-      child: Column(
-        children: [
-          ElevatedButton.icon(
-            icon: const Icon(Icons.edit, color: Colors.white),
-            label: const Text('Editar Información', style: TextStyle(color: Colors.white)),
-            onPressed: () async {
-              final result = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BlocProvider.value(
-                    value: editProfileBloc,
-                    child: const EditarInformacionScreenTechnical(),
-                  ),
+    return Row(
+      children: [
+        // Botón Editar
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blue[600]!, Colors.blue[400]!],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+              borderRadius: BorderRadius.circular(25),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.blue.withOpacity(0.3),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
                 ),
-              );
+              ],
+            ),
+            child: ElevatedButton.icon(
+              icon: Icon(Icons.edit, color: Colors.white, size: screenWidth * 0.045),
+              label: Text(
+                'Editar',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: screenWidth * 0.038,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onPressed: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider.value(
+                      value: editProfileBloc,
+                      child: const EditarInformacionScreenTechnical(),
+                    ),
+                  ),
+                );
 
-              if (result == true && context.mounted) {
-                // Reload the profile data if the update was successful
-                editProfileBloc.add(LoadTechnicalProfile());
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: primaryColor,
-              minimumSize: Size(double.infinity, screenHeight * 0.05), // Reduced height
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              elevation: 5,
+                if (result == true && context.mounted) {
+                  editProfileBloc.add(LoadTechnicalProfile());
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.transparent,
+                shadowColor: Colors.transparent,
+                minimumSize: Size(double.infinity, screenHeight * 0.055),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+              ),
             ),
           ),
-          SizedBox(height: screenHeight * 0.01), // Reduced height
-          OutlinedButton.icon(
-            icon: const Icon(Icons.logout, color: Colors.red),
-            label: const Text('Cerrar Sesión', style: TextStyle(color: Colors.red)),
-            onPressed: () async {
-              final secureStorage = SecureStorageService();
-              await secureStorage.clearAll();
-              if (!context.mounted) return;
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginScreen()),
-                (route) => false,
-              );
-            },
-            style: OutlinedButton.styleFrom(
-              side: BorderSide(color: Colors.red),
-              minimumSize: Size(double.infinity, screenHeight * 0.05), // Reduced height
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        ),
+        SizedBox(width: screenWidth * 0.03),
+        // Botón Cerrar Sesión
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25),
+              border: Border.all(color: Colors.red, width: 2),
+            ),
+            child: OutlinedButton.icon(
+              icon: Icon(Icons.logout, color: Colors.red, size: screenWidth * 0.045),
+              label: Text(
+                'Salir',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: screenWidth * 0.038,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onPressed: () async {
+                final secureStorage = SecureStorageService();
+                await secureStorage.clearAll();
+                if (!context.mounted) return;
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  (route) => false,
+                );
+              },
+              style: OutlinedButton.styleFrom(
+                side: BorderSide.none,
+                minimumSize: Size(double.infinity, screenHeight * 0.055),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+              ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
