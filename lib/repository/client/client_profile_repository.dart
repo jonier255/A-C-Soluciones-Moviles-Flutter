@@ -4,7 +4,7 @@ import 'package:flutter_a_c_soluciones/model/client/client_profile_model.dart';
 import 'package:flutter_a_c_soluciones/repository/secure_storage_service.dart';
 
 class ClientProfileRepository {
-  final String _baseUrl = "https://flutter-58c3.onrender.com/api";
+  final String _baseUrl = "http://10.0.2.2:8000/api";
 
   Future<ClientProfileModel> getClientProfile() async {
     final storage = SecureStorageService();

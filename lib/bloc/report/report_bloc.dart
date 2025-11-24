@@ -18,10 +18,12 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
     CreateReport event,
     Emitter<ReportState> emit,
   ) async {
+    // ignore: avoid_print
     print('🔵 [ReportBloc] Iniciando creación de reporte...');
     emit(ReportCreationLoading());
     
     try {
+      // ignore: avoid_print
       print('🔵 [ReportBloc] Llamando al repositorio...');
       await reportRepository.createMaintenanceSheet(
         visitId: event.visitId,
@@ -39,10 +41,13 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
         fotoEstadoFinal: event.fotoEstadoFinal,
         fotoDescripcionTrabajo: event.fotoDescripcionTrabajo,
       );
+      // ignore: avoid_print
       print('✅ [ReportBloc] Reporte creado exitosamente. Emitiendo ReportCreationSuccess...');
       emit(ReportCreationSuccess());
+      // ignore: avoid_print
       print('✅ [ReportBloc] Estado ReportCreationSuccess emitido.');
     } catch (e) {
+      // ignore: avoid_print
       print('❌ [ReportBloc] Error capturado: $e');
       try {
         final message = e.toString();
@@ -54,17 +59,21 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
           if (responseData.containsKey('errors')) {
             final errors = responseData['errors'] as Map<String, dynamic>;
             final fieldErrors = errors.map((key, value) => MapEntry(key, value.toString()));
+            // ignore: avoid_print
             print('❌ [ReportBloc] Emitiendo error con fieldErrors');
             emit(ReportCreationFailure('Por favor, corrija los errores.', fieldErrors: fieldErrors));
           } else {
+            // ignore: avoid_print
             print('❌ [ReportBloc] Emitiendo error con mensaje');
             emit(ReportCreationFailure(responseData['message'] ?? 'Ocurrió un error inesperado.'));
           }
         } else {
+          // ignore: avoid_print
           print('❌ [ReportBloc] Emitiendo error genérico');
           emit(ReportCreationFailure(e.toString()));
         }
       } catch (parseError) {
+        // ignore: avoid_print
         print('❌ [ReportBloc] Error al parsear: $parseError');
         emit(ReportCreationFailure(e.toString()));
       }

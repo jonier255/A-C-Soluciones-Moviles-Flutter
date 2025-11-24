@@ -18,7 +18,7 @@ class VisitWithReport {
 
 class ReportRepository {
   final _storageService = SecureStorageService();
-  final String _baseUrl = 'https://flutter-58c3.onrender.com/api';
+  final String _baseUrl = 'http://10.0.2.2:8000/api';
 
   Future<void> createMaintenanceSheet({
     required int visitId,
@@ -36,6 +36,7 @@ class ReportRepository {
     XFile? fotoEstadoFinal,
     XFile? fotoDescripcionTrabajo,
   }) async {
+    // ignore: avoid_print
     print('🟢 [Repository] Iniciando createMaintenanceSheet para visitId: $visitId');
     
     final token = await _storageService.getToken();
@@ -43,16 +44,19 @@ class ReportRepository {
       throw Exception('Token not found');
     }
     
+    // ignore: avoid_print
     print('🟢 [Repository] Token obtenido');
     
     final taskRepository = TaskRepository();
     final solicitudRepository = SolicitudApiRepository();
 
+    // ignore: avoid_print
     print('🟢 [Repository] Obteniendo datos de la visita...');
     final visit = await taskRepository.getTaskById(visitId);
     final tecnicoId = visit.tecnicoId;
     final solicitudId = visit.solicitudId;
 
+    // ignore: avoid_print
     print('🟢 [Repository] Obteniendo datos de la solicitud...');
     final solicitud = await solicitudRepository.getSolicitudById(solicitudId);
     final clienteId = solicitud.clienteId;
@@ -61,11 +65,15 @@ class ReportRepository {
       throw Exception('Could not find client ID for this visit.');
     }
 
+    // ignore: avoid_print
     print('🟢 [Repository] Preparando request multipart...');
+    // ignore: avoid_print
     print('🟢 [Repository] clienteId: $clienteId, tecnicoId: $tecnicoId, visitId: $visitId');
     
     var request = http.MultipartRequest('POST', Uri.parse('$_baseUrl/fichas'));
     request.headers['Authorization'] = 'Bearer $token';
+    request.headers['Connection'] = 'keep-alive';
+    request.headers['Accept'] = '*/*';
 
     request.fields['id_cliente'] = clienteId.toString();
     request.fields['id_tecnico'] = tecnicoId.toString();
@@ -82,47 +90,79 @@ class ReportRepository {
     request.fields['fecha_de_mantenimiento'] = fechaDeMantenimiento;
 
     if (fotoEstadoAntes != null) {
+      // ignore: avoid_print
       print('🟢 [Repository] Agregando foto estado antes...');
       request.files.add(await http.MultipartFile.fromPath('foto_estado_antes', fotoEstadoAntes.path));
     }
     if (fotoEstadoFinal != null) {
+      // ignore: avoid_print
       print('🟢 [Repository] Agregando foto estado final...');
       request.files.add(await http.MultipartFile.fromPath('foto_estado_final', fotoEstadoFinal.path));
     }
     if (fotoDescripcionTrabajo != null) {
+      // ignore: avoid_print
       print('🟢 [Repository] Agregando foto descripción trabajo...');
       request.files.add(await http.MultipartFile.fromPath('foto_descripcion_trabajo', fotoDescripcionTrabajo.path));
     }
 
+    // ignore: avoid_print
     print('🟢 [Repository] Enviando request al servidor...');
-    final streamedResponse = await request.send();
+    // ignore: avoid_print
+    print('🟢 [Repository] Request fields: ${request.fields.keys.toList()}');
+    // ignore: avoid_print
+    print('🟢 [Repository] Request files: ${request.files.length} archivos');
+    
+    final streamedResponse = await request.send().timeout(
+      const Duration(seconds: 60),
+      onTimeout: () {
+        // ignore: avoid_print
+        print('⏱️ [Repository] Timeout alcanzado después de 60 segundos');
+        throw Exception('Timeout: El servidor tardó demasiado en responder');
+      },
+    );
+    
+    // ignore: avoid_print
     print('🟢 [Repository] Response recibida. Status: ${streamedResponse.statusCode}');
     
+    // ignore: avoid_print
     print('🟢 [Repository] Convirtiendo stream a Response...');
-    final response = await http.Response.fromStream(streamedResponse);
+    final response = await http.Response.fromStream(streamedResponse).timeout(
+      const Duration(seconds: 30),
+      onTimeout: () {
+        // ignore: avoid_print
+        print('⏱️ [Repository] Timeout al leer la respuesta');
+        throw Exception('Timeout: No se pudo leer la respuesta del servidor');
+      },
+    );
+    // ignore: avoid_print
     print('🟢 [Repository] Response convertida. Body length: ${response.body.length}');
 
     if (response.statusCode != 201 && response.statusCode != 200) {
+      // ignore: avoid_print
       print('❌ [Repository] Error en respuesta: ${response.statusCode}');
       
       // El backend tiene un bug: guarda el reporte pero devuelve 500
       // Verificamos si el reporte realmente se creó esperando un poco y consultando
+      // ignore: avoid_print
       print('🟡 [Repository] Verificando si el reporte se creó a pesar del error...');
       await Future.delayed(const Duration(seconds: 2));
       
       try {
         final pdfPath = await getPdfPathForVisit(visitId);
         if (pdfPath != null) {
+          // ignore: avoid_print
           print('✅ [Repository] Reporte encontrado a pesar del error 500! El backend lo guardó correctamente.');
           return; // El reporte existe, consideramos esto un éxito
         }
       } catch (e) {
+        // ignore: avoid_print
         print('🟡 [Repository] No se pudo verificar el reporte: $e');
       }
       
       throw Exception('Error al crear el reporte: ${response.body}');
     }
     
+    // ignore: avoid_print
     print('✅ [Repository] Reporte creado exitosamente!');
     return;
   }

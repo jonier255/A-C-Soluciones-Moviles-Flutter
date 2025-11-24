@@ -134,17 +134,21 @@ class _CreateReportViewState extends State<_CreateReportView> {
       ),
       body: BlocListener<ReportBloc, ReportState>(
         listener: (context, state) {
+          // ignore: avoid_print
           print('🟣 [UI] BlocListener recibió estado: ${state.runtimeType}');
           
           if (state is ReportCreationSuccess) {
+            // ignore: avoid_print
             print('✅ [UI] Estado es ReportCreationSuccess - Mostrando SnackBar y navegando...');
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Reporte creado con éxito'), backgroundColor: Colors.green),
             );
             // Regresar a la pantalla anterior con resultado true para indicar éxito
             Navigator.of(context).pop(true);
+            // ignore: avoid_print
             print('✅ [UI] Navegación completada');
           } else if (state is ReportCreationFailure) {
+            // ignore: avoid_print
             print('❌ [UI] Estado es ReportCreationFailure: ${state.error}');
             if (state.fieldErrors != null) {
               setState(() {
