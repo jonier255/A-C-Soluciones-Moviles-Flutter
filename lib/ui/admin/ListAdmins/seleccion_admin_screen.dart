@@ -105,7 +105,6 @@ class AdminMenuScreen extends StatelessWidget {
         icon: Icons.person_add_rounded,
         gradient: AdminMenuTheme.createAdminGradient,
         onTap: () {
-          // TODO: Implementar navegación a pantalla de crear administrador
         },
       ),
     );

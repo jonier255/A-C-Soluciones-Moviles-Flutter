@@ -47,7 +47,6 @@ class DeleteAdminDialog {
             ),
             ElevatedButton(
               onPressed: () {
-                // TODO: Implementar lógica de eliminación
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_a_c_soluciones/ui/admin/GestionTecnicos/create_technical_screen.dart';
 import 'admin_home_constants.dart';
 
 /// Sección con botones principales de acción (Técnico, Cliente)

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import '../../../model/administrador/admin_model.dart';
 import 'widgets/admin_detail/admin_action_button.dart';
@@ -104,7 +104,7 @@ class AdminDetailScreen extends StatelessWidget {
                   icon: Icons.edit_rounded,
                   isOutlined: false,
                   onTap: () {
-                    // TODO: Implementar edición
+                    
                   },
                 ),
               ),
