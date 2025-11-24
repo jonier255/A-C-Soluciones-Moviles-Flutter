@@ -58,8 +58,8 @@ void main() {
     });
 
     testWidgets('shows user profile when state is EditProfileTechnicalLoaded', (WidgetTester tester) async {
-      when(() => mockEditProfileTechnicalBloc.state).thenReturn(EditProfileTechnicalLoaded(tTechnical));
-      when(() => mockEditProfileTechnicalBloc.stream).thenAnswer((_) => Stream.value(EditProfileTechnicalLoaded(tTechnical)));
+      when(() => mockEditProfileTechnicalBloc.state).thenReturn(const EditProfileTechnicalLoaded(tTechnical));
+      when(() => mockEditProfileTechnicalBloc.stream).thenAnswer((_) => Stream.value(const EditProfileTechnicalLoaded(tTechnical)));
 
       await pumpAccountTechnicalScreen(tester);
       await tester.pump();
