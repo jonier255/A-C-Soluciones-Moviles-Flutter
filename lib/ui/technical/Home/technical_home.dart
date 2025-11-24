@@ -5,6 +5,7 @@ import 'package:flutter_a_c_soluciones/bloc/task/task_event.dart';
 import 'package:flutter_a_c_soluciones/model/technical/task_model.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_state.dart';
 import 'package:flutter_a_c_soluciones/repository/task_repository.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/Visits/visits_details_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/widgets/bottom_nav_bar.dart';
 
 class TechnicalHomeScreen extends StatelessWidget {
@@ -340,61 +341,71 @@ class _TaskCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return Card(
-      elevation: 6,
-      color: Colors.white,
-      margin: EdgeInsets.symmetric(vertical: screenHeight * 0.01, horizontal: screenWidth * 0.04), // Responsive margin
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      child: Padding(
-        padding: EdgeInsets.all(screenWidth * 0.035), // Responsive padding
-        child: Row(
-          children: [
-            Icon(Icons.handyman, size: screenWidth * 0.09, color: Colors.black), // Responsive icon size
-            SizedBox(width: screenWidth * 0.04), // Responsive width
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    task.servicio.nombre.length > 35
-                        ? '${task.servicio.nombre.substring(0, 35)}...'
-                        : task.servicio.nombre,
-                    style: TextStyle(
-                        fontSize: screenWidth * 0.035, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: screenHeight * 0.005), // Responsive height
-                  Text(
-                    task.servicio.descripcion.length > 35
-                        ? '${task.servicio.descripcion.substring(0, 35)}...'
-                        : task.servicio.descripcion,
-                    style: TextStyle(fontSize: screenWidth * 0.03, color: Colors.grey), // Responsive font size
-                  ),
-                  SizedBox(height: screenHeight * 0.005), // Responsive height
-                  Text("Fecha: ${task.fechaProgramada.toString().substring(0, 10)}",
-                      style:
-                          TextStyle(fontSize: screenWidth * 0.03, color: Colors.grey)), // Responsive font size
-                ],
-              ),
-            ),
-            Container(padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025, vertical: screenHeight * 0.008), // Responsive padding
-              decoration: BoxDecoration(
-                color: task.estado == "completada"
-                    ? Colors.green[100]
-                    : Colors.orange[100],
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                task.estado,
-                style: TextStyle(
-                  color: task.estado == "completada"
-                      ? Colors.green[800]
-                      : Colors.orange[800],
-                  fontWeight: FontWeight.bold,
-                  fontSize: screenWidth * 0.03, // Responsive font size
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => VisitsDetailsScreen(task: task),
+          ),
+        );
+      },
+      child: Card(
+        elevation: 6,
+        color: Colors.white,
+        margin: EdgeInsets.symmetric(vertical: screenHeight * 0.01, horizontal: screenWidth * 0.04), // Responsive margin
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Padding(
+          padding: EdgeInsets.all(screenWidth * 0.035), // Responsive padding
+          child: Row(
+            children: [
+              Icon(Icons.handyman, size: screenWidth * 0.09, color: Colors.black), // Responsive icon size
+              SizedBox(width: screenWidth * 0.04), // Responsive width
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      task.servicio.nombre.length > 35
+                          ? '${task.servicio.nombre.substring(0, 35)}...'
+                          : task.servicio.nombre,
+                      style: TextStyle(
+                          fontSize: screenWidth * 0.035, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: screenHeight * 0.005), // Responsive height
+                    Text(
+                      task.servicio.descripcion.length > 35
+                          ? '${task.servicio.descripcion.substring(0, 35)}...'
+                          : task.servicio.descripcion,
+                      style: TextStyle(fontSize: screenWidth * 0.03, color: Colors.grey), // Responsive font size
+                    ),
+                    SizedBox(height: screenHeight * 0.005), // Responsive height
+                    Text("Fecha: ${task.fechaProgramada.toString().substring(0, 10)}",
+                        style:
+                            TextStyle(fontSize: screenWidth * 0.03, color: Colors.grey)), // Responsive font size
+                  ],
                 ),
               ),
-            )
-          ],
+              Container(padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025, vertical: screenHeight * 0.008), // Responsive padding
+                decoration: BoxDecoration(
+                  color: task.estado == "completada"
+                      ? Colors.green[100]
+                      : Colors.orange[100],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  task.estado,
+                  style: TextStyle(
+                    color: task.estado == "completada"
+                        ? Colors.green[800]
+                        : Colors.orange[800],
+                    fontWeight: FontWeight.bold,
+                    fontSize: screenWidth * 0.03, // Responsive font size
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

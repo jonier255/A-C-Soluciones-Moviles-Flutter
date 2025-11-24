@@ -5,6 +5,7 @@ import 'package:flutter_a_c_soluciones/bloc/task/task_event.dart';
 import 'package:flutter_a_c_soluciones/bloc/task/task_state.dart';
 import 'package:flutter_a_c_soluciones/model/technical/task_model.dart';
 import 'package:flutter_a_c_soluciones/repository/task_repository.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/Visits/visits_details_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/widgets/bottom_nav_bar.dart';
 
 class CompletedVisitsScreen extends StatelessWidget {
@@ -276,53 +277,63 @@ class _TaskCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return Card(
-      elevation: 6,
-      color: Colors.white,
-      margin: EdgeInsets.symmetric(vertical: screenHeight * 0.01, horizontal: screenWidth * 0.04),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(screenWidth * 0.05)),
-      child: Padding(
-        padding: EdgeInsets.all(screenWidth * 0.035),
-        child: Row(
-          children: [
-            Icon(Icons.check_circle, size: screenWidth * 0.09, color: Colors.green),
-            SizedBox(width: screenWidth * 0.04),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(task.servicio.nombre,
-                      style: TextStyle(
-                          fontSize: screenWidth * 0.038, fontWeight: FontWeight.bold)),
-                  SizedBox(height: screenHeight * 0.005),
-                  Text(
-                    task.servicio.descripcion.length > 50
-                          ? '${task.servicio.descripcion.substring(0, 50)}...'
-                          : task.servicio.descripcion,
-                    style: TextStyle(fontSize: screenWidth * 0.032, color: Colors.grey),
-                  ),
-                  SizedBox(height: screenHeight * 0.005),
-                  Text("Fecha: ${task.fechaProgramada.toString().substring(0, 10)}",
-                      style:
-                          TextStyle(fontSize: screenWidth * 0.032, color: Colors.grey)),
-                ],
-              ),
-            ),
-            Container(padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025, vertical: screenHeight * 0.008),
-              decoration: BoxDecoration(
-                color: Colors.green[100],
-                borderRadius: BorderRadius.circular(screenWidth * 0.03),
-              ),
-              child: Text(
-                task.estado,
-                style: TextStyle(
-                  color: Colors.green[800],
-                  fontWeight: FontWeight.bold,
-                  fontSize: screenWidth * 0.03,
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => VisitsDetailsScreen(task: task),
+          ),
+        );
+      },
+      child: Card(
+        elevation: 6,
+        color: Colors.white,
+        margin: EdgeInsets.symmetric(vertical: screenHeight * 0.01, horizontal: screenWidth * 0.04),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(screenWidth * 0.05)),
+        child: Padding(
+          padding: EdgeInsets.all(screenWidth * 0.035),
+          child: Row(
+            children: [
+              Icon(Icons.check_circle, size: screenWidth * 0.09, color: Colors.green),
+              SizedBox(width: screenWidth * 0.04),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(task.servicio.nombre,
+                        style: TextStyle(
+                            fontSize: screenWidth * 0.038, fontWeight: FontWeight.bold)),
+                    SizedBox(height: screenHeight * 0.005),
+                    Text(
+                      task.servicio.descripcion.length > 50
+                            ? '${task.servicio.descripcion.substring(0, 50)}...'
+                            : task.servicio.descripcion,
+                      style: TextStyle(fontSize: screenWidth * 0.032, color: Colors.grey),
+                    ),
+                    SizedBox(height: screenHeight * 0.005),
+                    Text("Fecha: ${task.fechaProgramada.toString().substring(0, 10)}",
+                        style:
+                            TextStyle(fontSize: screenWidth * 0.032, color: Colors.grey)),
+                  ],
                 ),
               ),
-            )
-          ],
+              Container(padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025, vertical: screenHeight * 0.008),
+                decoration: BoxDecoration(
+                  color: Colors.green[100],
+                  borderRadius: BorderRadius.circular(screenWidth * 0.03),
+                ),
+                child: Text(
+                  task.estado,
+                  style: TextStyle(
+                    color: Colors.green[800],
+                    fontWeight: FontWeight.bold,
+                    fontSize: screenWidth * 0.03,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
