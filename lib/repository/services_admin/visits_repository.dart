@@ -12,7 +12,7 @@ class VisitsRepository {
       throw Exception('Token no encontrado. Por favor, inicie sesión de nuevo.');
     }
 
-    final url = Uri.parse('http://10.0.2.2:8000/api/visitas');
+    final url = Uri.parse('https://flutter-58c3.onrender.com/api/visitas');
     final response = await http.post(
       url,
       headers: {
