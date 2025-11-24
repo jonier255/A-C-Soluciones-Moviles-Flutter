@@ -95,7 +95,7 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
   Widget _buildHeader(BuildContext context, double sw, double sh) {
     return Container(
       height: sh * 0.15,  
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: ServiceMenuTheme.primaryGradient,  
       ),
       child: Padding(
@@ -150,7 +150,7 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
 
   
   Widget _buildLoadingState() {
-    return Center(
+    return const Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,  
         children: [
@@ -159,7 +159,7 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
               ServiceMenuTheme.primaryPurple,  
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
             'Cargando servicios...',
             style: TextStyle(
@@ -198,8 +198,8 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
   }
   
   Widget _buildLoadingMoreIndicator() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 16),
       child: Center(
         child: SizedBox(
           height: 24,
@@ -303,7 +303,7 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            const Icon(
               Icons.error_outline_rounded,
               size: 64,
               color: ServiceMenuTheme.statusError,  // Color rojo

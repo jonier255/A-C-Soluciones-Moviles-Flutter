@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/bloc/report/report_bloc.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/Reports/create_report_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 class MockReportBloc extends MockBloc<ReportEvent, ReportState> implements ReportBloc {}
 
@@ -24,7 +24,7 @@ void main() {
         MaterialApp(
           home: BlocProvider<ReportBloc>.value(
             value: mockReportBloc,
-            child: CreateReportScreen(visitId: 1),
+            child: const CreateReportScreen(visitId: 1),
           ),
         ),
       );
@@ -76,13 +76,13 @@ void main() {
     testWidgets('shows error message when state is ReportCreationFailure', (WidgetTester tester) async {
       whenListen(
         mockReportBloc,
-        Stream.fromIterable([ReportCreationFailure('Test Error')]),
+        Stream.fromIterable([const ReportCreationFailure('Test Error')]),
         initialState: ReportInitial(),
       );
 
       await pumpCreateReportScreen(tester);
       
-      mockReportBloc.emit(ReportCreationFailure('Test Error'));
+      mockReportBloc.emit(const ReportCreationFailure('Test Error'));
       await tester.pump();
 
     });

@@ -74,12 +74,12 @@ class ServiceDetailScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(screenWidth * 0.037),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       color: cardShadowColor,
                       blurRadius: 20.0,
                       spreadRadius: 1.0,
-                      offset: const Offset(0, 5),
+                      offset: Offset(0, 5),
                     ),
                   ],
                 ),

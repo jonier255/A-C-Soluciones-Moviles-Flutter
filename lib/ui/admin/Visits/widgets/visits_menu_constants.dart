@@ -28,7 +28,7 @@ class VisitsMenuTheme {
   static List<BoxShadow> containerShadow() {
     return [
       BoxShadow(
-        color: primaryGradientEnd.withOpacity(0.2),
+        color: primaryGradientEnd.withValues(alpha: 0.2),
         blurRadius: 20,
         offset: const Offset(0, 8),
       ),
@@ -38,7 +38,7 @@ class VisitsMenuTheme {
   static List<BoxShadow> navBarShadow() {
     return [
       BoxShadow(
-        color: Colors.black.withOpacity(0.1),
+        color: Colors.black.withValues(alpha: 0.1),
         blurRadius: 20,
         offset: const Offset(0, -5),
       ),

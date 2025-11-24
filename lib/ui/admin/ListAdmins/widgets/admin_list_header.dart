@@ -20,7 +20,7 @@ class AdminListHeader extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color.fromARGB(255, 18, 39, 230).withOpacity(0.3),
+            color: const Color.fromARGB(255, 18, 39, 230).withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -34,7 +34,7 @@ class AdminListHeader extends StatelessWidget {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: IconButton(

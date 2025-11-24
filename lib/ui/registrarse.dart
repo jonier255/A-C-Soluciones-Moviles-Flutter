@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/register/register_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/register/register_event.dart';
 import 'package:flutter_a_c_soluciones/bloc/register/register_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -87,7 +87,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               boxShadow: [
                                 BoxShadow(
                                   color: const Color.fromARGB(255, 15, 128, 209)
-                                      .withOpacity(0.9),
+                                      .withValues(alpha: 0.9),
                                   spreadRadius: 2,
                                   blurRadius: 18,
                                   offset: const Offset(0, 4),
@@ -141,9 +141,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                   .nombreController.text,
                                               apellido: _registerBloc
                                                   .apellidoController.text,
-                                              numero_de_cedula: _registerBloc
+                                              numeroDeCedula: _registerBloc
                                                   .numeroDeCedulaController.text,
-                                              correo_electronico: _registerBloc
+                                              correoElectronico: _registerBloc
                                                   .correoElectronicoController
                                                   .text,
                                               telefono: _registerBloc

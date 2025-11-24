@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../bloc/request/request_state.dart';
+
 import '../../../../bloc/request/request_bloc.dart';
-import 'request_card.dart';
+import '../../../../bloc/request/request_state.dart';
 import 'pagination_controls.dart';
+import 'request_card.dart';
 import 'request_screen_constants.dart';
 
 /// Main content area with requests list and pagination
@@ -81,7 +82,7 @@ class _RequestListContentState extends State<RequestListContent> {
     );
   }
 
-  Widget _buildRequestsContainer(List requests, Size size) {
+  Widget _buildRequestsContainer(List<dynamic> requests, Size size) {
     final sw = size.width;
     final sh = size.height;
     final containerMarginHorizontal = sw * 0.04;
@@ -143,7 +144,7 @@ class _RequestListContentState extends State<RequestListContent> {
                     ),
                   ),
                   SizedBox(height: sh * 0.025),
-                  Text(
+                  const Text(
                     "No hay solicitudes registradas",
                     style: RequestScreenTheme.emptyMessageStyle,
                   ),

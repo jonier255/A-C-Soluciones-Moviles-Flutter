@@ -47,7 +47,7 @@ class BlocDropdownField<B extends StateStreamable<S>, S, T> extends StatelessWid
           return FieldContainer(
             child: DropdownButtonFormField<int>(
               isExpanded: true,
-              value: value != null ? getId(value as T) : null,
+              initialValue: value != null ? getId(value as T) : null,
               decoration: buildInputDecoration(context, label, icon: icon),
               icon: const Icon(Icons.arrow_drop_down, color: AssignVisitsTheme.accentBlue),
               items: items.map((item) {

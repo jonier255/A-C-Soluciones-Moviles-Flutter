@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_a_c_soluciones/ui/client/services/services_page.dart';
 import 'package:flutter_a_c_soluciones/model/client/service_model.dart';
 import 'package:flutter_a_c_soluciones/repository/client/service_api_service.dart';
+import 'package:flutter_a_c_soluciones/ui/client/services/services_page.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 // Mock para ServiceRepository
 class MockServiceRepository implements ServiceRepository {
@@ -29,7 +29,7 @@ void main() {
       // Este test es difícil de hacer sin modificar el código para inyectar el repositorio
       // Por ahora, verificamos que el widget se renderiza correctamente
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: ServicesContent(clienteId: 1),
           ),
@@ -42,7 +42,7 @@ void main() {
 
     testWidgets('Renderiza correctamente el widget', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: ServicesContent(clienteId: 1),
           ),
@@ -59,7 +59,7 @@ void main() {
       const testClienteId = 123;
 
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
             body: ServicesContent(clienteId: testClienteId),
           ),

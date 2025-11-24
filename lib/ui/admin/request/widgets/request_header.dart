@@ -32,7 +32,7 @@ class RequestScreenHeader extends StatelessWidget {
                   height: 150,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white.withOpacity(0.1),
+                    color: Colors.white.withValues(alpha: 0.1),
                   ),
                 ),
               ),
@@ -44,7 +44,7 @@ class RequestScreenHeader extends StatelessWidget {
                   height: 120,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white.withOpacity(0.08),
+                    color: Colors.white.withValues(alpha: 0.08),
                   ),
                 ),
               ),
@@ -59,8 +59,8 @@ class RequestScreenHeader extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  RequestScreenTheme.primaryGradientStart.withOpacity(0.9),
-                  RequestScreenTheme.primaryGradientEnd.withOpacity(0.9),
+                  RequestScreenTheme.primaryGradientStart.withValues(alpha: 0.9),
+                  RequestScreenTheme.primaryGradientEnd.withValues(alpha: 0.9),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -81,7 +81,7 @@ class RequestScreenHeader extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: IconButton(
@@ -108,7 +108,7 @@ class RequestScreenHeader extends StatelessWidget {
                         width: 40,
                         height: 3,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.6),
+                          color: Colors.white.withValues(alpha: 0.6),
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),

@@ -53,7 +53,7 @@ class AdminOptionCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(AdminMenuTheme.cardIconPadding(sw)),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.25),
+        color: Colors.white.withValues(alpha: 0.25),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Icon(
@@ -82,7 +82,7 @@ class AdminOptionCard extends StatelessWidget {
           option.subtitle,
           style: TextStyle(
             fontSize: AdminMenuTheme.cardSubtitleSize(sw),
-            color: Colors.white.withOpacity(0.9),
+            color: Colors.white.withValues(alpha: 0.9),
             fontWeight: FontWeight.w400,
           ),
         ),
@@ -95,7 +95,7 @@ class AdminOptionCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.25),
+        color: Colors.white.withValues(alpha: 0.25),
         shape: BoxShape.circle,
       ),
       child: const Icon(

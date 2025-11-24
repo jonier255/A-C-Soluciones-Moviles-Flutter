@@ -86,13 +86,13 @@ class AdminProfileSection extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AdminDetailTheme.statusGreen.withOpacity(0.15),
-            const Color(0xFF00B894).withOpacity(0.15),
+            AdminDetailTheme.statusGreen.withValues(alpha: 0.15),
+            const Color(0xFF00B894).withValues(alpha: 0.15),
           ],
         ),
         borderRadius: BorderRadius.circular(25),
         border: Border.all(
-          color: AdminDetailTheme.statusGreen.withOpacity(0.3),
+          color: AdminDetailTheme.statusGreen.withValues(alpha: 0.3),
           width: 1.5,
         ),
       ),

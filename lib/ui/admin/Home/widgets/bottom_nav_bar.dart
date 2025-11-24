@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_a_c_soluciones/ui/admin/Profile/accountAdmin.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/Profile/account_admin.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../../bloc/request/request_bloc.dart';
 import '../../../../repository/services_admin/request_repository.dart';
 import 'admin_home_constants.dart';
@@ -16,7 +17,7 @@ class AdminBottomNavBar extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 20,
             offset: const Offset(0, -5),
           ),
@@ -77,7 +78,7 @@ class AdminBottomNavBar extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => BlocProvider(
               create: (context) => RequestBloc(RequestRepository()),
-              child: RequestScreen(),
+              child: const RequestScreen(),
             ),
           ),
         );

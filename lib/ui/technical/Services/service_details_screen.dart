@@ -18,96 +18,187 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detalles del Servicio'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(screenWidth * 0.05),
-        child: Center(
-          child: Container(
-            width: screenWidth * 0.9,
-            padding: EdgeInsets.all(screenWidth * 0.06),
-            margin: EdgeInsets.symmetric(vertical: screenHeight * 0.025),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(screenWidth * 0.045),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.blue.withOpacity(0.35),
-                  blurRadius: 15,
-                  spreadRadius: 3,
-                  offset: const Offset(0, 5),
-                ),
-              ],
-              border: Border.all(
-                color: Colors.blueAccent.withOpacity(0.3),
-                width: 1.5,
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.service.nombre,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: screenWidth * 0.05,
-                    color: Colors.black87,
-                  ),
-                ),
-                SizedBox(height: screenHeight * 0.03),
-                _buildDetailRow('Descripción:', widget.service.descripcion, screenWidth, screenHeight),
-                SizedBox(height: screenHeight * 0.015),
-                _buildDetailRow('Estado:', widget.service.estado, screenWidth, screenHeight),
-                SizedBox(height: screenHeight * 0.015),
-                _buildDetailRow(
-                  'Fecha de Creación:',
-                  widget.service.fechaCreacion.toString().substring(0, 10),
-                  screenWidth, screenHeight
-                ),
-                SizedBox(height: screenHeight * 0.015),
-                _buildDetailRow(
-                  'Última Modificación:',
-                  widget.service.fechaModificacion.toString().substring(0, 10),
-                  screenWidth, screenHeight
-                ),
-              ],
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue[700]!, Colors.blue[500]!],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
           ),
+        ),
+        title: const Text(
+          'Detalles del Servicio',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        elevation: 0,
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(
+          horizontal: screenWidth * 0.04,
+          vertical: screenHeight * 0.01,
+        ),
+        child: Column(
+          children: [
+            // Card con nombre del servicio
+            Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Container(
+                padding: EdgeInsets.all(screenWidth * 0.03),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFFE3F2FD), Colors.white],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.business_center,
+                      color: Colors.blue[800],
+                      size: screenWidth * 0.06,
+                    ),
+                    SizedBox(width: screenWidth * 0.02),
+                    Expanded(
+                      child: Text(
+                        widget.service.nombre,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: screenWidth * 0.04,
+                          color: Colors.blue[800],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: screenHeight * 0.01),
+
+            // Card con información del servicio
+            Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Container(
+                padding: EdgeInsets.all(screenWidth * 0.03),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.info_outline, color: Colors.blue, size: 20),
+                        SizedBox(width: screenWidth * 0.02),
+                        Text(
+                          'Información del Servicio',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: screenWidth * 0.038,
+                            color: Colors.blue[800],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: screenHeight * 0.01),
+                    _buildDetailRow(
+                      Icons.description,
+                      'Descripción:',
+                      widget.service.descripcion,
+                      screenWidth,
+                      screenHeight,
+                    ),
+                    SizedBox(height: screenHeight * 0.008),
+                    _buildDetailRow(
+                      Icons.flag_outlined,
+                      'Estado:',
+                      widget.service.estado,
+                      screenWidth,
+                      screenHeight,
+                    ),
+                    SizedBox(height: screenHeight * 0.008),
+                    _buildDetailRow(
+                      Icons.calendar_today,
+                      'Fecha de Creación:',
+                      widget.service.fechaCreacion.toString().substring(0, 10),
+                      screenWidth,
+                      screenHeight,
+                    ),
+                    SizedBox(height: screenHeight * 0.008),
+                    _buildDetailRow(
+                      Icons.update,
+                      'Última Modificación:',
+                      widget.service.fechaModificacion.toString().substring(0, 10),
+                      screenWidth,
+                      screenHeight,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: screenHeight * 0.01),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildDetailRow(String title, String value, double screenWidth, double screenHeight) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.008),
-      child: Column(
+  Widget _buildDetailRow(
+    IconData icon,
+    String title,
+    String value,
+    double screenWidth,
+    double screenHeight,
+  ) {
+    return Container(
+      padding: EdgeInsets.all(screenWidth * 0.025),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey[200]!, width: 0.5),
+      ),
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: screenWidth * 0.042,
-              color: Colors.black87,
-            ),
-          ),
-          SizedBox(height: screenHeight * 0.005),
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.only(bottom: screenHeight * 0.008, top: screenHeight * 0.004),
-            decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: Colors.lightBlueAccent, width: 1.2),
-              ),
-            ),
-            child: Text(
-              value.isNotEmpty ? value : '—',
-              style: TextStyle(fontSize: screenWidth * 0.038, color: Colors.black87),
+          Icon(icon, color: Colors.blue[700], size: screenWidth * 0.04),
+          SizedBox(width: screenWidth * 0.02),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: screenWidth * 0.032,
+                    color: Colors.grey[700],
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.003),
+                Text(
+                  value.isNotEmpty ? value : '—',
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.034,
+                    color: Colors.grey[900],
+                    height: 1.2,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
           ),
         ],

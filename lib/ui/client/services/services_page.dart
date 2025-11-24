@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_a_c_soluciones/repository/client/service_api_service.dart';
 import 'package:flutter_a_c_soluciones/model/client/service_model.dart';
-import 'package:flutter_a_c_soluciones/ui/client/Requests/create/create_request_modal.dart';
+import 'package:flutter_a_c_soluciones/repository/client/service_api_service.dart';
 import 'package:flutter_a_c_soluciones/repository/client/solicitud_api_solicitud.dart';
+import 'package:flutter_a_c_soluciones/ui/client/Requests/create/create_request_modal.dart';
 
 class ServicesContent extends StatefulWidget {
   final int clienteId;
 
-  ServicesContent({Key? key, required this.clienteId}) : super(key: key);
+  const ServicesContent({super.key, required this.clienteId});
 
   @override
   State<ServicesContent> createState() => _ServicesContentState();
@@ -29,9 +29,7 @@ class _ServicesContentState extends State<ServicesContent> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
-    final screenHeight = mediaQuery.size.height;
     final isTablet = screenWidth > 600;
-    final isDesktop = screenWidth > 1024;
 
     return Column(
       children: [
@@ -53,7 +51,7 @@ class _ServicesContentState extends State<ServicesContent> {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -98,7 +96,7 @@ class _ServicesContentState extends State<ServicesContent> {
                         Container(
                           padding: EdgeInsets.all(isTablet ? 16 : 12),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Icon(
@@ -148,7 +146,7 @@ class _ServicesContentState extends State<ServicesContent> {
           ),
         ),
         Expanded(
-          child: Container(
+          child: ColoredBox(
             color: const Color(0xFFF5F7FA),
             child: FutureBuilder<List<ServiceModel>>(
               future: _futureServices,
@@ -171,7 +169,7 @@ class _ServicesContentState extends State<ServicesContent> {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
+                            color: Colors.black.withValues(alpha: 0.08),
                             blurRadius: 20,
                             offset: const Offset(0, 4),
                           ),
@@ -208,7 +206,7 @@ class _ServicesContentState extends State<ServicesContent> {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
+                            color: Colors.black.withValues(alpha: 0.08),
                             blurRadius: 20,
                             offset: const Offset(0, 4),
                           ),
@@ -272,7 +270,7 @@ class _ServicesContentState extends State<ServicesContent> {
                           color: Colors.white,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
+                              color: Colors.black.withValues(alpha: 0.05),
                               blurRadius: 10,
                               offset: const Offset(0, -2),
                             ),
@@ -317,7 +315,7 @@ class _ServicesContentState extends State<ServicesContent> {
                                 vertical: isTablet ? 12 : 8,
                               ),
                               decoration: BoxDecoration(
-                                color: const Color(0xFF2E91D8).withOpacity(0.1),
+                                color: const Color(0xFF2E91D8).withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
@@ -391,37 +389,35 @@ class _ServicesContentState extends State<ServicesContent> {
                 repository: SolicitudApiRepository(),
               ),
             );
-            if (result == true) {
-              if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Row(
-                      children: const [
-                        Icon(Icons.check_circle, color: Colors.white),
-                        SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            'Solicitud creada con éxito',
-                            style: TextStyle(fontSize: 16),
-                          ),
+            if (result == true && context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const Row(
+                    children: [
+                      Icon(Icons.check_circle, color: Colors.white),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'Solicitud creada con éxito',
+                          style: TextStyle(fontSize: 16),
                         ),
-                      ],
-                    ),
-                    backgroundColor: Colors.green.shade600,
-                    behavior: SnackBarBehavior.floating,
-                    margin: const EdgeInsets.only(
-                      top: 20,
-                      left: 16,
-                      right: 16,
-                    ),
-                    elevation: 8,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    duration: const Duration(seconds: 3),
+                      ),
+                    ],
                   ),
-                );
-              }
+                  backgroundColor: Colors.green.shade600,
+                  behavior: SnackBarBehavior.floating,
+                  margin: const EdgeInsets.only(
+                    top: 20,
+                    left: 16,
+                    right: 16,
+                  ),
+                  elevation: 8,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  duration: const Duration(seconds: 3),
+                ),
+              );
             }
           },
           borderRadius: BorderRadius.circular(20),
@@ -432,7 +428,7 @@ class _ServicesContentState extends State<ServicesContent> {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
+                  color: Colors.black.withValues(alpha: 0.08),
                   blurRadius: 20,
                   offset: const Offset(0, 4),
                 ),
@@ -443,7 +439,7 @@ class _ServicesContentState extends State<ServicesContent> {
                 Container(
                   padding: EdgeInsets.all(isTablet ? 16 : 12),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF2E91D8).withOpacity(0.1),
+                    color: const Color(0xFF2E91D8).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Icon(

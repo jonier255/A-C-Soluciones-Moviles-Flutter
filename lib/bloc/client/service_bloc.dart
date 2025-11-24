@@ -1,7 +1,7 @@
-import 'package:flutter_a_c_soluciones/repository/client/service_api_service.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/client/service_event.dart';
 import 'package:flutter_a_c_soluciones/bloc/client/service_state.dart';
+import 'package:flutter_a_c_soluciones/repository/client/service_api_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
   final ServiceRepository repository;

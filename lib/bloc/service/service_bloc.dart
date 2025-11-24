@@ -18,6 +18,7 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
           response.services,
           hasMorePages: response.hasMorePages,
           currentPage: 1,
+          totalPages: response.totalPages,
         ));
       } catch (e) {
         emit(ServiceFailure(error: e.toString()));
@@ -26,27 +27,23 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
 
     // Maneja la carga de más servicios (siguientes páginas)
     on<LoadMoreServices>((event, emit) async {
-      // Solo carga más si estamos en estado exitoso y hay más páginas
       final currentState = state;
-      if (currentState is ServiceSuccess && currentState.hasMorePages) {
-        // Emite un estado especial mientras carga más (mantiene los servicios actuales)
+      if (currentState is ServiceSuccess) {
+        // Emite un estado especial mientras carga (mantiene los servicios actuales)
         emit(ServiceLoadingMore(currentState.services));
         
         try {
           final response = await this.repository.getServices(page: event.page);
           
-          // Combina los servicios actuales con los nuevos
-          final allServices = [...currentState.services, ...response.services];
-          
           emit(ServiceSuccess(
-            allServices,
+            response.services,
             hasMorePages: response.hasMorePages,
             currentPage: event.page,
+            totalPages: response.totalPages,
           ));
         } catch (e) {
           // Si hay error, vuelve al estado anterior exitoso
           emit(currentState);
-          // Podríamos emitir un estado de error específico aquí si lo necesitamos
         }
       }
     });

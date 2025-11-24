@@ -23,7 +23,7 @@ class VisitsOptionCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: option.gradientColors[1].withOpacity(0.3),
+            color: option.gradientColors[1].withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),
@@ -66,7 +66,7 @@ class VisitsOptionCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(sw * 0.035),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.25),
+        color: Colors.white.withValues(alpha: 0.25),
         shape: BoxShape.circle,
       ),
       child: Icon(
@@ -97,7 +97,7 @@ class VisitsOptionCard extends StatelessWidget {
             option.subtitle,
             style: TextStyle(
               fontSize: sw * 0.032,
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white.withValues(alpha: 0.9),
               fontWeight: FontWeight.w400,
             ),
           ),
@@ -110,7 +110,7 @@ class VisitsOptionCard extends StatelessWidget {
   Widget _buildArrow(double sw) {
     return Icon(
       Icons.arrow_forward_ios_rounded,
-      color: Colors.white.withOpacity(0.8),
+      color: Colors.white.withValues(alpha: 0.8),
       size: sw * 0.05,
     );
   }

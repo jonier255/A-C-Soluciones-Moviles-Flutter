@@ -48,7 +48,7 @@ class LoginScreen extends StatelessWidget {
                     clipper: WaveClipper(),
                     child: Container(
                       height: 180,
-                      color: Color.fromARGB(255, 46, 145, 216),
+                      color: const Color.fromARGB(255, 46, 145, 216),
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -70,7 +70,7 @@ class LoginScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(22),
                         boxShadow: [
                           BoxShadow(
-                            color: Color.fromARGB(255, 46, 145, 216).withOpacity(0.9),
+                            color: const Color.fromARGB(255, 46, 145, 216).withValues(alpha: 0.9),
                             spreadRadius: 4,
                             blurRadius: 10,
                             offset: const Offset(0, 3),
@@ -86,23 +86,23 @@ class LoginScreen extends StatelessWidget {
                           TextField(
                             controller: loginBloc.emailController,
                             decoration: InputDecoration(
-                                border: OutlineInputBorder(),
+                                border: const OutlineInputBorder(),
                                 hintText: "Ingrese su correo electronico",
                                 filled: true,
                                 fillColor: Colors.white,
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
+                                  borderSide: const BorderSide(
                                       color: Color.fromARGB(255, 121, 188, 236), width: 2.0),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
+                                  borderSide: const BorderSide(
                                       color: Color.fromARGB(255, 121, 188, 236), width: 2.0),
                                 ),
                                 disabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
+                                  borderSide: const BorderSide(
                                       color: Color.fromARGB(255, 121, 188, 236), width: 2.0),
                                 )),
                           ),
@@ -115,24 +115,24 @@ class LoginScreen extends StatelessWidget {
                             controller: loginBloc.passwordController,
                             obscureText: true,
                             decoration: InputDecoration(
-                                border: OutlineInputBorder(),
+                                border: const OutlineInputBorder(),
                                 hintText: "Ingresa tu contraseña",
                                 filled: true,
                                 fillColor: Colors.white,
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
+                                  borderSide: const BorderSide(
                                       color: Color.fromARGB(255, 121, 188, 236), width: 2.0),
                                 ),
                                   
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
+                                  borderSide: const BorderSide(
                                       color: Color.fromARGB(255, 121, 188, 236), width: 2.0),
                                 ),
                                 disabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
+                                  borderSide: const BorderSide(
                                       color: Color.fromARGB(255, 121, 188, 236), width: 2.0),
                                 )),
                           ),
@@ -231,7 +231,7 @@ class LoginScreen extends StatelessWidget {
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 50,
                                                       vertical: 15),
-                                              backgroundColor: Color.fromARGB(255, 46, 145, 216),
+                                              backgroundColor: const Color.fromARGB(255, 46, 145, 216),
                                               elevation: 8,
                                               shadowColor: Colors.black,
                                               shape: RoundedRectangleBorder(

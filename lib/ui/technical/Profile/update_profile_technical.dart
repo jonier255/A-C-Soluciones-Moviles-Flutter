@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/editProfileTechnical/edit_profile_technical_bloc.dart';
 import 'package:flutter_a_c_soluciones/model/technical/technical_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EditarInformacionScreenTechnical extends StatefulWidget {
   const EditarInformacionScreenTechnical({super.key});
@@ -70,18 +70,29 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Color(0xFF0D47A1);
-    final backgroundColor = Color(0xFFF5F5F5);
+    const primaryColor = Color(0xFF0D47A1);
+    const backgroundColor = Color(0xFFF5F5F5);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: Text('Editar Perfil', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        backgroundColor: primaryColor,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue[700]!, Colors.blue[500]!],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        title: const Text(
+          'Editar Perfil',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0,
-        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: BlocConsumer<EditProfileTechnicalBloc, EditProfileTechnicalState>(
         listener: (context, state) {
@@ -159,7 +170,7 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
                 ),
                 SizedBox(height: screenHeight * 0.03),
                 ElevatedButton.icon(
-                  icon: Icon(Icons.save, color: Colors.white),
+                  icon: const Icon(Icons.save, color: Colors.white),
                   label: Text(isSubmitting ? 'Guardando...' : 'Guardar Cambios'),
                   onPressed: (isSubmitting || !_hasChanges) ? null : () {
                     setState(() {
@@ -192,7 +203,7 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
                 ),
                 SizedBox(height: screenHeight * 0.02),
                 OutlinedButton.icon(
-                  icon: Icon(Icons.cancel, color: Colors.grey[600]),
+                  icon: const Icon(Icons.cancel),
                   label: Text('Cancelar', style: TextStyle(color: Colors.grey[600])),
                   onPressed: () {
                     context.read<EditProfileTechnicalBloc>().add(LoadTechnicalProfile());
@@ -219,7 +230,7 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
       keyboardType: keyboardType,
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: TextStyle(color: primaryColor.withOpacity(0.7)),
+        labelStyle: TextStyle(color: primaryColor.withValues(alpha: 0.7)),
         prefixIcon: Icon(icon, color: primaryColor),
         filled: true,
         fillColor: Colors.white,
@@ -234,11 +245,11 @@ class _EditarInformacionScreenTechnicalState extends State<EditarInformacionScre
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(color: Colors.red, width: 1),
+          borderSide: const BorderSide(color: Colors.red, width: 1),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(color: Colors.red, width: 2),
+          borderSide: const BorderSide(color: Colors.red, width: 2),
         ),
       ),
       validator: (value) {

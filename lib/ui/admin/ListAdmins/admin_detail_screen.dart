@@ -1,10 +1,11 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+
 import '../../../model/administrador/admin_model.dart';
+import 'widgets/admin_detail/admin_action_button.dart';
 import 'widgets/admin_detail/admin_detail_constants.dart';
 import 'widgets/admin_detail/admin_detail_header.dart';
-import 'widgets/admin_detail/admin_profile_section.dart';
 import 'widgets/admin_detail/admin_info_card.dart';
-import 'widgets/admin_detail/admin_action_button.dart';
+import 'widgets/admin_detail/admin_profile_section.dart';
 import 'widgets/admin_detail/delete_admin_dialog.dart';
 
 class AdminDetailScreen extends StatelessWidget {
