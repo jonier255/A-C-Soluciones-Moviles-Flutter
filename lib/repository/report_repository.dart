@@ -18,7 +18,7 @@ class VisitWithReport {
 
 class ReportRepository {
   final _storageService = SecureStorageService();
-  final String _baseUrl = 'http://10.0.2.2:8000/api';
+  final String _baseUrl = 'https://flutter-58c3.onrender.com/api';
 
   Future<void> createMaintenanceSheet({
     required int visitId,

@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 class TecnicosRepository {
   Future<List<Tecnico>> getTecnicos() async {
-    final url = Uri.parse('http://10.0.2.2:8000/api/tecnico');
+    final url = Uri.parse('https://flutter-58c3.onrender.com/api/tecnico');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {

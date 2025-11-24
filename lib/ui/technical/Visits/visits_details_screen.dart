@@ -109,7 +109,7 @@ class _VisitsDetailsScreenState extends State<VisitsDetailsScreen> {
     try {
       final pathFromServer = _pdfPath!.replaceAll(r'\', '/');
       final fileName = pathFromServer.split('/').last;
-      final url = 'http://10.0.2.2:8000/fichas/$fileName';
+      final url = 'https://flutter-58c3.onrender.com/fichas/$fileName';
       final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
