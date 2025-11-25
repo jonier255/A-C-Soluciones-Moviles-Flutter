@@ -37,6 +37,7 @@ jobs:
         id: diawi_upload
         run: |
           echo "Subiendo APK a Diawi..."
+
           RESPONSE=$(curl -s -X POST "https://upload.diawi.com/" \
             -H "accept: application/json" \
             -F "token=${{ secrets.DIAWI_TOKEN }}" \
@@ -74,16 +75,15 @@ jobs:
             echo "STATUS: $RESULT"
 
             if ! echo "$RESULT" | jq -e . >/dev/null 2>&1; then
-              echo "⚠️ Diawi devolvió algo NO JSON:"
+              echo "⚠️ Diawi NO devolvió JSON:"
               echo "$RESULT"
-              echo "Reintentando..."
               sleep 10
               continue
             fi
 
             LINK=$(echo "$RESULT" | jq -r '.link // empty')
 
-            if [ ! -z "$LINK" ]; then
+            if [ -n "$LINK" ]; then
               echo "DIAWI_LINK=$LINK" >> $GITHUB_ENV
               echo "link=$LINK" >> $GITHUB_OUTPUT
               exit 0
@@ -112,17 +112,46 @@ jobs:
           echo "build=$BUILD" >> $GITHUB_OUTPUT
 
       ############################################################
-      # 4️⃣ GUARDAR EN TU API REMOTA
+      # 4️⃣ GUARDAR EN TU API REMOTA CON LOG COMPLETO
       ############################################################
       - name: Save metadata to API
         run: |
           echo "Guardando registro en tu API..."
 
-          curl -X POST "${{ secrets.API_URL }}/api/versions" \
+          # Asegurar que la URL no termine en '/'
+          CLEAN_URL="${{ secrets.API_URL }}"
+          CLEAN_URL="${CLEAN_URL%/}" 
+
+          URL="$CLEAN_URL/api/versions"
+
+          PAYLOAD=$(cat <<EOF
+{
+  "version": "${{ env.APK_VERSION }}",
+  "build": "${{ env.APK_BUILD }}",
+  "diawi_link": "${{ steps.diawi_poll.outputs.link }}"
+}
+EOF
+          )
+
+          echo "➡️ Enviando a: $URL"
+          echo "➡️ Payload:"
+          echo "$PAYLOAD"
+
+          HTTP_RESPONSE=$(curl -s -w "HTTP_STATUS:%{http_code}" -o api_response.json \
+            -X POST "$URL" \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${{ secrets.API_KEY }}" \
-            -d "{
-              \"version\": \"${{ env.APK_VERSION }}\",
-              \"build\": \"${{ env.APK_BUILD }}\",
-              \"diawi_link\": \"${{ steps.diawi_poll.outputs.link }}\"
-            }"
+            -d "$PAYLOAD")
+
+          HTTP_STATUS=$(echo "$HTTP_RESPONSE" | sed -e 's/.*HTTP_STATUS://')
+
+          echo "📌 Código HTTP: $HTTP_STATUS"
+          echo "📌 Respuesta de la API:"
+          cat api_response.json
+
+          if [ $HTTP_STATUS -lt 200 ] || [ $HTTP_STATUS -ge 300 ]; then
+            echo "❌ ERROR: La API respondió con un error"
+            exit 1
+          fi
+
+          echo "✔️ Registro guardado exitosamente en la API"
