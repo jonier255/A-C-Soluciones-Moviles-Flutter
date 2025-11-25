@@ -86,7 +86,7 @@ jobs:
           exit 1
           
       ############################################################
-      # 3️⃣ OBTENER VERSION Y BUILD DEL pubspec.yaml
+      # 3️⃣ OBTENER VERSION, BUILD Y TAMAÑO DEL APK
       ############################################################
       - name: Read version from pubspec.yaml
         id: version_reader
@@ -98,6 +98,15 @@ jobs:
           echo "APK_BUILD=$BUILD" >> $GITHUB_ENV
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "build=$BUILD" >> $GITHUB_OUTPUT
+          
+      - name: Get APK file size
+        id: apk_size
+        run: |
+          APK_PATH="build/app/outputs/flutter-apk/app-release.apk"
+          FILE_SIZE=$(stat -c%s "$APK_PATH")
+          echo "APK_SIZE=$FILE_SIZE" >> $GITHUB_ENV
+          echo "size=$FILE_SIZE" >> $GITHUB_OUTPUT
+          echo "📦 Tamaño del APK: $FILE_SIZE bytes"
           
       ############################################################
       # 4️⃣ ENVIAR A TU API
@@ -114,7 +123,8 @@ jobs:
             --arg version "${{ env.APK_VERSION }}" \
             --arg build "${{ env.APK_BUILD }}" \
             --arg link "${{ steps.diawi_poll.outputs.link }}" \
-            '{version: $version, build: $build, diawi_link: $link}')
+            --arg size "${{ env.APK_SIZE }}" \
+            '{version: $version, build: $build, diawi_link: $link, file_size: ($size | tonumber)}')
 
           echo "➡️ Enviando a: $URL"
           echo "$PAYLOAD"
