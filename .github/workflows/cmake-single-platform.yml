@@ -2,9 +2,13 @@ name: Flutter CI
 
 on:
   push:
-    branches: [development, master]
+    branches:
+      - development
+      - master
   pull_request:
-    branches: [development, master]
+    branches:
+      - development
+      - master
 
 jobs:
   build:
@@ -30,64 +34,73 @@ jobs:
       - name: Build APK
         run: flutter build apk --release
 
-      # ---------------------------------------------
-      # 📌 SUBIR A DIAWI
-      # ---------------------------------------------
+      ##############################
+      # 1️⃣ SUBIR A DIAWI
+      ##############################
       - name: Upload APK to Diawi
         id: diawi_upload
         run: |
-          response=$(curl -X POST "https://upload.diawi.com/" \
+          echo "Subiendo a Diawi..."
+
+          RESPONSE=$(curl -s -X POST "https://upload.diawi.com/" \
             -H "accept: application/json" \
             -F "token=${{ secrets.DIAWI_TOKEN }}" \
-            -F "file=@build/app/outputs/flutter-apk/app-release.apk" \
-            -F "wall_of_apps=1")
+            -F "file=@build/app/outputs/flutter-apk/app-release.apk")
 
-          echo "Diawi response: $response"
+          echo "$RESPONSE" > diawi_response.json
+          echo "response=$RESPONSE" >> $GITHUB_OUTPUT
 
-          # Guardamos el JSON completo
-          echo "$response" > diawi_response.json
+          # Validar JSON
+          if ! echo "$RESPONSE" | jq . >/dev/null 2>&1; then
+            echo "ERROR: Diawi NO respondió JSON:"
+            cat diawi_response.json
+            exit 1
+          fi
 
-          # Extraer el job_id de Diawi
-          job_id=$(echo "$response" | jq -r '.job')
-          echo "JOB_ID=$job_id" >> $GITHUB_ENV
+          JOB_ID=$(echo "$RESPONSE" | jq -r '.job')
+          echo "JOB_ID=$JOB_ID" >> $GITHUB_ENV
 
-      - name: Upload Diawi Response Artifact
+      - name: Save Diawi Response as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: diawi-upload-response
           path: diawi_response.json
 
-      # ---------------------------------------------
-      # 📌 POLL a Diawi para obtener el LINK FINAL
-      # ---------------------------------------------
+      ##############################
+      # 2️⃣ POLLING HASTA OBTENER LINK
+      ##############################
       - name: Poll Diawi until link is ready
         id: diawi_poll
         run: |
-          echo "Consultando Diawi por el link final..."
-          for i in {1..20}; do
-            result=$(curl -s -X POST "https://upload.diawi.com/status" \
+          echo "Esperando link final..."
+          for i in {1..20}
+          do
+            STATUS=$(curl -s -X POST "https://upload.diawi.com/status" \
               -F "token=${{ secrets.DIAWI_TOKEN }}" \
               -F "job=${{ env.JOB_ID }}")
 
-            echo "Status: $result"
+            echo "STATUS: $STATUS"
 
-            link=$(echo "$result" | jq -r '.link')
-            if [ "$link" != "null" ]; then
-              echo "LINK LISTO: $link"
-              echo "DIAWI_LINK=$link" >> $GITHUB_ENV
-              exit 0
+            if echo "$STATUS" | jq . >/dev/null 2>&1; then
+              LINK=$(echo "$STATUS" | jq -r '.link')
+
+              if [ "$LINK" != "null" ]; then
+                echo "DIAWI_LINK=$LINK" >> $GITHUB_ENV
+                echo "link=$LINK" >> $GITHUB_OUTPUT
+                exit 0
+              fi
             fi
 
-            echo "Esperando 10s..."
+            echo "No listo aún. Intento $i/20"
             sleep 10
           done
 
-          echo "Error: No se obtuvo el link final de Diawi."
+          echo "ERROR: Diawi nunca devolvió link"
           exit 1
 
-      # ---------------------------------------------
-      # 📌 LEER version y build del pubspec.yaml
-      # ---------------------------------------------
+      ##############################
+      # 3️⃣ LEER VERSION + BUILD
+      ##############################
       - name: Read version from pubspec.yaml
         id: version_reader
         run: |
@@ -98,9 +111,9 @@ jobs:
           echo "APK_VERSION=$VERSION" >> $GITHUB_ENV
           echo "APK_BUILD=$BUILD" >> $GITHUB_ENV
 
-      # ---------------------------------------------
-      # 📌 GUARDAR VERSIÓN EN TU API
-      # ---------------------------------------------
+      ##############################
+      # 4️⃣ GUARDAR EN TU API
+      ##############################
       - name: Save metadata to API
         run: |
           curl -X POST "${{ secrets.API_URL }}/versions" \
@@ -109,6 +122,8 @@ jobs:
             -d "{
               \"version\": \"${{ env.APK_VERSION }}\",
               \"build\": \"${{ env.APK_BUILD }}\",
-              \"diawi_link\": \"${{ env.DIAWI_LINK }}\"
+              \"diawi_link\": \"${{ steps.diawi_poll.outputs.link }}\"
             }"
+
+
 
