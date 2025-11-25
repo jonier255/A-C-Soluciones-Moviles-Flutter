@@ -41,6 +41,7 @@ jobs:
             -H "accept: application/json" \
             -F "token=${{ secrets.DIAWI_TOKEN }}" \
             -F "file=@build/app/outputs/flutter-apk/app-release.apk")
+
           echo "$RESPONSE" > diawi_response.json
 
           if ! echo "$RESPONSE" | jq -e . >/dev/null 2>&1; then
@@ -60,20 +61,19 @@ jobs:
           path: diawi_response.json
 
       ############################################################
-      # 2️⃣ POLL A DIAWI PARA ESPERAR EL ENLACE FINAL
+      # 2️⃣ POLL A DIAWI HASTA OBTENER EL LINK FINAL
       ############################################################
       - name: Poll Diawi until link ready
         id: diawi_poll
         run: |
           echo "Esperando link final..."
-
           for i in {1..20}
           do
             RESULT=$(curl -s "https://upload.diawi.com/status?token=${{ secrets.DIAWI_TOKEN }}&job=${{ env.JOB_ID }}")
             echo "STATUS: $RESULT"
 
             if ! echo "$RESULT" | jq -e . >/dev/null 2>&1; then
-              echo "⚠️ Diawi NO devolvió JSON"
+              echo "⚠️ Diawi NO devolvió JSON, reintentando..."
               sleep 10
               continue
             fi
@@ -94,7 +94,7 @@ jobs:
           exit 1
 
       ############################################################
-      # 3️⃣ OBTENER VERSION Y BUILD DEL pubspec.yaml
+      # 3️⃣ LEER VERSION Y BUILD DEL pubspec.yaml
       ############################################################
       - name: Read version from pubspec.yaml
         id: version_reader
@@ -105,12 +105,11 @@ jobs:
 
           echo "APK_VERSION=$VERSION" >> $GITHUB_ENV
           echo "APK_BUILD=$BUILD" >> $GITHUB_ENV
-
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "build=$BUILD" >> $GITHUB_OUTPUT
 
       ############################################################
-      # 4️⃣ ENVIAR A TU API
+      # 4️⃣ ENVIAR INFORMACIÓN A TU API
       ############################################################
       - name: Save metadata to API
         run: |
@@ -120,20 +119,15 @@ jobs:
           CLEAN_URL="${CLEAN_URL%/}"
           URL="$CLEAN_URL/api/versions"
 
-          # JSON literal SIN errores
-          PAYLOAD=$(cat <<'EOF'
+          # JSON válido y limpio
+          PAYLOAD=$(cat <<EOF
 {
-  "version": "${APK_VERSION}",
-  "build": "${APK_BUILD}",
-  "diawi_link": "${DIAWI_LINK}"
+  "version": "${{ env.APK_VERSION }}",
+  "build": "${{ env.APK_BUILD }}",
+  "diawi_link": "${{ env.DIAWI_LINK }}"
 }
 EOF
           )
-
-          # Sustituir variables reales
-          PAYLOAD=${PAYLOAD//\$\{APK_VERSION\}/${{ env.APK_VERSION }}}
-          PAYLOAD=${PAYLOAD//\$\{APK_BUILD\}/${{ env.APK_BUILD }}}
-          PAYLOAD=${PAYLOAD//\$\{DIAWI_LINK\}/${{ steps.diawi_poll.outputs.link }}}
 
           echo "➡️ Enviando a: $URL"
           echo "$PAYLOAD"
@@ -147,10 +141,9 @@ EOF
           HTTP_STATUS=$(echo "$HTTP_RESPONSE" | sed -e 's/.*HTTP_STATUS://')
 
           echo "📌 Código HTTP: $HTTP_STATUS"
-          echo "📌 Respuesta:"
           cat api_response.json
 
-          if [ $HTTP_STATUS -lt 200 ] || [ $HTTP_STATUS -ge 300 ]; then
+          if [ "$HTTP_STATUS" -lt 200 ] || [ "$HTTP_STATUS" -ge 300 ]; then
             echo "❌ ERROR: La API respondió con un error"
             exit 1
           fi
