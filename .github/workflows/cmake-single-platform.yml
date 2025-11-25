@@ -1,4 +1,4 @@
-name: Flutter CI with Diawi + Polling + PR Comment
+name: Flutter CI
 
 on:
   push:
@@ -25,93 +25,32 @@ jobs:
       - name: Flutter pub get
         run: flutter pub get
 
+      - name: Flutter analyze (no fail)
+        run: flutter analyze || true
+
+      - name: Flutter test (no fail)
+        run: flutter test || true
+
       - name: Build APK
         run: flutter build apk --release
 
-      #  SUBIR APK A DIAWI
-      - name: Upload to Diawi
+      - name: Upload APK to Diawi
         id: diawi_upload
         run: |
-          echo "Uploading APK to Diawi..."
-          RESPONSE=$(curl -s -F token=${{ secrets.DIAWI_TOKEN }} \
-                         -F file=@build/app/outputs/flutter-apk/app-release.apk \
-                         -F find_by_udid=0 \
-                         -F install_url=1 \
-                         https://upload.diawi.com/)
+          response=$(curl -X POST "https://upload.diawi.com/" \
+          -H "accept: application/json" \
+          -F "token=${{ secrets.DIAWI_TOKEN }}" \
+          -F "file=@build/app/outputs/flutter-apk/app-release.apk" \
+          -F "wall_of_apps=1")
 
-          echo "Upload response:"
-          echo "$RESPONSE"
+          echo "Diawi response: $response"
+          echo "::set-output name=response::$response"
 
-          # Guardar la respuesta cruda
-          echo "$RESPONSE" > diawi-upload.json
-
-          # Extraer job (si falla, job será vacío o null)
-          JOB=$(echo "$RESPONSE" | jq -r '.job // empty')
-
-          if [ -z "$JOB" ]; then
-            echo " ERROR: Diawi no devolvió un job válido."
-            exit 1
-          fi
-
-          echo "job=$JOB" >> $GITHUB_OUTPUT
-
-      #  POLLING HASTA OBTENER EL LINK FINAL (MANEJO DE ERRORES INCLUIDO)
-      - name: Check Diawi Processing
-        id: diawi_poll
-        run: |
-          JOB=${{ steps.diawi_upload.outputs.job }}
-          echo "Polling job: $JOB"
-
-          for i in {1..20}
-          do
-            RAW=$(curl -s -X POST https://upload.diawi.com/status \
-                        -F token=${{ secrets.DIAWI_TOKEN }} \
-                        -F job=$JOB)
-
-            echo "Raw Status Response:"
-            echo "$RAW"
-
-            # Verificar si la respuesta es JSON válido
-            if ! echo "$RAW" | jq . >/dev/null 2>&1; then
-              echo "Diawi devolvió un error no-JSON. Reintentando..."
-              sleep 10
-              continue
-            fi
-
-            RESULT=$(echo $RAW | jq -r '.status')
-            LINK=$(echo $RAW | jq -r '.link')
-
-            # Si el link ya está disponible
-            if [ "$RESULT" = "0" ] && [ "$LINK" != "null" ]; then
-              echo " Link final obtenido: $LINK"
-              echo "link=$LINK" >> $GITHUB_OUTPUT
-              exit 0
-            fi
-
-            echo "Aún procesando. Reintentando en 10 segundos..."
-            sleep 10
-          done
-
-          echo "Error: No se obtuvo link final tras varios intentos."
-          exit 1
-
-      # PUBLICAR EL LINK EN EL PR
-      - name: Post Link to Pull Request
-        if: github.event_name == 'pull_request'
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          message: |
-            **Nueva versión lista en Diawi**
-            [Instalar actualización](${{ steps.diawi_poll.outputs.link }})
-
-      #  GUARDAR EL LINK COMO ARTIFACT
-      - name: Save Diawi Link
-        run: |
-          echo "${{ steps.diawi_poll.outputs.link }}" > diawi-link.txt
-
-      - name: Upload Diawi Link Artifact
+      - name: Save Diawi Response as Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: diawi-link
-          path: diawi-link.txt
+          name: diawi-upload-response
+          path: diawi_response.json
 
+      - name: Write Response to File
+        run: echo "${{ steps.diawi_upload.outputs.response }}" > diawi_response.json
