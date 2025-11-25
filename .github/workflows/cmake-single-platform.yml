@@ -124,7 +124,7 @@ jobs:
             --arg build "${{ env.APK_BUILD }}" \
             --arg link "${{ steps.diawi_poll.outputs.link }}" \
             --arg size "${{ env.APK_SIZE }}" \
-            '{version: $version, build: $build, diawi_link: $link, file_size: ($size | tonumber)}')
+            '{version: $version, build: $build, diawi_link: $link, fileSize: ($size | tonumber)}')
 
           echo "➡️ Enviando a: $URL"
           echo "$PAYLOAD"
