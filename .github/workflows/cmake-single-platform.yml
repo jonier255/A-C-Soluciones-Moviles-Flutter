@@ -37,7 +37,6 @@ jobs:
         id: diawi_upload
         run: |
           echo "Subiendo APK a Diawi..."
-
           RESPONSE=$(curl -s -X POST "https://upload.diawi.com/" \
             -H "accept: application/json" \
             -F "token=${{ secrets.DIAWI_TOKEN }}" \
@@ -118,20 +117,24 @@ jobs:
         run: |
           echo "Guardando registro en tu API..."
 
-          # Asegurar que la URL no termine en '/'
           CLEAN_URL="${{ secrets.API_URL }}"
-          CLEAN_URL="${CLEAN_URL%/}" 
-
+          CLEAN_URL="${CLEAN_URL%/}"
           URL="$CLEAN_URL/api/versions"
 
-          PAYLOAD=$(cat <<EOF
+          # Creamos plantilla JSON literal (sin expandir variables)
+          PAYLOAD=$(cat <<'EOF'
 {
-  "version": "${{ env.APK_VERSION }}",
-  "build": "${{ env.APK_BUILD }}",
-  "diawi_link": "${{ steps.diawi_poll.outputs.link }}"
+  "version": "${APK_VERSION}",
+  "build": "${APK_BUILD}",
+  "diawi_link": "${DIAWI_LINK}"
 }
 EOF
           )
+
+          # Sustituimos variables reales
+          PAYLOAD=${PAYLOAD//\$\{APK_VERSION\}/${{ env.APK_VERSION }}}
+          PAYLOAD=${PAYLOAD//\$\{APK_BUILD\}/${{ env.APK_BUILD }}}
+          PAYLOAD=${PAYLOAD//\$\{DIAWI_LINK\}/${{ steps.diawi_poll.outputs.link }}}
 
           echo "➡️ Enviando a: $URL"
           echo "➡️ Payload:"
