@@ -2,20 +2,15 @@ name: Flutter CI
 
 on:
   push:
-    branches:
-      - development
-      - master   
+    branches: [development, master]
   pull_request:
-    branches:
-      - development
-      - master
-
-  
+    branches: [development, master]
 
 jobs:
-  build:
+  # Job 1: Tests y análisis (siempre se ejecuta)
+  test:
     runs-on: ubuntu-latest
-
+    
     steps:
       - uses: actions/checkout@v4
 
@@ -33,12 +28,141 @@ jobs:
       - name: Flutter test (no fail)
         run: flutter test || true
 
+  # Job 2: Build y deploy (solo en push a development o master)
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    # Solo se ejecuta en push (merge), NO en pull requests
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/development' || github.ref == 'refs/heads/master')
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.38.1'
+
+      - name: Flutter pub get
+        run: flutter pub get
+
       - name: Build APK
         run: flutter build apk --release
 
-      - name: Upload APK
+      ############################################################
+      # 1️⃣ SUBIR APK A DIAWI
+      ############################################################
+      - name: Upload APK to Diawi
+        id: diawi_upload
+        run: |
+          echo "Subiendo APK a Diawi..."
+          RESPONSE=$(curl -s -X POST "https://upload.diawi.com/" \
+            -H "accept: application/json" \
+            -F "token=${{ secrets.DIAWI_TOKEN }}" \
+            -F "file=@build/app/outputs/flutter-apk/app-release.apk")
+          echo "$RESPONSE" > diawi_response.json
+          if ! echo "$RESPONSE" | jq -e . >/dev/null 2>&1; then
+            echo "ERROR: Diawi NO devolvió JSON válido:"
+            cat diawi_response.json
+            exit 1
+          fi
+          JOB_ID=$(echo "$RESPONSE" | jq -r '.job')
+          echo "JOB_ID=$JOB_ID" >> $GITHUB_ENV
+          echo "job=$JOB_ID" >> $GITHUB_OUTPUT
+          
+      - name: Save Diawi response as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: app-release
-          path: build/app/outputs/flutter-apk/app-release.apk
+          name: diawi-upload-response
+          path: diawi_response.json
 
+      ############################################################
+      # 2️⃣ POLL A DIAWI PARA ESPERAR EL ENLACE FINAL
+      ############################################################
+      - name: Poll Diawi until link ready
+        id: diawi_poll
+        run: |
+          echo "Esperando link final..."
+          for i in {1..20}
+          do
+            RESULT=$(curl -s "https://upload.diawi.com/status?token=${{ secrets.DIAWI_TOKEN }}&job=${{ env.JOB_ID }}")
+            echo "STATUS: $RESULT"
+            if ! echo "$RESULT" | jq -e . >/dev/null 2>&1; then
+              echo "⚠️ Diawi NO devolvió JSON"
+              sleep 10
+              continue
+            fi
+            LINK=$(echo "$RESULT" | jq -r '.link // empty')
+            if [ -n "$LINK" ]; then
+              echo "DIAWI_LINK=$LINK" >> $GITHUB_ENV
+              echo "link=$LINK" >> $GITHUB_OUTPUT
+              exit 0
+            fi
+            echo "Aún no está listo. Intento $i/20"
+            sleep 10
+          done
+          echo "ERROR: Diawi nunca devolvió link"
+          exit 1
+          
+      ############################################################
+      # 3️⃣ OBTENER VERSION, BUILD Y TAMAÑO DEL APK
+      ############################################################
+      - name: Read version from pubspec.yaml
+        id: version_reader
+        run: |
+          VERSION_LINE=$(grep '^version:' pubspec.yaml)
+          VERSION=$(echo "$VERSION_LINE" | cut -d ':' -f2 | cut -d '+' -f1 | xargs)
+          BUILD=$(echo "$VERSION_LINE" | cut -d '+' -f2)
+          echo "APK_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "APK_BUILD=$BUILD" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "build=$BUILD" >> $GITHUB_OUTPUT
+          
+      - name: Get APK file size
+        id: apk_size
+        run: |
+          APK_PATH="build/app/outputs/flutter-apk/app-release.apk"
+          FILE_SIZE=$(stat -c%s "$APK_PATH")
+          echo "APK_SIZE=$FILE_SIZE" >> $GITHUB_ENV
+          echo "size=$FILE_SIZE" >> $GITHUB_OUTPUT
+          echo "📦 Tamaño del APK: $FILE_SIZE bytes"
+          
+      ############################################################
+      # 4️⃣ ENVIAR A TU API
+      ############################################################
+      - name: Save metadata to API
+        run: |
+          echo "Guardando registro en tu API..."
+          CLEAN_URL="${{ secrets.API_URL }}"
+          CLEAN_URL="${CLEAN_URL%/}"
+          URL="$CLEAN_URL/api/versiones"
+          
+          # Construir JSON con jq para evitar problemas de escape
+          PAYLOAD=$(jq -n \
+            --arg version "${{ env.APK_VERSION }}" \
+            --arg build "${{ env.APK_BUILD }}" \
+            --arg link "${{ steps.diawi_poll.outputs.link }}" \
+            --arg size "${{ env.APK_SIZE }}" \
+            '{version: $version, build: $build, diawi_link: $link, fileSize: ($size | tonumber)}')
+
+          echo "➡️ Enviando a: $URL"
+          echo "$PAYLOAD"
+
+          HTTP_RESPONSE=$(curl -s -w "HTTP_STATUS:%{http_code}" -o api_response.json \
+            -X POST "$URL" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.API_KEY }}" \
+            -d "$PAYLOAD")
+
+          HTTP_STATUS=$(echo "$HTTP_RESPONSE" | sed -e 's/.*HTTP_STATUS://')
+
+          echo "📌 Código HTTP: $HTTP_STATUS"
+          echo "📌 Respuesta:"
+          cat api_response.json
+
+          if [ $HTTP_STATUS -lt 200 ] || [ $HTTP_STATUS -ge 300 ]; then
+            echo "❌ ERROR: La API respondió con un error"
+            exit 1
+          fi
+
+          echo "✔️ Registro guardado exitosamente en la API"
