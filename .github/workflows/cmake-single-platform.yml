@@ -107,7 +107,7 @@ jobs:
           echo "Guardando registro en tu API..."
           CLEAN_URL="${{ secrets.API_URL }}"
           CLEAN_URL="${CLEAN_URL%/}"
-          URL="$CLEAN_URL/api/versions"
+          URL="$CLEAN_URL/api/versiones"
           
           # Construir JSON con jq para evitar problemas de escape
           PAYLOAD=$(jq -n \
