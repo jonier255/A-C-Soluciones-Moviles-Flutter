@@ -31,7 +31,7 @@ jobs:
         run: flutter build apk --release
 
       ############################################################
-      # 1️⃣ SUBIR APK A DIAWI (API REAL — SIN /v2)
+      # 1️⃣ SUBIR APK A DIAWI (Correcto)
       ############################################################
       - name: Upload APK to Diawi
         id: diawi_upload
@@ -46,8 +46,8 @@ jobs:
           echo "$RESPONSE" > diawi_response.json
 
           # Validar JSON
-          if ! echo "$RESPONSE" | jq . >/dev/null 2>&1; then
-            echo "ERROR: Diawi NO devolvió JSON válido"
+          if ! echo "$RESPONSE" | jq -e . >/dev/null 2>&1; then
+            echo "ERROR: Diawi NO devolvió JSON válido:"
             cat diawi_response.json
             exit 1
           fi
@@ -63,7 +63,7 @@ jobs:
           path: diawi_response.json
 
       ############################################################
-      # 2️⃣ ESPERAR EL LINK FINAL
+      # 2️⃣ ESPERAR A QUE DIAWI GENERE EL LINK FINAL
       ############################################################
       - name: Poll Diawi until link ready
         id: diawi_poll
@@ -72,11 +72,20 @@ jobs:
 
           for i in {1..20}
           do
-            RESULT=$(curl -s -X POST "https://upload.diawi.com/status" \
+            RESULT=$(curl -s -X POST "https://upload.diawi.com/v3/status" \
               -F "token=${{ secrets.DIAWI_TOKEN }}" \
               -F "job=${{ env.JOB_ID }}")
 
             echo "STATUS: $RESULT"
+
+            # Validar JSON
+            if ! echo "$RESULT" | jq -e . >/dev/null 2>&1; then
+              echo "⚠️ Diawi devolvió algo NO JSON:"
+              echo "$RESULT"
+              echo "Reintentando..."
+              sleep 10
+              continue
+            fi
 
             LINK=$(echo "$RESULT" | jq -r '.link // empty')
 
@@ -94,7 +103,7 @@ jobs:
           exit 1
 
       ############################################################
-      # 3️⃣ LEER VERSION Y BUILD
+      # 3️⃣ LEER VERSION Y BUILD DESDE pubspec.yaml
       ############################################################
       - name: Read version from pubspec.yaml
         id: version_reader
@@ -105,17 +114,18 @@ jobs:
 
           echo "APK_VERSION=$VERSION" >> $GITHUB_ENV
           echo "APK_BUILD=$BUILD" >> $GITHUB_ENV
+
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "build=$BUILD" >> $GITHUB_OUTPUT
 
       ############################################################
-      # 4️⃣ GUARDAR EN TU API
+      # 4️⃣ GUARDAR EN TU API REMOTA
       ############################################################
       - name: Save metadata to API
         run: |
           echo "Guardando registro en tu API..."
 
-          curl -X POST "${{ secrets.API_URL }}/versions" \
+          curl -X POST "${{ secrets.API_URL }}/api/versions" \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${{ secrets.API_KEY }}" \
             -d "{
