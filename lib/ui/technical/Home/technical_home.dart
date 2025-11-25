@@ -218,21 +218,32 @@ class _MainButton extends StatelessWidget {
             ),
           ],
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: screenWidth * 0.1, color: Colors.white),
-            SizedBox(height: screenHeight * 0.008),
-            Text(
-              label,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: screenWidth * 0.042,
+        child: ClipRect(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(icon, size: 32, color: Colors.white),
+                  const SizedBox(height: 4),
+                  Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -342,26 +353,29 @@ class _RecentTasksSection extends StatelessWidget {
       padding: EdgeInsets.all(screenWidth * 0.04), // Responsive padding
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             children: [
               Icon(
                 Icons.schedule,
                 color: Colors.blue[700],
-                size: screenWidth * 0.07,
+                size: screenWidth * 0.06,
               ),
               SizedBox(width: screenWidth * 0.02),
-              Text(
-                "Tareas recientes",
-                style: TextStyle(
-                  fontSize: screenWidth * 0.052,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue[800],
+              Flexible(
+                child: Text(
+                  "Tareas recientes",
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.045,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue[800],
+                  ),
                 ),
               ),
             ],
           ),
-          SizedBox(height: screenHeight * 0.015),
+          SizedBox(height: screenHeight * 0.01),
           BlocBuilder<TaskBloc, TaskState>(
             builder: (context, state) {
               if (state is TaskLoading) {

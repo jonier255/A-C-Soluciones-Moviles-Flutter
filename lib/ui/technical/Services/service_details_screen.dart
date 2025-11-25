@@ -103,12 +103,14 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                       children: [
                         const Icon(Icons.info_outline, color: Colors.blue, size: 20),
                         SizedBox(width: screenWidth * 0.02),
-                        Text(
-                          'Información del Servicio',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: screenWidth * 0.038,
-                            color: Colors.blue[800],
+                        Flexible(
+                          child: Text(
+                            'Información del Servicio',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: screenWidth * 0.038,
+                              color: Colors.blue[800],
+                            ),
                           ),
                         ),
                       ],

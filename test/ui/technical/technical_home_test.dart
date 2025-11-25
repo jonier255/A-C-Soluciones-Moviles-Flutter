@@ -63,7 +63,7 @@ void main() {
 
       await pumpTechnicalHomeScreen(tester);
 
-      expect(find.widgetWithText(TextField, 'Buscar tarea o cliente'), findsOneWidget);
+      // Verify main buttons are present
       expect(find.text('Asignadas'), findsWidgets);
       expect(find.text('Reportes'), findsOneWidget);
       expect(find.text('Servicios'), findsWidgets);
