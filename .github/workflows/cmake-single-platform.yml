@@ -54,6 +54,13 @@ jobs:
           echo "Modificando applicationId según la rama..."
           if [[ "${GITHUB_REF##*/}" == "development" ]]; then
             echo "✔ Rama DEV → com.tuapp.dev"
+            - name: Debug directory structure
+            run: |
+              echo "Mostrando carpeta raíz:"
+              ls -R .
+              echo "Mostrando carpeta android:"
+              ls -R android || echo "No existe carpeta android"
+
             sed -i 's/applicationId "com.tuapp"/applicationId "com.tuapp.dev"/g' android/app/build.gradle
           else
             echo "✔ Rama MASTER → com.tuapp"
