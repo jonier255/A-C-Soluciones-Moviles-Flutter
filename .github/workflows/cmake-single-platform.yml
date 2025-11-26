@@ -32,7 +32,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     needs: test
-    # Solo se ejecuta en push (merge), NO en pull requests
+
     if: github.event_name == 'push' && (github.ref == 'refs/heads/development' || github.ref == 'refs/heads/master')
     
     steps:
@@ -46,6 +46,23 @@ jobs:
       - name: Flutter pub get
         run: flutter pub get
 
+      ############################################################
+      # 🔥 CAMBIAR DINÁMICAMENTE EL applicationId
+      ############################################################
+      - name: Set dynamic applicationId (dev vs prod)
+        run: |
+          echo "Modificando applicationId según la rama..."
+          if [[ "${GITHUB_REF##*/}" == "development" ]]; then
+            echo "✔ Rama DEV → com.tuapp.dev"
+            sed -i 's/applicationId "com.tuapp"/applicationId "com.tuapp.dev"/g' android/app/build.gradle
+          else
+            echo "✔ Rama MASTER → com.tuapp"
+            sed -i 's/applicationId "com.tuapp.dev"/applicationId "com.tuapp"/g' android/app/build.gradle
+          fi
+
+      ############################################################
+      # BUILD APK
+      ############################################################
       - name: Build APK
         run: flutter build apk --release
 
@@ -103,7 +120,7 @@ jobs:
           done
           echo "ERROR: Diawi nunca devolvió link"
           exit 1
-          
+      
       ############################################################
       # 3️⃣ OBTENER VERSION, BUILD Y TAMAÑO DEL APK
       ############################################################
@@ -126,7 +143,7 @@ jobs:
           echo "APK_SIZE=$FILE_SIZE" >> $GITHUB_ENV
           echo "size=$FILE_SIZE" >> $GITHUB_OUTPUT
           echo "📦 Tamaño del APK: $FILE_SIZE bytes"
-          
+
       ############################################################
       # 4️⃣ ENVIAR A TU API
       ############################################################
@@ -137,29 +154,21 @@ jobs:
           CLEAN_URL="${CLEAN_URL%/}"
           URL="$CLEAN_URL/api/versiones"
           
-          # Construir JSON con jq para evitar problemas de escape
           PAYLOAD=$(jq -n \
             --arg version "${{ env.APK_VERSION }}" \
             --arg build "${{ env.APK_BUILD }}" \
             --arg link "${{ steps.diawi_poll.outputs.link }}" \
             --arg size "${{ env.APK_SIZE }}" \
             '{version: $version, build: $build, diawi_link: $link, fileSize: ($size | tonumber)}')
-
-          echo "➡️ Enviando a: $URL"
-          echo "$PAYLOAD"
-
+          
           HTTP_RESPONSE=$(curl -s -w "HTTP_STATUS:%{http_code}" -o api_response.json \
             -X POST "$URL" \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${{ secrets.API_KEY }}" \
             -d "$PAYLOAD")
-
+          
           HTTP_STATUS=$(echo "$HTTP_RESPONSE" | sed -e 's/.*HTTP_STATUS://')
-
-          echo "📌 Código HTTP: $HTTP_STATUS"
-          echo "📌 Respuesta:"
           cat api_response.json
-
           if [ $HTTP_STATUS -lt 200 ] || [ $HTTP_STATUS -ge 300 ]; then
             echo "❌ ERROR: La API respondió con un error"
             exit 1
