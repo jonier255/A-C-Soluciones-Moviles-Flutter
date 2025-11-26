@@ -47,6 +47,20 @@ jobs:
         run: flutter pub get
 
       ############################################################
+      # 🔍 DEBUG: Verificar estructura de directorios
+      ############################################################
+      - name: Debug directory structure
+        run: |
+          echo "Mostrando carpeta raíz:"
+          ls -la
+          echo ""
+          echo "Mostrando carpeta android:"
+          ls -la android || echo "No existe carpeta android"
+          echo ""
+          echo "Mostrando android/app:"
+          ls -la android/app || echo "No existe carpeta android/app"
+
+      ############################################################
       # 🔥 CAMBIAR DINÁMICAMENTE EL applicationId
       ############################################################
       - name: Set dynamic applicationId (dev vs prod)
@@ -54,18 +68,16 @@ jobs:
           echo "Modificando applicationId según la rama..."
           if [[ "${GITHUB_REF##*/}" == "development" ]]; then
             echo "✔ Rama DEV → com.tuapp.dev"
-            - name: Debug directory structure
-            run: |
-              echo "Mostrando carpeta raíz:"
-              ls -R .
-              echo "Mostrando carpeta android:"
-              ls -R android || echo "No existe carpeta android"
-
             sed -i 's/applicationId "com.tuapp"/applicationId "com.tuapp.dev"/g' android/app/build.gradle
           else
             echo "✔ Rama MASTER → com.tuapp"
             sed -i 's/applicationId "com.tuapp.dev"/applicationId "com.tuapp"/g' android/app/build.gradle
           fi
+          
+      - name: Verify applicationId change
+        run: |
+          echo "Verificando cambio en build.gradle:"
+          grep "applicationId" android/app/build.gradle || echo "No se encontró applicationId"
 
       ############################################################
       # BUILD APK
@@ -180,5 +192,4 @@ jobs:
             echo "❌ ERROR: La API respondió con un error"
             exit 1
           fi
-
           echo "✔️ Registro guardado exitosamente en la API"
