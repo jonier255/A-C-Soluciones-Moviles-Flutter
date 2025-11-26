@@ -88,6 +88,19 @@ jobs:
         run: flutter build apk --release
 
       ############################################################
+      # 4️⃣ DEFINIR releaseType SEGÚN LA RAMA
+      ############################################################
+      - name: Detect release type
+        run: |
+          if [[ "${GITHUB_REF##*/}" == "development" ]]; then
+            echo "RELEASE_TYPE=dev" >> $GITHUB_ENV
+          else
+            echo "RELEASE_TYPE=prod" >> $GITHUB_ENV
+          fi
+          echo "releaseType=${RELEASE_TYPE}"
+
+
+      ############################################################
       # 1️⃣ SUBIR APK A DIAWI
       ############################################################
       - name: Upload APK to Diawi
@@ -180,7 +193,9 @@ jobs:
             --arg build "${{ env.APK_BUILD }}" \
             --arg link "${{ steps.diawi_poll.outputs.link }}" \
             --arg size "${{ env.APK_SIZE }}" \
-            '{version: $version, build: $build, diawi_link: $link, fileSize: ($size | tonumber)}')
+            --arg releaseType "${{ env.RELEASE_TYPE }}" \
+            '{version: $version, build: $build, diawi_link: $link, fileSize: ($size | tonumber), releaseType: $releaseType}')
+
           
           HTTP_RESPONSE=$(curl -s -w "HTTP_STATUS:%{http_code}" -o api_response.json \
             -X POST "$URL" \
