@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_a_c_soluciones/ui/admin/Visits/visits_screen.dart';
-import 'package:flutter_a_c_soluciones/ui/client/layout.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/login/login_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/request/request_bloc.dart';
-import 'package:flutter_a_c_soluciones/repository/services_admin/request_repository.dart';
 import 'package:flutter_a_c_soluciones/repository/report_repository.dart'; // Import new repository
+import 'package:flutter_a_c_soluciones/repository/services_admin/request_repository.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/Home/admin_home.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/Visits/visits_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/changePassword/forget.dart';
+import 'package:flutter_a_c_soluciones/ui/changePassword/verify_code.dart';
+import 'package:flutter_a_c_soluciones/ui/client/layout.dart';
 import 'package:flutter_a_c_soluciones/ui/login.dart';
 import 'package:flutter_a_c_soluciones/ui/registrarse.dart';
 import 'package:flutter_a_c_soluciones/ui/splash.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/Home/technical_home.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/Reports/view_report_list_page_tc.dart'; // Import new screen
-import 'package:flutter_a_c_soluciones/ui/technical/Visits/assigned_visits_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/Services/services_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/Visits/assigned_visits_screen.dart';
 import 'package:flutter_a_c_soluciones/ui/technical/Visits/completed_visits_screen.dart';
-import 'package:flutter_a_c_soluciones/ui/changePassword/forget.dart';
-import 'package:flutter_a_c_soluciones/ui/admin/Home/admin_home.dart';
-import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
-import 'package:flutter_a_c_soluciones/ui/changePassword/verifyCode.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 void main() {
@@ -51,11 +51,11 @@ class MyApp extends StatelessWidget {
             "/login": (context) => const LoginScreen(),
             "/register": (context) => const RegisterScreen(),
             '/forget': (context) => const ForgetScreen(),
-            '/verify': (context) => VerifyCodeScreen(),
+            '/verify': (context) => const VerifyCodeScreen(),
             '/admin_home': (context) => const AdminHomeScreen(),
-            '/request': (context) => RequestScreen(),
+            '/request': (context) => const RequestScreen(),
             '/technical_home': (context) => const TechnicalHomeScreen(),
-            '/visits': (context) => VisitsScreen(),
+            '/visits': (context) => const VisitsScreen(),
             '/technical_reports': (context) => const ViewReportListPageTc(), // Add new route
             '/technical_assigned_visits': (context) => const AssignedVisitsScreen(),
             '/technical_services': (context) => const ServicesScreen(),

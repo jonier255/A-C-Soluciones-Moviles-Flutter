@@ -29,7 +29,7 @@ class ForgetScreen extends StatelessWidget {
                         boxShadow: [
                           BoxShadow(
                             color: const Color.fromARGB(255, 39, 128, 192)
-                                .withOpacity(0.9),
+                                .withValues(alpha: 0.9),
                             spreadRadius: 2,
                             blurRadius: 16,
                             offset: const Offset(0, 4),

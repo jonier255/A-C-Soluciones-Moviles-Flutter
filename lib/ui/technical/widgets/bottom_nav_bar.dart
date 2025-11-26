@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_a_c_soluciones/ui/technical/Profile/accountTechnical.dart';
+import 'package:flutter_a_c_soluciones/ui/technical/Profile/account_technical.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key});

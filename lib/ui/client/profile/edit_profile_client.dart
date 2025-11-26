@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/client/edit_profile_client_bloc.dart';
 import 'package:flutter_a_c_soluciones/model/client/client_profile_model.dart';
 import 'package:flutter_a_c_soluciones/repository/secure_storage_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EditProfileClientScreen extends StatefulWidget {
   const EditProfileClientScreen({super.key});
@@ -36,7 +36,6 @@ class _EditProfileClientScreenState extends State<EditProfileClientScreen> {
   Future<void> _loadInitialDataFromLogin() async {
     // Cargar datos iniciales del login desde SecureStorage
     final storage = SecureStorageService();
-    final clienteIdStr = await storage.getUserData('cliente_id');
     final userName = await storage.getUserData('user_name');
     final userEmail = await storage.getUserData('user_email');
     
@@ -160,7 +159,7 @@ class _EditProfileClientScreenState extends State<EditProfileClientScreen> {
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
+                                color: Colors.black.withValues(alpha: 0.1),
                                 blurRadius: 10,
                                 offset: const Offset(0, 4),
                               ),
@@ -199,7 +198,7 @@ class _EditProfileClientScreenState extends State<EditProfileClientScreen> {
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
+                                color: Colors.black.withValues(alpha: 0.05),
                                 blurRadius: 10,
                                 offset: const Offset(0, 4),
                               ),

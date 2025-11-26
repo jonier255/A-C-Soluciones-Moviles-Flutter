@@ -1,11 +1,70 @@
 include: package:flutter_lints/flutter.yaml
 
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/*.gen.dart"
+  errors:
+    # Hacer estos errores críticos
+    avoid_print: error
+    avoid_web_libraries_in_flutter: error
+  language:
+    # Habilitar null safety estricto
+    strict-casts: false
+    strict-inference: false
+    strict-raw-types: true
+
 linter:
   rules:
-    prefer_const_constructors: false
-    prefer_final_fields: false
-    use_key_in_widget_constructors: true
-    prefer_const_literals_to_create_immutables: false
+    # ===== PERFORMANCE (Esenciales) =====
+    prefer_const_constructors: true
+    prefer_final_fields: true
+    prefer_const_literals_to_create_immutables: true
     prefer_const_constructors_in_immutables: true
+    
+    # ===== CODE QUALITY (Core) =====
+    use_key_in_widget_constructors: true
     avoid_print: true
-    avoid_unnecessary_containers: true 
+    avoid_unnecessary_containers: true
+    unnecessary_new: true
+    unnecessary_this: true
+    prefer_collection_literals: true
+    unnecessary_parenthesis: true
+    use_super_parameters: true
+    prefer_is_empty: true
+    prefer_is_not_empty: true
+    
+    # ===== WIDGETS (Optimizaciones simples) =====
+    sized_box_for_whitespace: true
+    use_colored_box: true
+    
+    # ===== BLOC ESPECÍFICO =====
+    always_declare_return_types: true
+    prefer_final_in_for_each: true
+    
+    # ===== NULL SAFETY =====
+    prefer_null_aware_operators: true
+    avoid_returning_null_for_void: true
+    
+    # ===== CONTROL FLOW =====
+    avoid_bool_literals_in_conditional_expressions: true
+    prefer_conditional_assignment: true
+    prefer_if_null_operators: true
+    curly_braces_in_flow_control_structures: true
+    
+    # ===== STYLE =====
+    directives_ordering: true
+    
+    # ===== ERROR HANDLING =====
+    use_build_context_synchronously: true
+    
+    # ===== IMPORTS =====
+    avoid_relative_lib_imports: true
+    
+    # ===== CRÍTICOS (Memory leaks y async) =====
+    unawaited_futures: true
+    avoid_void_async: true
+    cancel_subscriptions: true
+    close_sinks: true
+    depend_on_referenced_packages: true

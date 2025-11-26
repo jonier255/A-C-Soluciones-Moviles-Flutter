@@ -1,8 +1,8 @@
 class RegisterRequestModel {
   String? nombre;
   String? apellido;
-  String? numero_de_cedula;
-  String? correo_electronico;
+  String? numeroDeCedula;
+  String? correoElectronico;
   String? telefono;
   String? direccion;
   String? contrasenia;
@@ -10,8 +10,8 @@ class RegisterRequestModel {
   RegisterRequestModel({
     this.nombre,
     this.apellido,
-    this.numero_de_cedula,
-    this.correo_electronico,
+    this.numeroDeCedula,
+    this.correoElectronico,
     this.telefono,
     this.direccion,
     this.contrasenia,
@@ -21,8 +21,8 @@ class RegisterRequestModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['nombre'] = nombre;
     data['apellido'] = apellido;
-    data['numero_de_cedula'] = numero_de_cedula;
-    data['correo_electronico'] = correo_electronico;
+    data['numero_de_cedula'] = numeroDeCedula;
+    data['correo_electronico'] = correoElectronico;
     data['telefono'] = telefono;
     data['direccion'] = direccion;
     data['contrasenia'] = contrasenia;

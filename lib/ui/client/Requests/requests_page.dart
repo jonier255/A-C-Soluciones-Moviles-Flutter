@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/model/client/solicitud_model.dart';
 import 'package:flutter_a_c_soluciones/repository/client/solicitud_api_solicitud.dart';
+import 'package:intl/intl.dart';
 
 class RequestsContent extends StatefulWidget {
   const RequestsContent({super.key});
@@ -27,9 +27,7 @@ class _RequestsContentState extends State<RequestsContent> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
-    final screenHeight = mediaQuery.size.height;
     final isTablet = screenWidth > 600;
-    final isDesktop = screenWidth > 1024;
 
     return Column(
       children: [
@@ -41,17 +39,17 @@ class _RequestsContentState extends State<RequestsContent> {
             horizontal: isTablet ? 32 : 20,
           ),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                const Color(0xFF56AFEC),
-                const Color(0xFF2E91D8),
+                Color(0xFF56AFEC),
+                Color(0xFF2E91D8),
               ],
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -152,7 +150,7 @@ class _RequestsContentState extends State<RequestsContent> {
                         width: isTablet ? 150 : 120,
                         height: isTablet ? 150 : 120,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                           shape: BoxShape.circle,
                         ),
                         padding: const EdgeInsets.all(8),
@@ -243,7 +241,7 @@ class _RequestsContentState extends State<RequestsContent> {
           ),
         ),
         Expanded(
-          child: Container(
+          child: ColoredBox(
             color: const Color(0xFFF5F7FA),
             child: FutureBuilder<List<Solicitud>>(
               future: _futureSolicitudes,
@@ -266,7 +264,7 @@ class _RequestsContentState extends State<RequestsContent> {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
+                            color: Colors.black.withValues(alpha: 0.08),
                             blurRadius: 20,
                             offset: const Offset(0, 4),
                           ),
@@ -303,7 +301,7 @@ class _RequestsContentState extends State<RequestsContent> {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
+                            color: Colors.black.withValues(alpha: 0.08),
                             blurRadius: 20,
                             offset: const Offset(0, 4),
                           ),
@@ -368,7 +366,7 @@ class _RequestsContentState extends State<RequestsContent> {
                           color: Colors.white,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
+                              color: Colors.black.withValues(alpha: 0.05),
                               blurRadius: 10,
                               offset: const Offset(0, -2),
                             ),
@@ -413,7 +411,7 @@ class _RequestsContentState extends State<RequestsContent> {
                                 vertical: isTablet ? 12 : 8,
                               ),
                               decoration: BoxDecoration(
-                                color: const Color(0xFF2E91D8).withOpacity(0.1),
+                                color: const Color(0xFF2E91D8).withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
@@ -532,7 +530,7 @@ class _RequestsContentState extends State<RequestsContent> {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 20,
               offset: const Offset(0, 4),
             ),
@@ -543,7 +541,7 @@ class _RequestsContentState extends State<RequestsContent> {
             Container(
               padding: EdgeInsets.all(isTablet ? 16 : 12),
               decoration: BoxDecoration(
-                color: estadoColor.withOpacity(0.1),
+                color: estadoColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Icon(
@@ -597,7 +595,7 @@ class _RequestsContentState extends State<RequestsContent> {
                 vertical: isTablet ? 10 : 8,
               ),
               decoration: BoxDecoration(
-                color: estadoColor.withOpacity(0.1),
+                color: estadoColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(

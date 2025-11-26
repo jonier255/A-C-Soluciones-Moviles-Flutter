@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/Home/admin_home.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../bloc/request/request_bloc.dart';
-import '../../../repository/services_admin/request_repository.dart';
 import '../../../bloc/visits/visits_bloc.dart';
 import '../../../bloc/visits/visits_event.dart';
 import '../../../bloc/visits/visits_state.dart';
+import '../../../repository/services_admin/request_repository.dart';
 
 class VisitsScreen extends StatefulWidget {
+  const VisitsScreen({super.key});
+
   @override
-  _VisitsScreenState createState() => _VisitsScreenState();
+  VisitsScreenState createState() => VisitsScreenState();
 }
 
-class _VisitsScreenState extends State<VisitsScreen> {
+class VisitsScreenState extends State<VisitsScreen> {
   int _currentPage = 1; // página actual
   final int _visitsPerPage = 4; // cantidad de cards por página
 
@@ -51,7 +54,7 @@ class _VisitsScreenState extends State<VisitsScreen> {
             clipper: WaveClipper(),
             child: Container(
               height: topCurveHeight,
-              color: Color.fromARGB(255, 46, 145, 216),
+              color: const Color.fromARGB(255, 46, 145, 216),
             ),
           ),
           // Botón de retroceso y título
@@ -126,7 +129,7 @@ class _VisitsScreenState extends State<VisitsScreen> {
                                   borderRadius: BorderRadius.circular(30),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.blue.withOpacity(0.9),
+                                      color: Colors.blue.withValues(alpha: 0.9),
                                       spreadRadius: 4,
                                       blurRadius: 8,
                                       offset: const Offset(0, 3),
@@ -163,8 +166,8 @@ class _VisitsScreenState extends State<VisitsScreen> {
                                                         boxShadow: [
                                                           BoxShadow(
                                                             color: Colors.black
-                                                                .withOpacity(
-                                                                    0.3),
+                                                                .withValues(
+                                                                    alpha: 0.3),
                                                             spreadRadius: 2,
                                                             blurRadius: 5,
                                                             offset:
@@ -406,7 +409,7 @@ class _BottomNavBar extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => BlocProvider(
                 create: (context) => RequestBloc(RequestRepository()),
-                child: RequestScreen(),
+                child: const RequestScreen(),
               ),
             ),
           );

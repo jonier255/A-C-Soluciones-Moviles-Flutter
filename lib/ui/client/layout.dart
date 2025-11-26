@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_a_c_soluciones/bloc/login/login_state.dart';
-import 'package:flutter_a_c_soluciones/ui/client/Drawer/drawerClient.dart';
-import 'package:flutter_a_c_soluciones/ui/client/Header/client_header.dart';
-import 'package:flutter_a_c_soluciones/ui/client/Home/homeClient.dart';
-import 'package:flutter_a_c_soluciones/ui/client/services/services_page.dart';
-import 'package:flutter_a_c_soluciones/ui/client/Requests/requests_page.dart';
-import 'package:flutter_a_c_soluciones/ui/client/Chat/chat_page.dart';
-import 'package:flutter_a_c_soluciones/ui/client/profile/edit_profile_client.dart';
-import '../../../../repository/secure_storage_service.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_a_c_soluciones/bloc/login/login_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/client/edit_profile_client_bloc.dart';
+import 'package:flutter_a_c_soluciones/bloc/login/login_bloc.dart';
+import 'package:flutter_a_c_soluciones/bloc/login/login_state.dart';
 import 'package:flutter_a_c_soluciones/repository/client/client_profile_repository.dart';
+import 'package:flutter_a_c_soluciones/ui/client/Chat/chat_page.dart';
+import 'package:flutter_a_c_soluciones/ui/client/Drawer/drawer_client.dart';
+import 'package:flutter_a_c_soluciones/ui/client/Header/client_header.dart';
+import 'package:flutter_a_c_soluciones/ui/client/Home/home_client.dart';
+import 'package:flutter_a_c_soluciones/ui/client/Requests/requests_page.dart';
+import 'package:flutter_a_c_soluciones/ui/client/profile/edit_profile_client.dart';
+import 'package:flutter_a_c_soluciones/ui/client/services/services_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../repository/secure_storage_service.dart';
 
 class ClientLayout extends StatefulWidget {
   const ClientLayout({super.key});
@@ -95,7 +96,6 @@ class _ClientLayoutState extends State<ClientLayout> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
-    final isTablet = screenWidth > 600;
     final isDesktop = screenWidth > 1024;
 
     return BlocBuilder<LoginBloc, LoginState>(
@@ -145,7 +145,7 @@ class _ClientLayoutState extends State<ClientLayout> {
                 Expanded(
                   child: Container(
                     constraints: isDesktop && screenWidth > 1200
-                        ? BoxConstraints(maxWidth: 1200)
+                        ? const BoxConstraints(maxWidth: 1200)
                         : null,
                     margin: isDesktop && screenWidth > 1200
                         ? EdgeInsets.symmetric(

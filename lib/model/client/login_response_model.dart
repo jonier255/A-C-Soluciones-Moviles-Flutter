@@ -26,13 +26,13 @@ class Cliente {
   final int id;
   final String rol;
   final String nombre;
-  final String correo_electronico;
+  final String correoElectronico;
 
   Cliente({
     required this.id,
     required this.rol,
     required this.nombre,
-    required this.correo_electronico,
+    required this.correoElectronico,
   });
 
   factory Cliente.fromJson(Map<String, dynamic> json) {
@@ -40,7 +40,7 @@ class Cliente {
       id: json['id'] as int,
       rol: json['rol'] as String,
       nombre: json['nombre'] as String,
-      correo_electronico: json['correo_electronico'] as String,
+      correoElectronico: json['correo_electronico'] as String,
     );
   }
 
@@ -49,7 +49,7 @@ class Cliente {
       'id': id,
       'rol': rol,
       'nombre': nombre,
-      'email': correo_electronico,
+      'email': correoElectronico,
     };
   }
 }

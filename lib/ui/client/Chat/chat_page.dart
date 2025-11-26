@@ -59,11 +59,9 @@ class _ChatContentState extends State<ChatContent> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
-    final screenHeight = mediaQuery.size.height;
     final isTablet = screenWidth > 600;
-    final isDesktop = screenWidth > 1024;
 
-    return Container(
+    return ColoredBox(
       color: const Color(0xFFF5F7FA),
       child: Column(
         children: [
@@ -77,7 +75,7 @@ class _ChatContentState extends State<ChatContent> {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
+                  color: Colors.black.withValues(alpha: 0.08),
                   blurRadius: 10,
                   offset: const Offset(0, 2),
                 ),
@@ -156,7 +154,7 @@ class _ChatContentState extends State<ChatContent> {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
+                            color: Colors.black.withValues(alpha: 0.08),
                             blurRadius: 20,
                             offset: const Offset(0, 4),
                           ),
@@ -191,7 +189,7 @@ class _ChatContentState extends State<ChatContent> {
                       ),
                     ),
                   )
-                : Container(
+                : ColoredBox(
                     color: const Color(0xFFF5F7FA),
                     child: ListView.builder(
                       controller: _scrollController,
@@ -234,7 +232,7 @@ class _ChatContentState extends State<ChatContent> {
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.08),
+                                    color: Colors.black.withValues(alpha: 0.08),
                                     blurRadius: 8,
                                     offset: const Offset(0, 2),
                                   ),
@@ -266,7 +264,7 @@ class _ChatContentState extends State<ChatContent> {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
+                  color: Colors.black.withValues(alpha: 0.08),
                   blurRadius: 10,
                   offset: const Offset(0, -2),
                 ),
@@ -322,7 +320,7 @@ class _ChatContentState extends State<ChatContent> {
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFF2E91D8).withOpacity(0.3),
+                              color: const Color(0xFF2E91D8).withValues(alpha: 0.3),
                               blurRadius: 8,
                               offset: const Offset(0, 4),
                             ),

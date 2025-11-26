@@ -1,8 +1,9 @@
-import 'package:flutter_a_c_soluciones/repository/secure_storage_service.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+
 import 'package:flutter_a_c_soluciones/model/login_request_model.dart';
 import 'package:flutter_a_c_soluciones/model/login_response_model.dart';
+import 'package:flutter_a_c_soluciones/repository/secure_storage_service.dart';
+import 'package:http/http.dart' as http;
 
 class APIService {
   static var client = http.Client();
@@ -43,14 +44,15 @@ class APIService {
       }
 
       final candidates = [
-        responseBody['administrador'],
+        responseBody['administrador' ],
         responseBody['admin'],
         responseBody['user'],
         responseBody['usuario'],
         responseBody['data'],
+        responseBody['tecnico' ]
       ];
 
-      for (var c in candidates) {
+      for (final c in candidates) {
         final found = tryExtractId(c);
         if (found != null) {
           adminId = found;
