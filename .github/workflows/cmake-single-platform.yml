@@ -68,10 +68,12 @@ jobs:
           echo "Modificando applicationId según la rama..."
           if [[ "${GITHUB_REF##*/}" == "development" ]]; then
             echo "✔ Rama DEV → com.tuapp.dev"
-            sed -i 's/applicationId "com.tuapp"/applicationId "com.tuapp.dev"/g' android/app/build.gradle
+            sed -i 's/applicationId "com.tuapp"/applicationId "com.tuapp.dev"/g' android/app/build.gradle.kts
+
           else
             echo "✔ Rama MASTER → com.tuapp"
-            sed -i 's/applicationId "com.tuapp.dev"/applicationId "com.tuapp"/g' android/app/build.gradle
+            sed -i 's/applicationId "com.tuapp.dev"/applicationId "com.tuapp"/g' android/app/build.gradle.kts
+
           fi
           
       - name: Verify applicationId change
