@@ -7,7 +7,7 @@ on:
     branches: [development, master]
 
 jobs:
-  # Job 1: Tests y análisis (siempre se ejecuta)
+  # Job 1: Tests y análisis
   test:
     runs-on: ubuntu-latest
     
@@ -28,7 +28,7 @@ jobs:
       - name: Flutter test (no fail)
         run: flutter test || true
 
-  # Job 2: Build y deploy (solo en push a development o master)
+  # Job 2: Build y deploy
   build-and-deploy:
     runs-on: ubuntu-latest
     needs: test
@@ -46,9 +46,7 @@ jobs:
       - name: Flutter pub get
         run: flutter pub get
 
-      ############################################################
-      # 🔍 DEBUG: Verificar estructura de directorios
-      ############################################################
+      # DEBUG: Verificar estructura de directorios
       - name: Debug directory structure
         run: |
           echo "Mostrando carpeta raíz:"
@@ -60,9 +58,7 @@ jobs:
           echo "Mostrando android/app:"
           ls -la android/app || echo "No existe carpeta android/app"
 
-      ############################################################
-      # 🔥 CAMBIAR DINÁMICAMENTE EL applicationId
-      ############################################################
+      # cambiar dinamicamente el aplictionId para sacar la version beta y la estable
       - name: Set dynamic applicationId (dev vs prod)
         run: |
           echo "Modificando applicationId según la rama..."
@@ -81,15 +77,11 @@ jobs:
           echo "Verificando cambio en build.gradle:"
           grep "applicationId" android/app/build.gradle || echo "No se encontró applicationId"
 
-      ############################################################
       # BUILD APK
-      ############################################################
       - name: Build APK
         run: flutter build apk --release
 
-      ############################################################
-      # 1️⃣ SUBIR APK A DIAWI
-      ############################################################
+      # 1️ SUBIR APK A DIAWI
       - name: Upload APK to Diawi
         id: diawi_upload
         run: |
@@ -114,9 +106,7 @@ jobs:
           name: diawi-upload-response
           path: diawi_response.json
 
-      ############################################################
-      # 2️⃣ POLL A DIAWI PARA ESPERAR EL ENLACE FINAL
-      ############################################################
+      # 2 POLL A DIAWI PARA ESPERAR EL ENLACE FINAL
       - name: Poll Diawi until link ready
         id: diawi_poll
         run: |
@@ -126,7 +116,7 @@ jobs:
             RESULT=$(curl -s "https://upload.diawi.com/status?token=${{ secrets.DIAWI_TOKEN }}&job=${{ env.JOB_ID }}")
             echo "STATUS: $RESULT"
             if ! echo "$RESULT" | jq -e . >/dev/null 2>&1; then
-              echo "⚠️ Diawi NO devolvió JSON"
+              echo "Diawi NO devolvió JSON"
               sleep 10
               continue
             fi
@@ -141,10 +131,8 @@ jobs:
           done
           echo "ERROR: Diawi nunca devolvió link"
           exit 1
-      
-      ############################################################
-      # 3️⃣ OBTENER VERSION, BUILD Y TAMAÑO DEL APK
-      ############################################################
+    
+      # 3️ OBTENER VERSION, BUILD Y TAMAÑO DEL APK
       - name: Read version from pubspec.yaml
         id: version_reader
         run: |
@@ -163,11 +151,9 @@ jobs:
           FILE_SIZE=$(stat -c%s "$APK_PATH")
           echo "APK_SIZE=$FILE_SIZE" >> $GITHUB_ENV
           echo "size=$FILE_SIZE" >> $GITHUB_OUTPUT
-          echo "📦 Tamaño del APK: $FILE_SIZE bytes"
+          echo "Tamaño del APK: $FILE_SIZE bytes"
           
-      ############################################################
-      # 4️⃣ DEFINIR releaseType SEGÚN LA RAMA
-      ############################################################
+      # 4️ DEFINIR releaseType SEGÚN LA RAMA
       - name: Detect release type
         run: |
           if [[ "${GITHUB_REF##*/}" == "development" ]]; then
@@ -176,10 +162,8 @@ jobs:
             echo "RELEASE_TYPE=prod" >> $GITHUB_ENV
           fi
           echo "releaseType=${RELEASE_TYPE}"
-
-      ############################################################
-      # 4️⃣ ENVIAR A TU API
-      ############################################################
+          
+      # 5 ENVIAR A TU API
       - name: Save metadata to API
         run: |
           echo "Guardando registro en tu API..."
@@ -205,7 +189,7 @@ jobs:
           HTTP_STATUS=$(echo "$HTTP_RESPONSE" | sed -e 's/.*HTTP_STATUS://')
           cat api_response.json
           if [ $HTTP_STATUS -lt 200 ] || [ $HTTP_STATUS -ge 300 ]; then
-            echo "❌ ERROR: La API respondió con un error"
+            echo "ERROR: La API respondió con un error"
             exit 1
           fi
-          echo "✔️ Registro guardado exitosamente en la API"
+          echo "Registro guardado exitosamente en la API"
