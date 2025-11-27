@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_a_c_soluciones/bloc/tecnicos/tecnicos_bloc.dart';
+import 'package:flutter_a_c_soluciones/repository/services_admin/tecnicos_repository.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/GestionTecnicos/create_technical_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'admin_home_constants.dart';
 
 /// Sección con botones principales de acción (Técnico, Cliente)
@@ -11,7 +15,7 @@ class MainButtonsSection extends StatelessWidget {
     
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: AdminHomeTheme.horizontalPadding(sw)),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Expanded(
@@ -19,15 +23,37 @@ class MainButtonsSection extends StatelessWidget {
               icon: Icons.engineering_rounded,
               label: "Técnico",
               gradient: AdminHomeTheme.technicoGradient,
+               onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider(
+                      create: (context) => TecnicosBloc(tecnicosRepository: TecnicosRepository()),
+                      child: const CreateTechnicalScreen(),
+                    ),
+                  ),
+                );
+              },
               
             ),
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Expanded(
             child: MainButton(
               icon: Icons.person_rounded,
               label: "Cliente",
               gradient: AdminHomeTheme.clienteGradient,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider(
+                      create: (context) => TecnicosBloc(tecnicosRepository: TecnicosRepository()),
+                      child: const CreateTechnicalScreen(),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ],
@@ -41,12 +67,15 @@ class MainButton extends StatelessWidget {
   final IconData icon;
   final String label;
   final LinearGradient gradient;
+  final VoidCallback onTap;
+  
 
   const MainButton({
     super.key,
     required this.icon,
     required this.label,
     required this.gradient,
+    required this.onTap,
   });
 
   @override
@@ -58,7 +87,7 @@ class MainButton extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: () {},
+        onTap: onTap,
         borderRadius: BorderRadius.circular(AdminHomeTheme.mainButtonRadius),
         child: Container(
           height: AdminHomeTheme.mainButtonHeight(sh),

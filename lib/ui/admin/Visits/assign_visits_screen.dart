@@ -3,8 +3,8 @@ import 'package:flutter_a_c_soluciones/bloc/administrador/request/request_bloc.d
 import 'package:flutter_a_c_soluciones/bloc/administrador/request/request_event.dart';
 import 'package:flutter_a_c_soluciones/bloc/administrador/request/request_state.dart';
 import 'package:flutter_a_c_soluciones/bloc/administrador/servicios/servicios_bloc.dart';
-import 'package:flutter_a_c_soluciones/bloc/tecnicos/tecnicos_bloc.dart';
 import 'package:flutter_a_c_soluciones/bloc/administrador/visits/assign_visits/assign_visits_bloc.dart';
+import 'package:flutter_a_c_soluciones/bloc/tecnicos/tecnicos_bloc.dart';
 import 'package:flutter_a_c_soluciones/model/administrador/visits_model.dart';
 import 'package:flutter_a_c_soluciones/repository/service_repository.dart';
 import 'package:flutter_a_c_soluciones/repository/services_admin/request_repository.dart';
