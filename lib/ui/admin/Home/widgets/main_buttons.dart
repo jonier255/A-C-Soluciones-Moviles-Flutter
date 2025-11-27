@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_a_c_soluciones/bloc/tecnicos/tecnicos_bloc.dart';
 import 'package:flutter_a_c_soluciones/repository/services_admin/tecnicos_repository.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/GestionTecnicos/create_technical_screen.dart';
+import 'package:flutter_a_c_soluciones/ui/admin/GestionTecnicos/seleccion_tecnico_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'admin_home_constants.dart';
 
@@ -21,27 +22,23 @@ class MainButtonsSection extends StatelessWidget {
           Expanded(
             child: MainButton(
               icon: Icons.engineering_rounded,
-              label: "Técnico",
+              label: "Gestión de técnicos",
               gradient: AdminHomeTheme.technicoGradient,
-               onTap: () {
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => BlocProvider(
-                      create: (context) => TecnicosBloc(tecnicosRepository: TecnicosRepository()),
-                      child: const CreateTechnicalScreen(),
-                    ),
+                    builder: (context) => const TecnicoMenuScreen(),
                   ),
                 );
               },
-              
             ),
           ),
           const SizedBox(width: 16),
           Expanded(
             child: MainButton(
               icon: Icons.person_rounded,
-              label: "Cliente",
+              label: "Gestión de clientes",
               gradient: AdminHomeTheme.clienteGradient,
               onTap: () {
                 Navigator.push(
