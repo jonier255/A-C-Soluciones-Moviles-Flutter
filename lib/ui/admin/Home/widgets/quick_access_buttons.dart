@@ -5,7 +5,7 @@ import 'package:flutter_a_c_soluciones/ui/admin/Visits/admin_menu_visits.dart';
 import 'package:flutter_a_c_soluciones/ui/admin/request/request_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../bloc/request/request_bloc.dart';
+import '../../../../bloc/administrador/request/request_bloc.dart';
 import '../../../../repository/services_admin/request_repository.dart';
 import 'admin_home_constants.dart';
 
@@ -24,7 +24,7 @@ class QuickAccessSection extends StatelessWidget {
           Expanded(
             child: QuickButton(
               icon: Icons.build_rounded,
-              label: "Servicios",
+              label: "Gestión de servicios",
               onTap: () {
                 Navigator.push(
                   context,
@@ -39,7 +39,7 @@ class QuickAccessSection extends StatelessWidget {
           Expanded(
             child: QuickButton(
               icon: Icons.visibility_rounded,
-              label: "Visitas",
+              label: "Gestión de visitas",
               onTap: () {
                 Navigator.push(
                   context,
@@ -54,7 +54,7 @@ class QuickAccessSection extends StatelessWidget {
           Expanded(
             child: QuickButton(
               icon: Icons.admin_panel_settings_rounded,
-              label: "Admin",
+              label: "Gestión de administradores",
               onTap: () {
                 Navigator.push(
                   context,
@@ -69,7 +69,7 @@ class QuickAccessSection extends StatelessWidget {
           Expanded(
             child: QuickButton(
               icon: Icons.assignment_rounded,
-              label: "Solicitudes",
+              label: "Lista de solicitudes",
               onTap: () {
                 Navigator.push(
                   context,

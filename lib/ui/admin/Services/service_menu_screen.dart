@@ -19,8 +19,9 @@ class ServiceMenuScreen extends StatelessWidget {
     final sw = MediaQuery.of(context).size.width;   
     final sh = MediaQuery.of(context).size.height;  
     
-    return Scaffold(  
-      backgroundColor: ServiceMenuTheme.backgroundColor, 
+    return Scaffold(
+      backgroundColor: ServiceMenuTheme.backgroundColor,
+      bottomNavigationBar: const AdminBottomNavBar(),
       body: SafeArea(  
         child: Column(  
           children: [
@@ -65,7 +66,6 @@ class ServiceMenuScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const AdminBottomNavBar(),
     );
   }
 

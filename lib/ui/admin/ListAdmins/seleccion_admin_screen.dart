@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_a_c_soluciones/bloc/listAdmins/admins_bloc.dart';
+import 'package:flutter_a_c_soluciones/bloc/administrador/listAdmins/admins_bloc.dart';
 import 'package:flutter_a_c_soluciones/repository/services_admin/service_list_admin.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -105,7 +105,6 @@ class AdminMenuScreen extends StatelessWidget {
         icon: Icons.person_add_rounded,
         gradient: AdminMenuTheme.createAdminGradient,
         onTap: () {
-          // TODO: Implementar navegación a pantalla de crear administrador
         },
       ),
     );
