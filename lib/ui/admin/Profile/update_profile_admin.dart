@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_a_c_soluciones/bloc/editProfileAdmin/edit_profile_admin_bloc.dart';
+import 'package:flutter_a_c_soluciones/bloc/administrador/editProfileAdmin/edit_profile_admin_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'widgets/profile_avatar.dart';

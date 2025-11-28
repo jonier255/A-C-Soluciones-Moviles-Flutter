@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_a_c_soluciones/ui/common_widgets/widgets.dart';
 import 'widgets/service_menu_constants.dart';
 
 
@@ -132,166 +133,53 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
 
   
   Widget _buildNombreField(double sw) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),  
-        boxShadow: [
-          BoxShadow(
-            color: ServiceMenuTheme.primaryPurple.withAlpha(20),  
-            blurRadius: 12,
-            offset: const Offset(0, 4),  
-          ),
-        ],
-      ),
-      child: TextFormField(
-        controller: _nombreController,
-        decoration: InputDecoration(
-          labelText: 'Nombre del Servicio',
-          hintText: 'Ej: Instalación eléctrica',
-          prefixIcon: const Icon(
-            Icons.label_rounded,
-            color: ServiceMenuTheme.primaryPurple,
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide.none,
-          ),
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 16,
-          ),
-        ),
-        style: TextStyle(
-          fontSize: ServiceMenuTheme.cardSubtitleSize(sw),
-          color: ServiceMenuTheme.textPrimary,
-        ),
-        validator: (value) {
-          if (value == null || value.trim().isEmpty) {
-            return 'Por favor ingrese el nombre del servicio';
-          }
-          if (value.trim().length < 3) {
-            return 'El nombre debe tener al menos 3 caracteres';
-          }
-          return null;
-        },
-      ),
+    return CustomTextField(
+      controller: _nombreController,
+      label: 'Nombre del Servicio',
+      hintText: 'Ej: Instalación eléctrica',
+      icon: Icons.label_rounded,
+      validator: (value) {
+        if (value == null || value.trim().isEmpty) {
+          return 'Por favor ingrese el nombre del servicio';
+        }
+        if (value.trim().length < 3) {
+          return 'El nombre debe tener al menos 3 caracteres';
+        }
+        return null;
+      },
     );
   }
 
   
   Widget _buildDescripcionField(double sw) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: ServiceMenuTheme.primaryPurple.withAlpha(20),  
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: TextFormField(
-        controller: _descripcionController,  
-        maxLines: 5,  
-        decoration: InputDecoration(
-          labelText: 'Descripción',
-          hintText: 'Describe los detalles del servicio...',
-          prefixIcon: const Padding(
-            padding: EdgeInsets.only(bottom: 60),  
-            child: Icon(
-              Icons.description_rounded,
-              color: ServiceMenuTheme.primaryPurple,
-            ),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide.none,
-          ),
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 16,
-          ),
-        ),
-        style: TextStyle(
-          fontSize: ServiceMenuTheme.cardSubtitleSize(sw),
-          color: ServiceMenuTheme.textPrimary,
-        ),
-        validator: (value) {
-          if (value == null || value.trim().isEmpty) {
-            return 'Por favor ingrese la descripción del servicio';
-          }
-          // Si tiene menos de 10 caracteres
-          if (value.trim().length < 10) {
-            return 'La descripción debe tener al menos 10 caracteres';
-          }
-          return null;  
-        },
-      ),
+    return CustomTextField(
+      controller: _descripcionController,
+      label: 'Descripción',
+      hintText: 'Describe los detalles del servicio...',
+      icon: Icons.description_rounded,
+      maxLines: 5,
+      validator: (value) {
+        if (value == null || value.trim().isEmpty) {
+          return 'Por favor ingrese la descripción del servicio';
+        }
+        if (value.trim().length < 10) {
+          return 'La descripción debe tener al menos 10 caracteres';
+        }
+        return null;
+      },
     );
   }
 
   
   Widget _buildSubmitButton(BuildContext context, double sw) {
-    return SizedBox(
-      width: double.infinity,  
-      height: 56,               
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(  
-          onTap: _isLoading ? null : () => _handleSubmit(context),
-          borderRadius: BorderRadius.circular(16),
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: ServiceMenuTheme.createServiceGradient,  
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: ServiceMenuTheme.createServiceGradient.colors.first.withAlpha(77),
-                  blurRadius: 12,
-                  offset: const Offset(0, 6),  
-                ),
-              ],
-            ),
-            child: Center(
-              child: _isLoading
-                  ? const SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                        strokeWidth: 2.5,  
-                      ),
-                    )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.check_circle_rounded,
-                          color: Colors.white,
-                          size: 24,
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          'Crear Servicio',
-                          style: TextStyle(
-                            fontSize: ServiceMenuTheme.cardTitleSize(sw) * 0.9,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-            ),
-          ),
-        ),
-      ),
+    return CustomGradientButton(
+      label: 'Crear Servicio',
+      icon: Icons.check_circle_rounded,
+      onPressed: () => _handleSubmit(context),
+      gradient: ServiceMenuTheme.createServiceGradient,
+      isLoading: _isLoading,
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 16),
     );
   }
 

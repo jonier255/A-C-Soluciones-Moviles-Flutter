@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_a_c_soluciones/ui/common_widgets/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../bloc/service/service_bloc.dart';
 import '../../../bloc/service/service_event.dart';
 import '../../../bloc/service/service_state.dart';
 import '../../../model/servicio_model.dart';
+import '../Home/widgets/bottom_nav_bar.dart';
 import 'widgets/service_menu_constants.dart';
 
 class ServiceListScreen extends StatefulWidget { 
@@ -14,42 +17,13 @@ class ServiceListScreen extends StatefulWidget {
 }
 
 class _ServiceListScreenState extends State<ServiceListScreen> {
-  
-  final ScrollController _scrollController = ScrollController();
+  int _currentPage = 1;
+  static const int _itemsPerPage = 4;
   
   @override
   void initState() {
     super.initState();
-    
     context.read<ServiceBloc>().add(LoadServices());
-    
-    
-    _scrollController.addListener(_onScroll);
-  }
-  
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-  
- 
-  void _onScroll() {
-    
-    if (_scrollController.position.pixels >= 
-        _scrollController.position.maxScrollExtent * 0.8) {
-      
-      final state = context.read<ServiceBloc>().state;
-      
-      
-      if (state is ServiceSuccess && 
-          state.hasMorePages && 
-          state is! ServiceLoadingMore) {
-        context.read<ServiceBloc>().add(
-          LoadMoreServices(state.currentPage + 1)
-        );
-      }
-    }
   }
 
   @override
@@ -58,7 +32,8 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
     final sh = MediaQuery.of(context).size.height;  
     
     return Scaffold(
-      backgroundColor: ServiceMenuTheme.backgroundColor,  
+      backgroundColor: ServiceMenuTheme.backgroundColor,
+      bottomNavigationBar: const AdminBottomNavBar(),
       body: SafeArea(
         child: Column(
           children: [
@@ -68,16 +43,11 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
    
               child: BlocBuilder<ServiceBloc, ServiceState>(
                 builder: (context, state) {
-                  
-                  
                   if (state is ServiceLoading) {
                     return _buildLoadingState();
                   } 
                   else if (state is ServiceSuccess) {
-                    return _buildSuccessState(state.services, state.hasMorePages, sw, sh);
-                  }
-                  else if (state is ServiceLoadingMore) {
-                    return _buildSuccessState(state.currentServices, true, sw, sh);
+                    return _buildSuccessState(state.services, sw, sh);
                   }
                   else if (state is ServiceFailure) {
                     return _buildErrorState(state.error, sw);
@@ -150,68 +120,52 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
 
   
   Widget _buildLoadingState() {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,  
-        children: [
-          CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(
-              ServiceMenuTheme.primaryPurple,  
-            ),
-          ),
-          SizedBox(height: 16),
-          Text(
-            'Cargando servicios...',
-            style: TextStyle(
-              fontSize: 16,
-              color: ServiceMenuTheme.textSecondary,
-            ),
-          ),
-        ],
-      ),
+    return const LoadingIndicator(
+      message: 'Cargando servicios...',
+      color: ServiceMenuTheme.primaryPurple,
     );
   }
 
   
-  Widget _buildSuccessState(List<Servicio> services, bool hasMorePages, double sw, double sh) {
+  Widget _buildSuccessState(List<Servicio> services, double sw, double sh) {
     if (services.isEmpty) {
-      return _buildEmptyState(sw);  
+      return _buildEmptyState(sw);
     }
 
-    return ListView.builder(
-      controller: _scrollController,  
-      physics: const BouncingScrollPhysics(),  
-      padding: EdgeInsets.all(ServiceMenuTheme.screenHorizontalPadding(sw)),
-      itemCount: services.length + (hasMorePages ? 1 : 0),
-      
-      itemBuilder: (context, index) {
-        if (index >= services.length) {
-          return _buildLoadingMoreIndicator();
-        }
-        
-        return Padding(
-          padding: EdgeInsets.only(bottom: sh * 0.015),  
-          child: _buildServiceCard(services[index], sw),  
-        );
-      },
-    );
-  }
-  
-  Widget _buildLoadingMoreIndicator() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 16),
-      child: Center(
-        child: SizedBox(
-          height: 24,
-          width: 24,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            valueColor: AlwaysStoppedAnimation<Color>(
-              ServiceMenuTheme.primaryPurple,
-            ),
+    final totalPages = (services.length / _itemsPerPage).ceil();
+    final safePage = _currentPage.clamp(1, totalPages);
+    final startIndex = (safePage - 1) * _itemsPerPage;
+    final endIndex = (safePage * _itemsPerPage).clamp(0, services.length);
+    final currentServices = services.sublist(startIndex, endIndex);
+
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            padding: EdgeInsets.all(ServiceMenuTheme.screenHorizontalPadding(sw)),
+            itemCount: currentServices.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: EdgeInsets.only(bottom: sh * 0.015),
+                child: _buildServiceCard(currentServices[index], sw),
+              );
+            },
           ),
         ),
-      ),
+        if (services.isNotEmpty)
+          PaginationControls(
+            currentPage: safePage,
+            totalPages: totalPages,
+            onPageChanged: (page) {
+              setState(() {
+                _currentPage = page;
+              });
+            },
+            primaryColor: ServiceMenuTheme.primaryPurple,
+            selectedColor: ServiceMenuTheme.primaryPurple,
+          ),
+      ],
     );
   }
 
@@ -297,92 +251,21 @@ class _ServiceListScreenState extends State<ServiceListScreen> {
   }
 
   Widget _buildErrorState(String error, double sw) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(ServiceMenuTheme.screenHorizontalPadding(sw)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.error_outline_rounded,
-              size: 64,
-              color: ServiceMenuTheme.statusError,  // Color rojo
-            ),
-            const SizedBox(height: 16),
-            // Título del error
-            Text(
-              'Error al cargar servicios',
-              style: TextStyle(
-                fontSize: ServiceMenuTheme.cardTitleSize(sw),
-                fontWeight: FontWeight.bold,
-                color: ServiceMenuTheme.textPrimary,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              error,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: ServiceMenuTheme.cardSubtitleSize(sw),
-                color: ServiceMenuTheme.textSecondary,
-              ),
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton.icon(
-              onPressed: () {
-                context.read<ServiceBloc>().add(LoadServices());
-              },
-              icon: const Icon(Icons.refresh_rounded),
-              label: const Text('Reintentar'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: ServiceMenuTheme.primaryPurple,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+    return ErrorState(
+      error: error,
+      onRetry: () {
+        context.read<ServiceBloc>().add(LoadServices());
+      },
     );
   }
 
   
   Widget _buildEmptyState(double sw) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(ServiceMenuTheme.screenHorizontalPadding(sw)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.inventory_2_outlined,
-              size: 80,
-              color: ServiceMenuTheme.textSecondary.withAlpha(128),  
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'No hay servicios registrados',
-              style: TextStyle(
-                fontSize: ServiceMenuTheme.cardTitleSize(sw),
-                fontWeight: FontWeight.bold,
-                color: ServiceMenuTheme.textPrimary,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Crea tu primer servicio para comenzar',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: ServiceMenuTheme.cardSubtitleSize(sw),
-                color: ServiceMenuTheme.textSecondary,
-              ),
-            ),
-          ],
-        ),
-      ),
+    return const EmptyState(
+      icon: Icons.inventory_2_outlined,
+      title: 'No hay servicios registrados',
+      message: 'Crea tu primer servicio para comenzar',
+      iconColor: ServiceMenuTheme.textSecondary,
     );
   }
 

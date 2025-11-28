@@ -1,4 +1,4 @@
-import '../../model/administrador/visits_model.dart';
+import '../../../model/administrador/visits_model.dart';
 
 abstract class VisitsState {}
 class VisitsInitial extends VisitsState {}

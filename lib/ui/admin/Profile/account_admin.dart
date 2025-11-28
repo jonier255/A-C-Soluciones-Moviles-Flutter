@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_a_c_soluciones/bloc/editProfileAdmin/edit_profile_admin_bloc.dart';
-import 'package:flutter_a_c_soluciones/bloc/request/request_bloc.dart';
+import 'package:flutter_a_c_soluciones/bloc/administrador/editProfileAdmin/edit_profile_admin_bloc.dart';
+import 'package:flutter_a_c_soluciones/bloc/administrador/request/request_bloc.dart';
 import 'package:flutter_a_c_soluciones/repository/secure_storage_service.dart';
 import 'package:flutter_a_c_soluciones/repository/services_admin/request_repository.dart';
 import 'package:flutter_a_c_soluciones/repository/services_admin/service_admin_update_profile.dart';
