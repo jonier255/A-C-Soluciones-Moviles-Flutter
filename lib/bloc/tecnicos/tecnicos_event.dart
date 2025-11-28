@@ -8,3 +8,12 @@ abstract class TecnicosEvent extends Equatable {
 }
 
 class LoadTecnicos extends TecnicosEvent {}
+
+class LoadMoreTecnicos extends TecnicosEvent {
+  final int page;
+
+  const LoadMoreTecnicos(this.page);
+
+  @override
+  List<Object> get props => [page];
+}

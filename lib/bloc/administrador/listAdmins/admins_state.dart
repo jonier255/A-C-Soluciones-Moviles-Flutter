@@ -1,4 +1,4 @@
-import '../../model/administrador/admin_model.dart';
+import '../../../model/administrador/admin_model.dart';
 
 abstract class AdminsState {}
 

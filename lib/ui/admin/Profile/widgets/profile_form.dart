@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../bloc/editProfileAdmin/edit_profile_admin_bloc.dart';
+import '../../../../bloc/administrador/editProfileAdmin/edit_profile_admin_bloc.dart';
 import '../../../../model/administrador/admin_model.dart';
 import '../../../../repository/secure_storage_service.dart';
 import 'profile_constants.dart';

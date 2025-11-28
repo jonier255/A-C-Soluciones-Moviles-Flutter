@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_a_c_soluciones/bloc/visits/assign_visits/assign_visits_bloc.dart';
-import 'package:flutter_a_c_soluciones/bloc/visits/visits_bloc.dart';
+import 'package:flutter_a_c_soluciones/bloc/administrador/visits/assign_visits/assign_visits_bloc.dart';
+import 'package:flutter_a_c_soluciones/bloc/administrador/visits/visits_bloc.dart';
 import 'package:flutter_a_c_soluciones/repository/services_admin/service_api_visits.dart';
 import 'package:flutter_a_c_soluciones/repository/services_admin/visits_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../bloc/listAdmins/admins_bloc.dart';
-import '../../../../../bloc/listAdmins/admins_state.dart';
+import '../../../../../bloc/administrador/listAdmins/admins_bloc.dart';
+import '../../../../../bloc/administrador/listAdmins/admins_state.dart';
 import '../admin_card.dart';
 import '../admin_pagination.dart';
 import '../list_admin_constants.dart';

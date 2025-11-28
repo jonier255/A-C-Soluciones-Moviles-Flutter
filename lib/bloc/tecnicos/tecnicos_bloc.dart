@@ -13,10 +13,35 @@ class TecnicosBloc extends Bloc<TecnicosEvent, TecnicosState> {
     on<LoadTecnicos>((event, emit) async {
       emit(TecnicosLoading());
       try {
-        final tecnicos = await tecnicosRepository.getTecnicos();
-        emit(TecnicosLoaded(tecnicos: tecnicos));
+        final response = await tecnicosRepository.getTecnicos(page: 1);
+        emit(TecnicosLoaded(
+          tecnicos: response.tecnicos,
+          hasMorePages: response.hasMorePages,
+          currentPage: 1,
+          totalPages: response.totalPages,
+        ));
       } catch (e) {
         emit(TecnicosError(message: e.toString()));
+      }
+    });
+
+    on<LoadMoreTecnicos>((event, emit) async {
+      final currentState = state;
+      if (currentState is TecnicosLoaded) {
+        emit(TecnicosLoadingMore(currentState.tecnicos));
+        
+        try {
+          final response = await tecnicosRepository.getTecnicos(page: event.page);
+          
+          emit(TecnicosLoaded(
+            tecnicos: [...currentState.tecnicos, ...response.tecnicos],
+            hasMorePages: response.hasMorePages,
+            currentPage: event.page,
+            totalPages: response.totalPages,
+          ));
+        } catch (e) {
+          emit(currentState);
+        }
       }
     });
   }
