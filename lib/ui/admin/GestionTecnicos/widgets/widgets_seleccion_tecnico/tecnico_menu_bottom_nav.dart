@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'tecnico_menu_constants.dart';
 
-/// Barra de navegación inferior para el menú de técnicos
 class TecnicoMenuBottomNav extends StatelessWidget {
   const TecnicoMenuBottomNav({super.key});
 

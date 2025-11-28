@@ -7,7 +7,7 @@ import '../../../model/tecnico_model.dart';
 import '../Home/widgets/bottom_nav_bar.dart';
 import 'widgets/widgets_seleccion_tecnico/tecnico_menu_constants.dart';
 
-/// Pantalla que muestra la lista de técnicos registrados
+///lista de técnicos registrados
 class ListTecnicosScreen extends StatefulWidget {
   const ListTecnicosScreen({super.key});
 

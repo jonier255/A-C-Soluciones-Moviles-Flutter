@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Constantes y configuración de tema para el menú de técnicos
 class TecnicoMenuTheme {
-  // Paleta de colores moderna para técnicos (tonos naranjas y azules)
   static const Color primaryGradientStart = Color.fromARGB(255, 30, 118, 233);
   static const Color primaryGradientEnd = Color.fromARGB(255, 64, 169, 240);
   static const Color createTecnicoGradientStart = Color.fromARGB(255, 49, 94, 243);
@@ -107,7 +105,7 @@ class TecnicoMenuTheme {
   static const double iconContainerBorderRadius = 16;
 }
 
-/// Modelo para las opciones del menú de técnicos
+
 class TecnicoMenuOption {
   final String title;
   final String subtitle;

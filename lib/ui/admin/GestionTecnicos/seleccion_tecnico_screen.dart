@@ -10,7 +10,6 @@ import 'widgets/widgets_seleccion_tecnico/tecnico_menu_constants.dart';
 import 'widgets/widgets_seleccion_tecnico/tecnico_menu_header.dart';
 import 'widgets/widgets_seleccion_tecnico/tecnico_option_card.dart';
 
-/// Pantalla principal del menú de técnicos con diseño moderno y elegante
 class TecnicoMenuScreen extends StatelessWidget {
   const TecnicoMenuScreen({super.key});
 
@@ -36,7 +35,6 @@ class TecnicoMenuScreen extends StatelessWidget {
     );
   }
 
-  /// Construye el contenido principal con logo, texto de bienvenida y opciones
   Widget _buildContent(double sw, double sh) {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
@@ -61,7 +59,6 @@ class TecnicoMenuScreen extends StatelessWidget {
     );
   }
 
-  /// Logo de la aplicación con Hero animation
   Widget _buildLogo(double sw) {
     return Hero(
       tag: 'logo',
@@ -72,7 +69,6 @@ class TecnicoMenuScreen extends StatelessWidget {
     );
   }
 
-  /// Texto de bienvenida
   Widget _buildWelcomeText(double sw) {
     return Column(
       children: [
@@ -97,7 +93,6 @@ class TecnicoMenuScreen extends StatelessWidget {
     );
   }
 
-  /// Opción para crear técnico
   Widget _buildCreateTecnicoOption() {
     return Builder(
       builder: (context) {
@@ -114,7 +109,6 @@ class TecnicoMenuScreen extends StatelessWidget {
     );
   }
 
-  /// Opción para ver lista de técnicos
   Widget _buildListTecnicosOption() {
     return Builder(
       builder: (context) {
@@ -131,7 +125,6 @@ class TecnicoMenuScreen extends StatelessWidget {
     );
   }
 
-  /// Navega a la pantalla de crear técnico
   void _navigateToCreateTecnico(BuildContext context) {
     Navigator.push(
       context,
@@ -141,7 +134,6 @@ class TecnicoMenuScreen extends StatelessWidget {
     );
   }
 
-  /// Navega a la pantalla de lista de técnicos
   void _navigateToListTecnicos(BuildContext context) {
     Navigator.push(
       context,

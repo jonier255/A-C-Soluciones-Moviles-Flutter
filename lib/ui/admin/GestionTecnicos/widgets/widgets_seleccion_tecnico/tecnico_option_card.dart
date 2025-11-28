@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'tecnico_menu_constants.dart';
 
-/// Tarjeta de opción con gradiente para el menú de técnicos
 class TecnicoOptionCard extends StatelessWidget {
   final TecnicoMenuOption option;
 

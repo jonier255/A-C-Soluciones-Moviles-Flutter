@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'tecnico_menu_constants.dart';
 
-/// Header con gradiente para el menú de técnicos
 class TecnicoMenuHeader extends StatelessWidget {
   const TecnicoMenuHeader({super.key});
 
